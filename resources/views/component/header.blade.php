@@ -2,7 +2,7 @@
     <div class="container-lg wide-xl">
         <div class="nk-header-wrap">
             <div class="nk-header-brand">
-                <a href="html/index.html" class="logo-link">
+                <a href="{{route('perfil')}}" class="logo-link">
                     <img class="logo-light logo-img" src="{{asset('images/sivipol/BannerSivipolTemaOscuro.png')}}" srcset="{{asset('images/sivipol/BannerSivipolTemaOscuro.png')}}" alt="logo">
                     <img class="logo-dark logo-img" src="{{asset('images/sivipol/BannerSivipol.png')}}" srcset="{{asset('images/sivipol/BannerSivipol.png')}} 2x" alt="logo-dark">
                 </a>
@@ -120,7 +120,7 @@
                             </div>
                             <div class="dropdown-inner">
                                 <ul class="link-list">
-                                    <li><a href="{{route('logout')}}"><em class="icon ni ni-signout"></em><span>Salir</span></a></li>
+                                    <li><a href="{{route('salir')}}"><em class="icon ni ni-signout"></em><span>Salir</span></a></li>
                                 </ul>
                             </div>
                         </div>
