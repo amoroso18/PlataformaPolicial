@@ -20,6 +20,7 @@ class AuditoriaController extends Controller
         $new->relacion = $relacion;
         $new->audita_users_id = Auth::user()->id;
         $new->save();
+        return  $new;
     }
     public static function audita_usuario_automatic($users_id, $tipo, $descripcion, $relacion = null, $admin_id)
     {

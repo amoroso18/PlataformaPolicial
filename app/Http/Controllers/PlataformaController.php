@@ -10,7 +10,7 @@ use App\Models\TipoGrado;
 use App\Models\TipoPerfil;
 use App\Models\TipoUnidad;
 use App\Http\Controllers\AuditoriaController;
-
+use App\Http\Controllers\ReportesController;
 class PlataformaController extends Controller
 {
   
@@ -83,4 +83,13 @@ class PlataformaController extends Controller
         $usuarios = User::get();
         return view('modules.administracion.bandejaUsuarios',compact('usuarios'));
     }
+    public function administrador_reporte_usuario(Request $request)
+    {
+        return ReportesController::reporte($request->contexto);
+    }
+    public function administrador_reporte_usuarios()
+    {
+        return ReportesController::reporteUsuarios();
+    }
+    
 }
