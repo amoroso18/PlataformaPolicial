@@ -12,6 +12,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('carnet')->nullable();
+            $table->string('dni')->nullable();
             $table->string('nombres')->nullable();
             $table->string('apellidos')->nullable();
             $table->string('phone')->nullable();
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->foreignId('unidad_id')->constrained('tipo_unidads')->onDelete('cascade')->default(0);
             $table->foreignId('estado_id')->constrained('estado_usuarios')->onDelete('cascade')->default(0);
             $table->foreignId('perfil_id')->constrained('tipo_perfils')->onDelete('cascade')->default(0);
+            $table->foreignId('grado_id')->constrained('tipo_grados')->onDelete('cascade')->default(0);
             $table->rememberToken();
             $table->timestamps();
             $table->datetime('reseteo_contrasena')->nullable();
@@ -31,6 +33,7 @@ return new class extends Migration
             array(
                 [
                     'carnet' => '123',
+                    'dni' => '123',
                     'nombres' => 'Amoroso',
                     'apellidos' => 'COLQUE CAYPA',
                     'phone' => '957555221',
@@ -39,6 +42,7 @@ return new class extends Migration
                     'unidad_id' => 1,
                     'estado_id' => 1,
                     'perfil_id' => 1,
+                    'grado_id' => 11,
                 ],
                 
               

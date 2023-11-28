@@ -115,7 +115,7 @@
                                     <li><a href="{{route('perfil')}}"><em class="icon ni ni-account-setting-alt"></em><span>Cambio de contraseña</span></a></li>
                                     <li><a href="{{route('actualizacion')}}"><em class="icon ni ni-bell"></em><span>Historial de usuario</span></a></li>
                                     <li><a href="{{route('conexion')}}"><em class="icon ni ni-activity-alt"></em><span>Historial de conexión</span></a></li>
-                                    <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Modo oscuro</span></a></li>
+                                    <li><a class="dark-switch" href="#" id="toggle-theme-btn"><em class="icon ni ni-moon"></em><span>Modo oscuro</span></a></li>
                                 </ul>
                             </div>
                             <div class="dropdown-inner">

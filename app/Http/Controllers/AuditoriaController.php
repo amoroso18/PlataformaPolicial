@@ -440,5 +440,29 @@ class AuditoriaController extends Controller
          }
          return 'No detectado';
     }
+    public static function generarNombreAleatorio() {
+        $nombres = [
+            'Pedro', 'Juan', 'Ana', 'María', 'Luis', 'Sofía', 'Carlos', 'Laura', 'David', 'Elena',
+            'Diego', 'Carmen', 'Javier', 'Isabel', 'Pablo', 'Valeria', 'Roberto', 'Marta', 'Adrián', 'Leticia',
+            'Andrés', 'Beatriz', 'Raúl', 'Eva', 'Fernando', 'Natalia', 'Hugo', 'Olga', 'Miguel', 'Silvia'
+        ];
+        return $nombres[array_rand($nombres)];
+    }
+    public static function generarApellidoAleatorio() {
+        $apellidos = [
+            'Gómez', 'López', 'Rodríguez', 'Martínez', 'Fernández', 'González', 'Pérez', 'Díaz', 'Hernández', 'Moreno',
+            'Torres', 'Vargas', 'Suárez', 'Romero', 'Flores', 'Ortega', 'Molina', 'Serrano', 'Castro', 'Ruiz',
+            'Jiménez', 'Giménez', 'Mendoza', 'Rojas', 'Sánchez', 'Navarro', 'Aguilar', 'Lara', 'Pacheco', 'Reyes'
+        ];
+        return $apellidos[array_rand($apellidos)];
+    }
+    public static function generarNacionalidadAleatoria() {
+        $nacionalidades = [
+            'Peruano', 'Venezolano', 'Argentino', 'Mexicano', 'Colombiano', 'Chileno', 'Ecuatoriano', 'Boliviano', 'Paraguayo', 'Uruguayo',
+            'Brasileño', 'Costarricense', 'Guatemalteco', 'Salvadoreño', 'Panameño', 'Cubano', 'Hondureño', 'Nicaragüense', 'Dominicano', 'Puertorriqueño',
+            'Estadounidense', 'Canadiense', 'Alemán', 'Francés', 'Italiano', 'Español', 'Inglés', 'Ruso', 'Chino', 'Japonés'
+        ];
+        return $nacionalidades[array_rand($nacionalidades)];
+    }
   
 }

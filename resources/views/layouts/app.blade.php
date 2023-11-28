@@ -15,6 +15,9 @@
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="{{asset('assets/css/dashlite.css?ver=2.9.0')}}">
     <link id="skin-default" rel="stylesheet" href="{{asset('assets/css/theme.css?ver=2.9.0')}}">
+    
+    @stack('scripts')
+
 </head>
 
 <body class="nk-body bg-white npc-default has-aside ">
@@ -28,7 +31,7 @@
                             @include('component.navbar')
                             <div class="nk-content-body">
                                 <div class="nk-content-wrap">
-                                    <p>Starter page for Demo4 layout.</p>
+                                    @yield('content')
                                 </div>
                                 @include('component.footer')
                             </div>
@@ -43,6 +46,31 @@
 
     <script src="{{asset('assets/js/bundle.js?ver=2.9.0')}}"></script>
     <script src="{{asset('assets/js/scripts.js?ver=2.9.0')}}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Obtener el botón y el cuerpo del documento
+            var toggleThemeBtn = document.getElementById("toggle-theme-btn");
+            var body = document.body;
+
+            // Verificar si hay un tema guardado en el localStorage al cargar la página
+            var savedTheme = localStorage.getItem("theme-sivipol");
+            if (savedTheme) {
+                body.classList.add(savedTheme);
+            } else {
+                localStorage.setItem("theme-sivipol", "");
+            }
+
+            // Agregar un evento al botón para cambiar el tema y guardarlo en el localStorage
+            toggleThemeBtn.addEventListener("click", function() {
+                if (savedTheme == "dark-mode") {
+                    localStorage.setItem("theme-sivipol", "");
+                } else {
+                    localStorage.setItem("theme-sivipol", "dark-mode");
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>
