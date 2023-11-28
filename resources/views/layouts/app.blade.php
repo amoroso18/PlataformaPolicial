@@ -1,86 +1,48 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <meta name="author" content="AECC FULLSTACK DEVELOPER">
+    <meta name="description" content="{{ config('app.name_large', 'Laravel') }}">
+    <meta name="author" content="FullStack Developer AECC">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
-    <link rel="shortcut icon" href="./images/favicon.png">
-    <!-- Fonts -->
+    <link rel="shortcut icon" href="{{asset('images/sivipol/LogoSivipol.png')}}">
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="{{asset('assets/css/dashlite.css?ver=2.9.0')}}">
     <link id="skin-default" rel="stylesheet" href="{{asset('assets/css/theme.css?ver=2.9.0')}}">
-
-    <!-- Scripts -->
 </head>
+
 <body class="nk-body bg-white npc-default has-aside ">
-    <div id="app" class="nk-app-root">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
+    <div class="nk-app-root">
+        <div class="nk-main ">
+            <div class="nk-wrap ">
+                @include('component.header')
+                <div class="nk-content ">
+                    <div class="container wide-xl">
+                        <div class="nk-content-inner">
+                            @include('component.navbar')
+                            <div class="nk-content-body">
+                                <div class="nk-content-wrap">
+                                    <p>Starter page for Demo4 layout.</p>
                                 </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
+                                @include('component.footer')
+                            </div>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 
     <script src="{{asset('assets/js/bundle.js?ver=2.9.0')}}"></script>
     <script src="{{asset('assets/js/scripts.js?ver=2.9.0')}}"></script>
 </body>
+
 </html>

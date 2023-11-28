@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipo_perfils', function (Blueprint $table) {
+        Schema::create('entidad_celulars', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipo_perfils');
+        Schema::dropIfExists('entidad_celulars');
     }
 };

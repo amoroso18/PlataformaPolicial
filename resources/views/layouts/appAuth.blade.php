@@ -4,26 +4,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <meta name="author" content="AECC FULLSTACK DEVELOPER">
+    <meta name="description" content="{{ config('app.name_large', 'Laravel') }}">
+    <meta name="author" content="FullStack Developer AECC">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
-    <link rel="shortcut icon" href="./images/favicon.png">
-    <!-- Fonts -->
+    <link rel="shortcut icon" href="{{asset('images/sivipol/LogoSivipol.png')}}">
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="{{asset('assets/css/dashlite.css?ver=2.9.0')}}">
     <link id="skin-default" rel="stylesheet" href="{{asset('assets/css/theme.css?ver=2.9.0')}}">
-
-    <!-- Scripts -->
 </head>
 
 <body class="nk-body bg-white npc-default pg-auth">
     <div id="app" class="nk-app-root">
-
         <div class="nk-main ">
             <!-- wrap @s -->
             <div class="nk-wrap nk-wrap-nosidebar">
@@ -36,139 +31,49 @@
                             </div>
                             <div class="nk-block nk-block-middle nk-auth-body">
                                 <div class="brand-logo pb-5">
-                                    <a href="html/index.html" class="logo-link">
-                                        <img class="logo-light logo-img logo-img-lg" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
-                                        <img class="logo-dark logo-img logo-img-lg" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                                    <a href="{{route('login')}}" class="logo-link">
+                                        <img class="logo-light logo-img logo-img-lg" src="{{asset('images/sivipol/BannerSivipol.png')}}" srcset="{{asset('images/sivipol/BannerSivipol.png')}} 2x" alt="logo">
+                                        <img class="logo-dark logo-img logo-img-lg" src="{{asset('images/sivipol/BannerSivipol.png')}}" srcset="{{asset('images/sivipol/BannerSivipol.png')}}" alt="logo-dark">
                                     </a>
                                 </div>
-                                <div class="nk-block-head">
-                                    <div class="nk-block-head-content">
-                                        <h5 class="nk-block-title">Sign-In</h5>
-                                        <div class="nk-block-des">
-                                            <p>Access the DashLite panel using your email and passcode.</p>
-                                        </div>
-                                    </div>
-                                </div><!-- .nk-block-head -->
 
-                                <main >
-        @yield('content')
-    </main>
-                           
-                                <div class="form-note-s2 pt-4"> New on our platform? <a href="html/pages/auths/auth-register.html">Create an account</a>
-                                </div>
-                                <div class="text-center pt-4 pb-3">
-                                    <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
-                                </div>
-                                <ul class="nav justify-center gx-4">
-                                    <li class="nav-item"><a class="nav-link" href="#">Facebook</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#">Google</a></li>
-                                </ul>
-                                <div class="text-center mt-5">
-                                    <span class="fw-500">I don't have an account? <a href="#">Try 15 days free</a></span>
-                                </div>
+
+                                <main>
+                                    @yield('content')
+                                </main>
+
+
                             </div><!-- .nk-block -->
                             <div class="nk-block nk-auth-footer">
                                 <div class="nk-block-between">
                                     <ul class="nav nav-sm">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#">Terms & Condition</a>
+                                            <a class="nav-link" href="#">Nuevo usuario</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#">Privacy Policy</a>
+                                            <a class="nav-link" href="#">Soporte</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#">Help</a>
-                                        </li>
-                                        <li class="nav-item dropup">
-                                            <a class="dropdown-toggle dropdown-indicator has-indicator nav-link" data-toggle="dropdown" data-offset="0,10"><small>English</small></a>
-                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                                <ul class="language-list">
-                                                    <li>
-                                                        <a href="#" class="language-item">
-                                                            <img src="./images/flags/english.png" alt="" class="language-flag">
-                                                            <span class="language-name">English</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="language-item">
-                                                            <img src="./images/flags/spanish.png" alt="" class="language-flag">
-                                                            <span class="language-name">Español</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="language-item">
-                                                            <img src="./images/flags/french.png" alt="" class="language-flag">
-                                                            <span class="language-name">Français</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="language-item">
-                                                            <img src="./images/flags/turkey.png" alt="" class="language-flag">
-                                                            <span class="language-name">Türkçe</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            <a class="nav-link" href="#">Sugerencias</a>
                                         </li>
                                     </ul><!-- .nav -->
                                 </div>
                                 <div class="mt-3">
-                                    <p>&copy; 2021 DashLite. All Rights Reserved.</p>
+                                    <p> SIVIPOL &copy; 2023</p>
                                 </div>
                             </div><!-- .nk-block -->
                         </div><!-- .nk-split-content -->
-                        <div class="nk-split-content nk-split-stretch bg-lighter d-flex toggle-break-lg toggle-slide toggle-slide-right" data-content="athPromo" data-toggle-screen="lg" data-toggle-overlay="true">
-                            <div class="slider-wrap w-100 w-max-550px p-3 p-sm-5 m-auto">
-                                <div class="slider-init" data-slick='{"dots":true, "arrows":false}'>
-                                    <div class="slider-item">
-                                        <div class="nk-feature nk-feature-center">
-                                            <div class="nk-feature-img">
-                                                <img class="round" src="./images/slides/promo-a.png" srcset="./images/slides/promo-a2x.png 2x" alt="">
-                                            </div>
-                                            <div class="nk-feature-content py-4 p-sm-5">
-                                                <h4>Dashlite</h4>
-                                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
-                                            </div>
-                                        </div>
-                                    </div><!-- .slider-item -->
-                                    <div class="slider-item">
-                                        <div class="nk-feature nk-feature-center">
-                                            <div class="nk-feature-img">
-                                                <img class="round" src="./images/slides/promo-b.png" srcset="./images/slides/promo-b2x.png 2x" alt="">
-                                            </div>
-                                            <div class="nk-feature-content py-4 p-sm-5">
-                                                <h4>Dashlite</h4>
-                                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
-                                            </div>
-                                        </div>
-                                    </div><!-- .slider-item -->
-                                    <div class="slider-item">
-                                        <div class="nk-feature nk-feature-center">
-                                            <div class="nk-feature-img">
-                                                <img class="round" src="./images/slides/promo-c.png" srcset="./images/slides/promo-c2x.png 2x" alt="">
-                                            </div>
-                                            <div class="nk-feature-content py-4 p-sm-5">
-                                                <h4>Dashlite</h4>
-                                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
-                                            </div>
-                                        </div>
-                                    </div><!-- .slider-item -->
-                                </div><!-- .slider-init -->
-                                <div class="slider-dots"></div>
-                                <div class="slider-arrows"></div>
-                            </div><!-- .slider-wrap -->
-                        </div><!-- .nk-split-content -->
+
+
+                        @stack('BarraLateralAnuncios')
+
                     </div><!-- .nk-split -->
                 </div>
                 <!-- wrap @e -->
             </div>
             <!-- content @e -->
         </div>
-        <!-- main @e -->
     </div>
-  
-    </div>
-
     <script src="{{asset('assets/js/bundle.js?ver=2.9.0')}}"></script>
     <script src="{{asset('assets/js/scripts.js?ver=2.9.0')}}"></script>
 </body>
