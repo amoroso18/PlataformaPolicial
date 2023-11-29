@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('entidad_inmuebles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tipo_inmuebles_id')->constrained('tipo_inmuebles')->onDelete('cascade');
-            $table->integer('dirección',1000)->nullable();
-            $table->integer('departamento')->nullable();
+            $table->foreignId('inmuebles_id')->constrained('tipo_inmuebles')->onDelete('cascade');
+            $table->string('direccion',1000)->nullable();
+            $table->string('departamento')->nullable();
             $table->string('provincia')->nullable();
             $table->string('referencia',1000)->nullable();
             $table->string('color_interior')->nullable();

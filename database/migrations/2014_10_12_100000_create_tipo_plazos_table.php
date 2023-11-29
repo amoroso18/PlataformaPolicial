@@ -13,11 +13,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tipo_plazos', function (Blueprint $table) {
+            // $table->id(); 
             $table->unsignedBigInteger('id')->default(0)->primary()->unique()->index();
             $table->string('descripcion')->nullable();
             $table->timestamps();
             $table->integer('estado')->default(1);
         });
+        // DB::statement('ALTER TABLE tipo_plazos AUTO_INCREMENT = 0;');
         DB::table('tipo_plazos')->insert(
             array(
                 [
