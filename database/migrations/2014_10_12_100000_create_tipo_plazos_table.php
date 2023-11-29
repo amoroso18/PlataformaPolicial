@@ -23,10 +23,12 @@ return new class extends Migration
                 [
                     'id' => 0,
                     'descripcion' => 'DÍAS NATURALES',
+                    'estado' => 1
                 ],
                 [
                     'id' => 1,
                     'descripcion' => 'DÍAS HÁBILES',
+                    'estado' => 2
                 ],
             )
         );

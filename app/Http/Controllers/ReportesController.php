@@ -89,30 +89,30 @@ class ReportesController extends Controller
 
             $MYPDF->Ln(10);
             $MYPDF->SetFont('Arial', 'B', 11);
-            $MYPDF->multicell(192, -2, "CREACION DE DIPOSICIONES FISCALES", 0, 'C');
-
-            $MYPDF->Ln(8);
-            $MYPDF->SetFont('Arial', 'B', 1);
-            $MYPDF->multicell(192, -2, "CULMINACION DE DIPOSICIONES FISCALES", 0, 'C');
-
-            $MYPDF->Ln(8);
-            $MYPDF->SetFont('Arial', 'B', 12);
-            $MYPDF->multicell(192, -2, "SUSPENCION DE DIPOSICIONES FISCALES", 0, 'C');
-
-            $MYPDF->Ln(8);
-            $MYPDF->SetFont('Arial', 'B', 1);
-            $MYPDF->multicell(192, -2, "DESCARGA DE DIPOSICIONES FISCALES", 0, 'C');
+            $MYPDF->multicell(192, 5, "CREACION DE DIPOSICIONES FISCALES", 0, 'C');
 
             $MYPDF->Ln(8);
             $MYPDF->SetFont('Arial', 'B', 11);
-            $MYPDF->multicell(192, -2, "HISTORIAL DE CONEXION DE USUARIO", 0, 'C');
+            $MYPDF->multicell(192, 5, "CULMINACION DE DIPOSICIONES FISCALES", 0, 'C');
+
+            $MYPDF->Ln(8);
+            $MYPDF->SetFont('Arial', 'B', 11);
+            $MYPDF->multicell(192, 5, "SUSPENCION DE DIPOSICIONES FISCALES", 0, 'C');
+
+            $MYPDF->Ln(8);
+            $MYPDF->SetFont('Arial', 'B', 11);
+            $MYPDF->multicell(192, 5, "DESCARGA DE DIPOSICIONES FISCALES", 0, 'C');
+
+            $MYPDF->Ln(8);
+            $MYPDF->SetFont('Arial', 'B', 11);
+            $MYPDF->multicell(192, 5, "HISTORIAL DE CONEXION DE USUARIO", 0, 'C');
             $MYPDF->Ln(5);
             foreach ($USUARIO->getHistorialConexion as $key => $value) {
-                self::generateLineText($MYPDF,  $value->created_at, $value->lugar . " | " . $value->dipositivo . " | " . $value->autenticacion . " | " . $value->navegador);
+                self::generateLineText($MYPDF,  $value->created_at, $value->dipositivo . " | " . $value->lugar . " | " . $value->autenticacion . " | " . $value->navegador);
             }
             $MYPDF->Ln(5);
             $MYPDF->SetFont('Arial', 'B', 11);
-            $MYPDF->multicell(192, -2, "HISTORIAL DE ACTIVIDAD DE USUARIO", 0, 'C');
+            $MYPDF->multicell(192, 5, "HISTORIAL DE ACTIVIDAD DE USUARIO", 0, 'C');
             $MYPDF->Ln(5);
             foreach ($USUARIO->getHistorialAuditoria as $key => $value) {
                 self::generateLineText($MYPDF,  $value->created_at, "CODIGO: " . $value->id . " | " .  $value->tipo . " | " . $value->descripcion);

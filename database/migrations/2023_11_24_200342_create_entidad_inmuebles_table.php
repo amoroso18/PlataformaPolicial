@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('entidad_inmuebles', function (Blueprint $table) {
             $table->id();
+            $table->integer('dirección')->nullable();
+            $table->integer('departamento')->nullable();
+            $table->string('provincia')->nullable();
+            $table->string('referencia')->nullable();
+            $table->string('color')->nullable();
+            $table->string('pisos')->nullable();
+            $table->string('observaciones')->nullable();
+            $table->string('latitud')->nullable();
+            $table->string('longitud')->nullable();
             $table->timestamps();
         });
     }

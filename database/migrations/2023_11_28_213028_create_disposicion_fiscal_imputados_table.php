@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('entidad_policias', function (Blueprint $table) {
+        Schema::create('disposicion_fiscal_imputados', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('df_id')->constrained('dispocicion_fiscals')->onDelete('cascade');
+            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
+            $table->string('observaciones',1000)->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('entidad_policias');
+        Schema::dropIfExists('disposicion_fiscal_imputados');
     }
 };

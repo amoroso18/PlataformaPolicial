@@ -11,8 +11,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('carnet')->nullable();
-            $table->string('dni')->nullable();
+            $table->integer('carnet')->nullable();
+            $table->integer('dni')->nullable();
             $table->string('nombres')->nullable();
             $table->string('apellidos')->nullable();
             $table->string('phone')->nullable();
@@ -34,19 +34,42 @@ return new class extends Migration
                 [
                     'carnet' => '123',
                     'dni' => '123',
-                    'nombres' => 'Amoroso',
-                    'apellidos' => 'COLQUE CAYPA',
+                    'nombres' => 'Pedro',
+                    'apellidos' => 'Infantes',
                     'phone' => '957555221',
-                    'email' => 'codicioso18@gmail.com',
+                    'email' => 'programador@sivipol.com',
                     'password' => '$2y$10$swaDVJtnZcHKDcLBYEFqsuEVx/8XsY2fdWRCVocQ7vtn9LV472Qry',
                     'unidad_id' => 1,
                     'estado_id' => 1,
                     'perfil_id' => 1,
-                    'grado_id' => 11,
+                    'grado_id' => 1,
                 ],
-                
-              
-
+                [
+                    'carnet' => '1234',
+                    'dni' => '1234',
+                    'nombres' => 'Dina',
+                    'apellidos' => 'Bol Gal',
+                    'phone' => '999888777',
+                    'email' => 'administrador@sivipol.com',
+                    'password' => '$2y$10$swaDVJtnZcHKDcLBYEFqsuEVx/8XsY2fdWRCVocQ7vtn9LV472Qry',
+                    'unidad_id' => 2,
+                    'estado_id' => 1,
+                    'perfil_id' => 20,
+                    'grado_id' => 2,
+                ],
+                [
+                    'carnet' => '12345',
+                    'dni' => '12345',
+                    'nombres' => 'Pedro Pablo',
+                    'apellidos' => 'Escobar',
+                    'phone' => '999666333',
+                    'email' => 'analista@sivipol.com',
+                    'password' => '$2y$10$swaDVJtnZcHKDcLBYEFqsuEVx/8XsY2fdWRCVocQ7vtn9LV472Qry',
+                    'unidad_id' => 3,
+                    'estado_id' => 1,
+                    'perfil_id' => 30,
+                    'grado_id' => 3,
+                ],
             )
         );
     }

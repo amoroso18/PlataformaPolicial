@@ -52,13 +52,13 @@
                 <h6 class="overline-title text-primary-alt">Dashboards</h6>
             </li><!-- .nk-menu-heading -->
             <li class="nk-menu-item">
-                <a href="{{'perfil'}}" class="nk-menu-link">
+                <a href="{{route('entidades_policial')}}" class="nk-menu-link">
                     <span class="nk-menu-icon"><em class="icon ni ni-growth"></em></span>
                     <span class="nk-menu-text">Expedientes</span>
                 </a>
             </li><!-- .nk-menu-item -->
             <li class="nk-menu-item">
-                <a href="{{'perfil'}}" class="nk-menu-link">
+                <a href="{{route('entidades_policial')}}" class="nk-menu-link">
                     <span class="nk-menu-icon"><em class="icon ni ni-dashlite"></em></span>
                     <span class="nk-menu-text">Usuarios</span>
                 </a>
@@ -89,34 +89,34 @@
                 </a>
                 <ul class="nk-menu-sub">
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Policia</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">Policia</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Agente</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">Agente</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Fiscal</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">Fiscal</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Peruanos</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">Peruanos</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Extranjeros</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">Extranjeros</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Vehiculos</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">Vehiculos</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Denuncias</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">Denuncias</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Armas</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">Armas</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Celulares</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">Celulares</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Inmuebles</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">Inmuebles</span></a>
                     </li>
                 </ul><!-- .nk-menu-sub -->
             </li><!-- .nk-menu-item -->
@@ -127,13 +127,13 @@
                 </a>
                 <ul class="nk-menu-sub">
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">RQ Peruanos</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">RQ Peruanos</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">RQ Extranjeros</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">RQ Extranjeros</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">RQ Vehiculo</span></a>
+                        <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span class="nk-menu-text">RQ Vehiculo</span></a>
                     </li>
                 </ul><!-- .nk-menu-sub -->
             </li><!-- .nk-menu-item -->
@@ -144,19 +144,19 @@
                 </a>
                 <ul class="nk-menu-sub">
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Delitos</span></a>
+                        <a href="{{route('basededatos_secundarias_delitos')}}" class="nk-menu-link"><span class="nk-menu-text">Delitos</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Grados</span></a>
+                        <a href="{{route('basededatos_secundarias_grados')}}" class="nk-menu-link"><span class="nk-menu-text">Grados</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Perfiles</span></a>
+                        <a href="{{route('basededatos_secundarias_perfiles')}}" class="nk-menu-link"><span class="nk-menu-text">Perfiles</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Plazos</span></a>
+                        <a href="{{route('basededatos_secundarias_plazos')}}" class="nk-menu-link"><span class="nk-menu-text">Plazos</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{'perfil'}}" class="nk-menu-link"><span class="nk-menu-text">Unidades</span></a>
+                        <a href="{{route('basededatos_secundarias_unidades')}}" class="nk-menu-link"><span class="nk-menu-text">Unidades</span></a>
                     </li>
                 </ul><!-- .nk-menu-sub -->
             </li><!-- .nk-menu-item -->

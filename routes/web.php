@@ -26,9 +26,21 @@ Route::GET('/usuario/actividad/actualizacion', [App\Http\Controllers\PlataformaC
 
 Route::GET('/administrador/usuarios/registro', [App\Http\Controllers\PlataformaController::class, 'administrador_usuarios_registro'])->name('administrador_usuarios_registro');
 Route::POST('/administrador/usuarios/registro/save', [App\Http\Controllers\PlataformaController::class, 'administrador_usuarios_registro_save'])->name('administrador_usuarios_registro_save');
+Route::POST('/administrador/usuarios/edit/save', [App\Http\Controllers\PlataformaController::class, 'administrador_usuarios_edit_save'])->name('administrador_usuarios_edit_save');
 Route::GET('/administrador/usuarios/bandeja', [App\Http\Controllers\PlataformaController::class, 'administrador_usuarios_bandeja'])->name('administrador_usuarios_bandeja');
 Route::GET('/administrador/consulta/policial', [App\Http\Controllers\PlataformaController::class, 'administrador_consulta_policial'])->name('administrador_consulta_policial');
 
 
 Route::GET('/administrador/reporte/usuarios', [App\Http\Controllers\PlataformaController::class, 'administrador_reporte_usuarios'])->name('administrador_reporte_usuarios');
 Route::GET('/administrador/reporte/usuario', [App\Http\Controllers\PlataformaController::class, 'administrador_reporte_usuario'])->name('administrador_reporte_usuario');
+
+
+Route::GET('entidades/policial', [App\Http\Controllers\PlataformaController::class, 'entidades_policial'])->name('entidades_policial');
+
+
+Route::GET('basededatos/secundarias/delitos', [App\Http\Controllers\PlataformaController::class, 'basededatos_secundarias_delitos'])->name('basededatos_secundarias_delitos');
+Route::GET('basededatos/secundarias/grados', [App\Http\Controllers\PlataformaController::class, 'basededatos_secundarias_grados'])->name('basededatos_secundarias_grados');
+Route::GET('basededatos/secundarias/unidades', [App\Http\Controllers\PlataformaController::class, 'basededatos_secundarias_unidades'])->name('basededatos_secundarias_unidades');
+Route::GET('basededatos/secundarias/perfiles', [App\Http\Controllers\PlataformaController::class, 'basededatos_secundarias_perfiles'])->name('basededatos_secundarias_perfiles');
+Route::GET('basededatos/secundarias/plazos', [App\Http\Controllers\PlataformaController::class, 'basededatos_secundarias_plazos'])->name('basededatos_secundarias_plazos');
+Route::POST('basededatos/secundarias/save', [App\Http\Controllers\PlataformaController::class, 'basededatos_secundarias_save'])->name('basededatos_secundarias_save');

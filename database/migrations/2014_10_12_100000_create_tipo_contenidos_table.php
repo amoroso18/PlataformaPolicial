@@ -26,7 +26,7 @@ return new class extends Migration
                 ],
                 [
                     'id' => 1,
-                    'descripcion' => 'PDF',
+                    'descripcion' => 'IMAGEN',
                 ],
                 [
                     'id' => 2,
@@ -35,6 +35,10 @@ return new class extends Migration
                 [
                     'id' => 3,
                     'descripcion' => 'AUDIO',
+                ],
+                [
+                    'id' => 4,
+                    'descripcion' => 'PDF',
                 ]
             )
         );
