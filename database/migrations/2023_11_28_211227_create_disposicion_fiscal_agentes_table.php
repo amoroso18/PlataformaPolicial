@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('disposicion_fiscal_agentes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('df_id')->constrained('dispocicion_fiscals')->onDelete('cascade');
+            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('agentes_id')->constrained('entidad_agentes')->onDelete('cascade');
+            $table->string('observaciones',1000)->nullable();
+            $table->integer('estado')->default(1);
             $table->timestamps();
         });
     }

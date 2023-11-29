@@ -37,7 +37,7 @@ return new class extends Migration
                     'nombres' => 'Pedro',
                     'apellidos' => 'Infantes',
                     'phone' => '957555221',
-                    'email' => 'programador@sivipol.com',
+                    'email' => 'comando@sivipol.com',
                     'password' => '$2y$10$swaDVJtnZcHKDcLBYEFqsuEVx/8XsY2fdWRCVocQ7vtn9LV472Qry',
                     'unidad_id' => 1,
                     'estado_id' => 1,

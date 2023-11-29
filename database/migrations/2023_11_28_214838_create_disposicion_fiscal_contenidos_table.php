@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('disposicion_fiscal_contenidos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('df_id')->constrained('dispocicion_fiscals')->onDelete('cascade');
+            $table->foreignId('dfnv_id')->constrained('disposicion_fiscal_nueva_vigilancias')->onDelete('cascade');
             $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('contenido_id')->constrained('tipo_contenidos')->onDelete('cascade');
             $table->datetime('fecha_hora_obtencion');
             $table->string('descripcion',1000)->nullable();
+            $table->string('observaciones',1000)->nullable();
+            $table->integer('estado')->default(1);
             $table->timestamps();
         });
     }

@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('df_id')->constrained('dispocicion_fiscals')->onDelete('cascade');
             $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
-
-            // relacionar con entidades PERUANOS, EXTRANJEROS, DOMICILIOS ....
+            $table->foreignId('entidads_id')->constrained('tipo_entidads')->onDelete('cascade');
+            $table->integer('codigo_relacion');
+            // codigo_relacion con entidades POLICIA, PERUANOS, EXTRANJEROS, VEHICULO, INMUEBLE ....
             $table->string('observaciones',1000)->nullable();
+            $table->integer('estado')->default(1);
             $table->timestamps();
         });
     }

@@ -13,15 +13,32 @@ return new class extends Migration
     {
         Schema::create('entidad_inmuebles', function (Blueprint $table) {
             $table->id();
-            $table->integer('dirección')->nullable();
+            $table->foreignId('tipo_inmuebles_id')->constrained('tipo_inmuebles')->onDelete('cascade');
+            $table->integer('dirección',1000)->nullable();
             $table->integer('departamento')->nullable();
             $table->string('provincia')->nullable();
-            $table->string('referencia')->nullable();
-            $table->string('color')->nullable();
+            $table->string('referencia',1000)->nullable();
+            $table->string('color_interior')->nullable();
+            $table->string('color_exterior')->nullable();
+            $table->string('dimensiones',1000)->nullable();
+            $table->string('nro_habitaciones')->nullable();
+            $table->string('nro_banios')->nullable();
+            $table->string('caracteristicas_especiales',1000)->nullable();
+            $table->string('estado_conservacion',1000)->nullable();
+            $table->string('valor')->nullable();
+            $table->date('fecha_construccion')->nullable();
+            $table->string('agua')->nullable();
+            $table->string('luz')->nullable();
+            $table->string('internet')->nullable();
+            $table->string('cable')->nullable();
             $table->string('pisos')->nullable();
-            $table->string('observaciones')->nullable();
             $table->string('latitud')->nullable();
             $table->string('longitud')->nullable();
+
+            $table->string('propietarios_actuales',1000)->nullable();
+            $table->string('propietarios_anteriores',1000)->nullable();
+
+            $table->string('observaciones',1000)->nullable();
             $table->timestamps();
         });
     }
