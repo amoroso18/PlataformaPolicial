@@ -24,8 +24,8 @@ return new class extends Migration
             $table->integer('plazo')->nullable();
             $table->integer('plazo_ampliacion')->nullable(); // dato secundario
             $table->integer('plazo_reduccion')->nullable(); // dato secundario
-            $table->datetime('fecha_hora_inicio'); //automatico
-            $table->datetime('fecha_hora_termino'); //automatico
+            $table->date('fecha_inicio'); //automatico
+            $table->date('fecha_termino'); //automatico
             $table->foreignId('estado_id')->constrained('estado_disposicion_fiscals')->onDelete('cascade')->default(1);
             $table->integer('referencia_fiscal_anterior')->nullable(); // si esta DF tiene alguna relacion anterior
             $table->timestamps();

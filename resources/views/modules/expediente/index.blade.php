@@ -16,6 +16,28 @@
         }
     );
 </script>
+<style>
+    /* Ajusta el estilo del input según tus preferencias */
+    input[type="date"] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        padding-right: 24px;
+        /* Ajusta según el ancho del icono */
+    }
+
+    .custom-date-input::before {
+        content: '\1F4C5';
+        /* Unicode del icono de calendario (puedes cambiarlo según tus preferencias) */
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        color: blue;
+        /* Cambia el color del icono según tus preferencias */
+    }
+</style>
 @endpush
 @section('content')
 <div class="nk-block-between">
@@ -23,29 +45,72 @@
         <h3 class="nk-block-title page-title">Expedientes de diposición fiscal</h3>
     </div><!-- .nk-block-head-content -->
     <div class="nk-block-head-content">
-        <a class="btn btn-primary" data-toggle="modal" data-target="#modalADD"><em class="icon ni ni-plus"></em></a>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#modalADD"><em class="icon ni ni-plus"></em></button>
         <a target="_blank" href="{{route('administrador_reporte_usuarios')}}" class="btn btn-info"><em class="icon ni ni-printer-fill"></em></a>
     </div><!-- .nk-block-head-content -->
 </div>
 <div id="miapp" class="mt-3">
-    <div class="nk-block-head-content" v-if="situacion">
-        <div class="nk-block-des text-soft">
-            <p v-text="situacion"></p>
-        </div>
-    </div><!-- .nk-block-head-content -->
-    <v-client-table :data="data.tableData" :columns="data.columns" :options="data.options" v-if="data.tableData.length > 0">
-        <div slot="estado" slot-scope="props">
-            <div class="text-success" v-if="props.row.estado_id == 1"> ACTIVO</div>
-            <div class="text-danger" v-if="props.row.estado_id != 1"> INACTIVO</div>
-        </div>
-        <div slot="opciones" slot-scope="props">
-            <div class="btn-group dropup">
-                <a target="_blank" :href="urlReporte+'?contexto='+props.row.id" class="m-1" style="font-size: 22px;"><em class="icon ni ni-reports"></em></a>
-                <a v-on:click="OpenEdit(props.row)" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
-
+    <div class="nk-block">
+        <p><strong>Resumen de expedientes</strong></p>
+        <div class="row g-gs">
+            <div class="col-md-4">
+                <div class="card card-bordered ">
+                    <div class="card-inner">
+                        <div class="card-title-group align-start mb-0">
+                            <div class="card-title">
+                                <h6 class="subtitle">Total</h6>
+                            </div>
+                        </div>
+                        <div class="card-amount"><span class="amount" v-text="data.tableData.length"></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-bordered ">
+                    <div class="card-inner">
+                        <div class="card-title-group align-start mb-0">
+                            <div class="card-title">
+                                <h6 class="subtitle">Culminados</h6>
+                            </div>
+                        </div>
+                        <div class="card-amount"><span class="amount" v-text="expe_culminados"></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-bordered ">
+                    <div class="card-inner">
+                        <div class="card-title-group align-start mb-0">
+                            <div class="card-title">
+                                <h6 class="subtitle">Pendientes</h6>
+                            </div>
+                        </div>
+                        <div class="card-amount"><span class="amount" v-text="expe_pendientes"></span></div>
+                    </div>
+                </div>
             </div>
         </div>
-    </v-client-table>
+    </div>
+
+    <div class="nk-block">
+        <p><strong>Expedientes</strong></p>
+        <p v-if="situacion" v-text="situacion"></p>
+        <div class="card card-bordered card-preview">
+            <v-client-table :data="data.tableData" :columns="data.columns" :options="data.options" v-if="data.tableData.length > 0">
+                <div slot="estado" slot-scope="props">
+                    <div class="text-success" v-if="props.row.estado_id == 1"> ACTIVO</div>
+                    <div class="text-danger" v-if="props.row.estado_id != 1"> INACTIVO</div>
+                </div>
+                <div slot="opciones" slot-scope="props">
+                    <div class="btn-group dropup">
+                        <a target="_blank" :href="urlReporte+'?contexto='+props.row.id" class="m-1" style="font-size: 22px;"><em class="icon ni ni-reports"></em></a>
+                        <a v-on:click="OpenEdit(props.row)" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
+
+                    </div>
+                </div>
+            </v-client-table>
+        </div>
+    </div>
 
     <div class="modal fade" id="modalADD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -58,22 +123,38 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-sm-12 mt-3">
-                        <div class="form-group">
-                            <label class="form-label" for="default-01">CASO</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="default-01" v-model="dataExpe.caso">
-                            </div>
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-Caso" v-model="dataExpe.caso"><label class="form-label-outlined" for="outlined-Caso">Caso</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-nro" v-model="dataExpe.nro"><label class="form-label-outlined" for="outlined-nro">Número</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-resumen" v-model="dataExpe.resumen"><label class="form-label-outlined" for="outlined-resumen">Resumen</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-Tipo" v-model="dataExpe.tipo_plazo"><label class="form-label-outlined" for="outlined-Tipo">Tipo de Plazo</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-plazo" v-model="dataExpe.plazo"><label class="form-label-outlined" for="outlined-plazo">Días de Plazo</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-observaciones" v-model="dataExpe.observaciones"><label class="form-label-outlined" for="outlined-observaciones">Observaciones</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap">
+                            <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="text" class="form-control form-control-xl form-control-outlined date-picker" id="outlined-date-picker" v-model="dataExpe.fecha_inicio"><label class="form-label-outlined" for="outlined-date-picker">Fecha de inicio</label>
                         </div>
                     </div>
                     <div class="col-sm-12 mt-3">
-                        <div class="form-group">
-                            <label class="form-label" for="default-011">NRO</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="default-011" v-model="dataExpe.nro">
-                            </div>
+                        <div class="form-control-wrap">
+                            <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="text" class="form-control form-control-xl form-control-outlined date-picker" id="outlined-date-picker2" v-model="dataExpe.fecha_termino"><label class="form-label-outlined" for="outlined-date-picker2">Fecha de termino</label>
                         </div>
                     </div>
-
+                    <div class="col-sm-12 mt-3">
+                        <button class="btn btn-primary" v-if="!loadingModal" v-on:click="Grabar">Registrar</button>
+                        <p v-if="loadingModal"><em class="icon ni ni-loader"></em> Cargando....</p>
+                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -108,22 +189,26 @@
         const app = new Vue({
             el: '#miapp',
             data: {
+                expe_culminados: 0,
+                expe_pendientes: 0,
                 uri: URL_REGISTRAR,
                 situacion: "",
+                loadingModal: false,
                 loadingBody: false,
                 loadingTable: false,
-                dataExpe:{
-                    nro : "",
+                dataExpe: {
+                    nro: "",
                     caso: "",
                     fecha_disposicion: null,
                     fiscal_responsable_id: null,
                     fiscal_asistente_id: null,
-                    resumen : "",
+                    resumen: "",
                     observaciones: "",
                     plazo_id: null,
                     plazo: 0,
-                    fecha_hora_inicio: null,
-                    fecha_hora_termino: null,
+                    fecha_inicio: null,
+                    fecha_termino: null,
+                    tipo_plazo: "Días Naturales"
                 },
                 data: {
                     columns: ['carnet', 'nombres', 'apellidos', 'phone', 'email', 'estado', 'opciones'],
@@ -163,6 +248,9 @@
                 },
             },
             methods: {
+                Grabar(){
+                    this.loadingModal = true;
+                },
                 BuscarIndice(objetoABuscar_id) {
                     const objetoABuscar = this.data.tableData;
                     const indice = objetoABuscar.findIndex(objeto => objeto.id === objetoABuscar_id);
