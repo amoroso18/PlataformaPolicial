@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('apellidos')->nullable();
             $table->string('phone')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
-            $table->string('email')->unique();
+            $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->foreignId('unidad_id')->constrained('tipo_unidads')->onDelete('cascade')->default(0);
