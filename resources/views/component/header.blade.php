@@ -6,21 +6,7 @@
                     <img class="logo-light logo-img" src="{{asset('images/sivipol/BannerSivipolTemaOscuro.png')}}" srcset="{{asset('images/sivipol/BannerSivipolTemaOscuro.png')}}" alt="logo">
                     <img class="logo-dark logo-img" src="{{asset('images/sivipol/BannerSivipol.png')}}" srcset="{{asset('images/sivipol/BannerSivipol.png')}} 2x" alt="logo-dark">
                 </a>
-            </div><!-- .nk-header-brand -->
-            <div class="nk-header-menu">
-                <ul class="nk-menu nk-menu-main">
-                    <li class="nk-menu-item">
-                        <a href="html/index.html" class="nk-menu-link">
-                            <span class="nk-menu-text">Expedientes</span>
-                        </a>
-                    </li><!-- .nk-menu-item -->
-                    <li class="nk-menu-item">
-                        <a href="html/components.html" class="nk-menu-link">
-                            <span class="nk-menu-text">Usuarios</span>
-                        </a>
-                    </li><!-- .nk-menu-item -->
-                </ul><!-- .nk-menu -->
-            </div><!-- .nk-header-menu -->
+            </div>
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
                     <li class="dropdown notification-dropdown">

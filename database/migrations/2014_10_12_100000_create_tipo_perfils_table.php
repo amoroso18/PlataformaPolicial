@@ -26,7 +26,7 @@ return new class extends Migration
                 ],
                 [
                     'id' => 1,
-                    'descripcion' => 'PROGRAMADOR',
+                    'descripcion' => 'COMANDO',
                 ],
                 [
                     'id' => 20,

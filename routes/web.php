@@ -2,11 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Auth::routes();
+
+Route::GET('/', [App\Http\Controllers\PlataformaController::class, 'dashboard'])->name('dashboard');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/ayuda', [App\Http\Controllers\UserController::class, 'ayuda'])->name('ayuda');
@@ -17,7 +16,6 @@ Route::get('/recuperar/usuario', [App\Http\Controllers\UserController::class, 'r
 Route::POST('/recuperar/usuario/credenciales', [App\Http\Controllers\UserController::class, 'recuperar_save'])->name('recuperar_save');
 Route::GET('/usuario/salir', [App\Http\Controllers\UserController::class, 'logout'])->name('salir');
 
-Route::GET('/dashboard', [App\Http\Controllers\PlataformaController::class, 'dashboard'])->name('dashboard');
 
 Route::GET('/usuario/perfil', [App\Http\Controllers\PlataformaController::class, 'perfil'])->name('perfil');
 Route::GET('/usuario/actividad/conexion', [App\Http\Controllers\PlataformaController::class, 'conexion'])->name('conexion');
@@ -44,3 +42,7 @@ Route::GET('basededatos/secundarias/unidades', [App\Http\Controllers\PlataformaC
 Route::GET('basededatos/secundarias/perfiles', [App\Http\Controllers\PlataformaController::class, 'basededatos_secundarias_perfiles'])->name('basededatos_secundarias_perfiles');
 Route::GET('basededatos/secundarias/plazos', [App\Http\Controllers\PlataformaController::class, 'basededatos_secundarias_plazos'])->name('basededatos_secundarias_plazos');
 Route::POST('basededatos/secundarias/save', [App\Http\Controllers\PlataformaController::class, 'basededatos_secundarias_save'])->name('basededatos_secundarias_save');
+
+
+Route::GET('expediente/disposicion-fiscal', [App\Http\Controllers\ExpedienteController::class, 'expedientes'])->name('expedientes');
+Route::POST('expediente/disposicion-fiscal/WS', [App\Http\Controllers\ExpedienteController::class, 'ExpedienteWS'])->name('ExpedienteWS');

@@ -29,17 +29,21 @@ return new class extends Migration
         DB::table('entidad_fiscals')->insert(
             array(
                 [
-                    'carnet' => 22335600,
-                    'dni' => 77889900,
-                    'nombres' => 'Prueba',
-                    'paterno' => 'Prueba',
-                    'materno' => 'Prueba',
-                    'celular' => '22335600',
+                    'carnet' => null,
+                    'dni' => null,
+                    'nombres' => '',
+                    'paterno' => '',
+                    'materno' => '',
+                    'celular' => '',
                     'correo' => '',
-                    'procedencia' => 'MINISTERIO PÚBLICO',
-                    'ficalia' => '2DA. FISCALÍA PROVINCIAL PENAL CORPORATIVADE CARABAYLLO',
-                    'despacho' => 'SEGUNDO DESPACHO',
-                    'ubigeo' => 'DISTRITO FISCAL DE LIMA NORTE',
+                     'procedencia' => 'NO TIENE',
+                    'ficalia' => 'NO TIENE',
+                    'despacho' => 'NO TIENE',
+                    'ubigeo' => 'NO TIENE',
+                    // 'procedencia' => 'MINISTERIO PÚBLICO',
+                    // 'ficalia' => '2DA. FISCALÍA PROVINCIAL PENAL CORPORATIVADE CARABAYLLO',
+                    // 'despacho' => 'SEGUNDO DESPACHO',
+                    // 'ubigeo' => 'DISTRITO FISCAL DE LIMA NORTE',
                 ],
                
              

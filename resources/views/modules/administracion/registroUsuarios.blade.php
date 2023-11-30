@@ -350,20 +350,32 @@
                 this.celular_selecionado = 0;
                 this.email_selecionado = "";
                 this.iniciarRegistroMASPOLSAVE = false;
+                var adjunto= "";
+                if(tipo == 1){
+                    adjunto = `?cip=${this.numero}`;
+                }else{
+                    adjunto = `?dni=${this.numero}`;
+                }
 
                 // Realizar una solicitud POST con Axios
-                axios.get(`${URL_CONSULTA}`)
+                axios.get(`${URL_CONSULTA}${adjunto}`)
                     .then(response => {
                         console.log(response);
-                        this.dataMASPOL = response.data.data;
                         // Ocultar indicador de carga
                         this.loading = false;
-                        this.iniciarRegistroMASPOL = true;
-
-
                         // Cerrar el modal
                         $('#modalDefault').modal('hide');
+                        if(response.data.error){
+                            return Swal.fire({
+                                title: 'Error',
+                                text: `${response.data.error}`,
+                                icon: 'info',
+                                confirmButtonText: '¡Entendido!',
 
+                            });
+                        }
+                        this.iniciarRegistroMASPOL = true;
+                        this.dataMASPOL = response.data.data;
                         // Manejar la respuesta exitosa
                         // this.resultado = 'Edad obtenida: ' + response.data.edad;
                     })
