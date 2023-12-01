@@ -52,7 +52,8 @@
 <div id="miapp" class="mt-3">
     <div class="nk-block">
         <p><strong>Resumen de expedientes</strong></p>
-        <div class="row g-gs">
+        <p v-if="loadingTable"><em class="icon ni ni-loader"></em> Cargando....</p>
+        <div class="row g-gs"  v-if="!loadingTable">
             <div class="col-md-4">
                 <div class="card card-bordered ">
                     <div class="card-inner">
@@ -96,16 +97,21 @@
         <p><strong>Expedientes</strong></p>
         <p v-if="situacion" v-text="situacion"></p>
         <div class="card card-bordered card-preview">
+            <p v-if="loadingTable"><em class="icon ni ni-loader"></em> Cargando....</p>
             <v-client-table :data="data.tableData" :columns="data.columns" :options="data.options" v-if="data.tableData.length > 0">
                 <div slot="estado" slot-scope="props">
                     <div class="text-success" v-if="props.row.estado_id == 1"> ACTIVO</div>
                     <div class="text-danger" v-if="props.row.estado_id != 1"> INACTIVO</div>
                 </div>
+                <div slot="get_fiscal" slot-scope="props" v-if="props.row.get_fiscal.id != 1">
+                    <span v-text="props.row.get_fiscal.procedencia"> </span>
+                </div>
+                <div slot="get_fiscal_adjunto" slot-scope="props" v-if="props.row.get_fiscal_adjunto.id != 1">
+                    <span v-text="props.row.get_fiscal_adjunto.procedencia"> </span>
+                </div>
                 <div slot="opciones" slot-scope="props">
                     <div class="btn-group dropup">
-                        <a target="_blank" :href="urlReporte+'?contexto='+props.row.id" class="m-1" style="font-size: 22px;"><em class="icon ni ni-reports"></em></a>
                         <a v-on:click="OpenEdit(props.row)" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
-
                     </div>
                 </div>
             </v-client-table>
@@ -127,6 +133,11 @@
                     </div>
                     <div class="col-sm-12 mt-3">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-nro" v-model="dataExpe.nro"><label class="form-label-outlined" for="outlined-nro">Número</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap">
+                            <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="text" class="form-control form-control-xl form-control-outlined date-picker" id="outlined-date-picker3" v-model="dataExpe.fecha_disposicion"><label class="form-label-outlined" for="outlined-date-picker3">Fecha de disposición</label>
+                        </div>
                     </div>
                     <div class="col-sm-12 mt-3">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-resumen" v-model="dataExpe.resumen"><label class="form-label-outlined" for="outlined-resumen">Resumen</label></div>
@@ -154,7 +165,7 @@
                         <button class="btn btn-primary" v-if="!loadingModal" v-on:click="Grabar">Registrar</button>
                         <p v-if="loadingModal"><em class="icon ni ni-loader"></em> Cargando....</p>
                     </div>
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -196,6 +207,7 @@
                 loadingModal: false,
                 loadingBody: false,
                 loadingTable: false,
+                dataEdit: {},
                 dataExpe: {
                     nro: "",
                     caso: "",
@@ -204,14 +216,14 @@
                     fiscal_asistente_id: null,
                     resumen: "",
                     observaciones: "",
-                    plazo_id: null,
+                    plazo_id: 1,
                     plazo: 0,
                     fecha_inicio: null,
                     fecha_termino: null,
                     tipo_plazo: "Días Naturales"
                 },
                 data: {
-                    columns: ['carnet', 'nombres', 'apellidos', 'phone', 'email', 'estado', 'opciones'],
+                    columns: ['nro','caso', 'resumen','plazo','get_fiscal','get_fiscal_adjunto','estado', 'opciones'],
                     tableData: [],
                     options: {
                         toMomentFormat: true,
@@ -223,15 +235,16 @@
                             dropdown: true
                         },
                         headings: {
-                            nombres: 'NOMBRE',
-                            apellidos: 'APELLIDOS',
-                            carnet: 'CIP',
-                            email: 'EMAIL',
-                            phone: 'CELULAR',
+                            nro: 'NRO',
+                            caso: 'CASO',
+                            resumen: 'RESUMEN',
+                            plazo: 'DÍAS DE PLAZO',
+                            get_fiscal: 'FISCAL',
+                            get_fiscal_adjunto: 'FISCAL ADJUNTO',
                             estado: 'SITUACION',
                             opciones: 'OPCIONES',
                         },
-                        filterable: ['carnet', 'nombres', 'apellidos', 'phone', 'email', ],
+                        filterable: ['nro', 'caso', 'resumen','plazo','get_fiscal','get_fiscal_adjunto',],
                         texts: {
                             limit: 'Mostrar:',
                             count: 'Total de {count} registros encontrados',
@@ -247,123 +260,204 @@
                     }
                 },
             },
+            mounted(){
+                this.Get();
+            },
             methods: {
-                Grabar(){
+                Grabar() {
                     this.loadingModal = true;
-                },
-                BuscarIndice(objetoABuscar_id) {
-                    const objetoABuscar = this.data.tableData;
-                    const indice = objetoABuscar.findIndex(objeto => objeto.id === objetoABuscar_id);
-                    if (indice !== -1) {
-                        return indice;
-                    } else {
-                        return false;
-                    }
-                },
-                EliminarIndice(objetoABuscar_indice) {
-                    if (indice !== -1) {
-                        var objetoABuscar = this.data.tableData;
-                        this.data.tableData = objetoABuscar.splice(objetoABuscar_indice, 1);
-                        return true;
-                    } else {
-                        return false;
-                    }
-                },
-                EditarIndice(key) {
-                    this.loading = true;
                     const formData = new FormData();
-                    formData.append('contexto', this.dataEdit.contexto);
-                    formData.append('type', key);
-                    switch (key) {
-                        case 1:
-                            formData.append('nombres', this.dataEdit.nombres);
-                            formData.append('apellidos', this.dataEdit.apellidos);
-                            break;
-                        case 2:
-                            formData.append('phone', this.dataEdit.phone);
-                            break;
-                        case 3:
-                            formData.append('email', this.dataEdit.email);
-                            break;
-                        case 4:
-                            formData.append('unidad_id', this.dataEdit.unidad_id);
-                            break;
-                        case 5:
-                            formData.append('grado_id', this.dataEdit.grado_id);
-                            break;
-                        case 6:
-                            formData.append('perfil_id', this.dataEdit.perfil_id);
-                            break;
-                        case 7:
-                            formData.append('estado_id', this.dataEdit.estado_id);
-                            break;
-                        default:
-                            break;
-                    }
+                    formData.append('type', "_SAVE");
+                    if(this.dataExpe.nro){ formData.append('nro', this.dataExpe.nro);}
+                    if(this.dataExpe.caso){ formData.append('caso', this.dataExpe.caso);}
+                    if(this.dataExpe.fecha_disposicion){ formData.append('fecha_disposicion', this.dataExpe.fecha_disposicion);}
+                  
+                    if(this.dataExpe.resumen){ formData.append('resumen', this.dataExpe.resumen);}
+                    if(this.dataExpe.observaciones){ formData.append('observaciones', this.dataExpe.observaciones);}
+                    if(this.dataExpe.plazo_id){ formData.append('plazo_id', this.dataExpe.plazo_id);}
+
+                    if(this.dataExpe.plazo){ formData.append('plazo', this.dataExpe.plazo);}
+                    if(this.dataExpe.fecha_inicio){ formData.append('fecha_inicio', this.dataExpe.fecha_inicio);}
+                    if(this.dataExpe.fecha_termino){ formData.append('fecha_termino', this.dataExpe.fecha_termino);}
+                    if(this.dataExpe.tipo_plazo){ formData.append('tipo_plazo', this.dataExpe.tipo_plazo);}
+
+                    if(this.dataExpe.fiscal_responsable_id){ formData.append('fiscal_responsable_id', this.dataExpe.fiscal_responsable_id);}
+                    if(this.dataExpe.fiscal_asistente_id){ formData.append('fiscal_asistente_id', this.dataExpe.fiscal_asistente_id);}
 
                     axios.post(URL_REGISTRAR, formData)
                         .then(response => {
                             if (response.data.error) {
                                 Swal.fire({
                                     title: 'Error',
-                                    text: `${response.data.error}`,
+                                    text: `${JSON.stringify(response.data.error)}`,
                                     icon: 'info',
                                     confirmButtonText: '¡Entendido!',
                                 });
                             } else {
-                                const DATARETURN = response.data.data;
-                                console.log(DATARETURN)
-                                const index = this.BuscarIndice(DATARETURN.id);
-                                console.log(index)
-                                this.data.tableData[index].id = DATARETURN.id;
-                                this.data.tableData[index].nombres = DATARETURN.nombres;
-                                this.data.tableData[index].apellidos = DATARETURN.apellidos;
-                                this.data.tableData[index].phone = DATARETURN.phone;
-                                this.data.tableData[index].email = DATARETURN.email;
-                                this.data.tableData[index].unidad_id = DATARETURN.unidad_id;
-                                this.data.tableData[index].grado_id = DATARETURN.grado_id;
-                                this.data.tableData[index].estado_id = DATARETURN.estado_id;
-                                this.data.tableData[index].perfil_id = DATARETURN.perfil_id;
-
-                                // this.loading = false;
-                                // this.iniciarRegistroMASPOL = false;
-                                // this.iniciarRegistroMASPOLSAVE = false;
-                                // this.iniciarRegistroMANUAL = false;
-                                // this.iniciarRegistroMANUALSAVE = false;
-                                // this.numero = 0;
-                                // this.celular_selecionado = 0;
-                                // this.dataMASPOL = {};
-                                // Swal.fire({
-                                //     title: `USUARIO: ${response.data.user}`,
-                                //     text: `CONTRASEÑA: ${response.data.password}`,
-                                //     icon: 'success',
-                                //     confirmButtonText: '¡Entendido!',
-                                // });
+                                this.data.tableData.push(response.data.data)
+                                // const DATARETURN = response.data.data;
+                                console.log(response)
+                                // const index = this.BuscarIndice(DATARETURN.id);
+                                // console.log(index)
                             }
                         })
                         .catch(error => {
                             Swal.fire({
                                 title: 'Error',
-                                text: `Error al realizar la solicitud: ${error}`,
+                                text: `Error al realizar la solicitud: ${JSON.stringify(error)}`,
                                 icon: 'error',
                                 confirmButtonText: '¡Entendido!',
                             });
                         }).finally(() => {
-                            this.loading = false;
-                            $('#modalDefault').modal('hide');
+                            this.loadingModal = false;
+                            $('#modalADD').modal('hide');
+                        });
+
+                },
+                Get(){
+                    this.loadingTable = true;
+                    const formData = new FormData();
+                    formData.append('dd', "_SAVE");
+                    formData.append('type', "_EXPEDIENTES");
+                    axios.post(URL_REGISTRAR, formData)
+                        .then(response => {
+                            if (response.data.error) {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: `${JSON.stringify(response.data.error)}`,
+                                    icon: 'info',
+                                    confirmButtonText: '¡Entendido!',
+                                });
+                            } else {
+                                this.data.tableData = response.data.data;
+                                this.expe_culminados = this.filtrarPorEstado(1);
+                                this.expe_pendientes = this.filtrarPorEstado(2);
+                                // const DATARETURN = response.data.data;
+                                console.log(response)
+                                // const index = this.BuscarIndice(DATARETURN.id);
+                                // console.log(index)
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: 'Error',
+                                text: `Error al realizar la solicitud: ${JSON.stringify(error)}`,
+                                icon: 'error',
+                                confirmButtonText: '¡Entendido!',
+                            });
+                        }).finally(() => {
+                            this.loadingTable = false;
                         });
                 },
-                OpenEdit(data) {
-                    this.dataEdit.contexto = data.id;
-                    this.dataEdit.nombres = data.nombres;
-                    this.dataEdit.apellidos = data.apellidos;
-                    this.dataEdit.phone = data.phone;
-                    this.dataEdit.email = data.email;
-                    this.dataEdit.unidad_id = data.unidad_id;
-                    this.dataEdit.grado_id = data.grado_id;
-                    this.dataEdit.estado_id = data.estado_id;
-                    this.dataEdit.perfil_id = data.perfil_id;
+                filtrarPorEstado(estado) {
+                    // Utiliza el método filter para obtener solo los objetos con el estado deseado
+                    var nuevaData = this.data.tableData.filter(item => item.estado_id === estado);
+                    return nuevaData.length;
+                },
+                BuscarIndice(objetoABuscar_id) {
+                    // const objetoABuscar = this.data.tableData;
+                    // const indice = objetoABuscar.findIndex(objeto => objeto.id === objetoABuscar_id);
+                    // if (indice !== -1) {
+                    //     return indice;
+                    // } else {
+                    //     return false;
+                    // }
+                },
+                EliminarIndice(objetoABuscar_indice) {
+                    // if (indice !== -1) {
+                    //     var objetoABuscar = this.data.tableData;
+                    //     this.data.tableData = objetoABuscar.splice(objetoABuscar_indice, 1);
+                    //     return true;
+                    // } else {
+                    //     return false;
+                    // }
+                },
+                EditarIndice(key) {
+                    // this.loading = true;
+                    // const formData = new FormData();
+                    // formData.append('contexto', this.dataEdit.contexto);
+                    // formData.append('type', key);
+                    // switch (key) {
+                    //     case 1:
+                    //         formData.append('nombres', this.dataEdit.nombres);
+                    //         formData.append('apellidos', this.dataEdit.apellidos);
+                    //         break;
+                    //     case 2:
+                    //         formData.append('phone', this.dataEdit.phone);
+                    //         break;
+                    //     case 3:
+                    //         formData.append('email', this.dataEdit.email);
+                    //         break;
+                    //     case 4:
+                    //         formData.append('unidad_id', this.dataEdit.unidad_id);
+                    //         break;
+                    //     case 5:
+                    //         formData.append('grado_id', this.dataEdit.grado_id);
+                    //         break;
+                    //     case 6:
+                    //         formData.append('perfil_id', this.dataEdit.perfil_id);
+                    //         break;
+                    //     case 7:
+                    //         formData.append('estado_id', this.dataEdit.estado_id);
+                    //         break;
+                    //     default:
+                    //         break;
+                    // }
 
+                    // axios.post(URL_REGISTRAR, formData)
+                    //     .then(response => {
+                    //         if (response.data.error) {
+                    //             Swal.fire({
+                    //                 title: 'Error',
+                    //                 text: `${response.data.error}`,
+                    //                 icon: 'info',
+                    //                 confirmButtonText: '¡Entendido!',
+                    //             });
+                    //         } else {
+                    //             const DATARETURN = response.data.data;
+                    //             console.log(DATARETURN)
+                    //             const index = this.BuscarIndice(DATARETURN.id);
+                    //             console.log(index)
+                    //             this.data.tableData[index].id = DATARETURN.id;
+                    //             this.data.tableData[index].nombres = DATARETURN.nombres;
+                    //             this.data.tableData[index].apellidos = DATARETURN.apellidos;
+                    //             this.data.tableData[index].phone = DATARETURN.phone;
+                    //             this.data.tableData[index].email = DATARETURN.email;
+                    //             this.data.tableData[index].unidad_id = DATARETURN.unidad_id;
+                    //             this.data.tableData[index].grado_id = DATARETURN.grado_id;
+                    //             this.data.tableData[index].estado_id = DATARETURN.estado_id;
+                    //             this.data.tableData[index].perfil_id = DATARETURN.perfil_id;
+
+                    //             // this.loading = false;
+                    //             // this.iniciarRegistroMASPOL = false;
+                    //             // this.iniciarRegistroMASPOLSAVE = false;
+                    //             // this.iniciarRegistroMANUAL = false;
+                    //             // this.iniciarRegistroMANUALSAVE = false;
+                    //             // this.numero = 0;
+                    //             // this.celular_selecionado = 0;
+                    //             // this.dataMASPOL = {};
+                    //             // Swal.fire({
+                    //             //     title: `USUARIO: ${response.data.user}`,
+                    //             //     text: `CONTRASEÑA: ${response.data.password}`,
+                    //             //     icon: 'success',
+                    //             //     confirmButtonText: '¡Entendido!',
+                    //             // });
+                    //         }
+                    //     })
+                    //     .catch(error => {
+                    //         Swal.fire({
+                    //             title: 'Error',
+                    //             text: `Error al realizar la solicitud: ${error}`,
+                    //             icon: 'error',
+                    //             confirmButtonText: '¡Entendido!',
+                    //         });
+                    //     }).finally(() => {
+                    //         this.loading = false;
+                    //         $('#modalDefault').modal('hide');
+                    //     });
+                },
+                OpenEdit(data) {
+                   this.dataEdit = data;
                 }
             }
         });

@@ -33,23 +33,29 @@ class ExpedienteController extends Controller
     {
         try {
             if($request->type && $request->type == "_SAVE"){
+                // return $request->all();
                 $new = new DispocicionFiscal;
-                $new->caso = $request->caso;
-                $new->nro = $request->nro;
-                $new->fecha_disposicion = $request->fecha_disposicion;
-                $new->fiscal_responsable_id = $request->fiscal_responsable_id;
-                $new->fiscal_asistente_id = $request->fiscal_asistente_id;
-                $new->resumen = $request->resumen;
-                $new->observaciones = $request->observaciones;
-                $new->plazo_id = $request->plazo_id;
-                $new->plazo = $request->plazo;
-                $new->plazo_ampliacion = $request->plazo_ampliacion;
-                $new->plazo_reduccion = $request->plazo_reduccion;
-                $new->fecha_hora_inicio = $request->fecha_hora_inicio;
-                $new->fecha_hora_termino = $request->fecha_hora_termino;
-                $new->referencia_fiscal_anterior = $request->referencia_fiscal_anterior;
+                $new->caso = $request->caso ? $request->caso:  "Sin caso";
+                $new->nro = $request->nro ? $request->nro : "Sin nro";
+                if($request->fecha_disposicion){
+                    $new->fecha_disposicion = $request->fecha_disposicion;
+                }
+                if($request->fiscal_responsable_id){
+                    $new->fiscal_responsable_id = $request->fiscal_responsable_id;
+                }
+                $new->fiscal_responsable_id = $request->fiscal_responsable_id ? $request->fiscal_responsable_id : 1;
+                $new->fiscal_asistente_id = $request->fiscal_asistente_id  ? $request->fiscal_asistente_id : 1;
+                $new->resumen = $request->resumen ? $request->resumen : "Sin resumen";
+                $new->observaciones = $request->observaciones  ? $request->observaciones : "Sin observaciones";
+                $new->plazo_id = $request->plazo_id  ? $request->plazo_id : 1;
+                $new->plazo = $request->plazo ? $request->plazo_id : 0;
+                $new->fecha_inicio = $request->fecha_inicio || $request->fecha_inicio != "null"  ? $request->fecha_inicio : null;
+                $new->fecha_termino =  $request->fecha_termino || $request->fecha_termino != "null"  ? $request->fecha_termino : null;
+                $new->estado_id =1;
                 $new->save();
-                return response()->json(['message' => 'Registrado correctamente', 'data' => $new]);
+
+                $data = DispocicionFiscal::with(['getFiscal','getFiscalAdjunto','getPlazo','getEstado'])->where('id',$new->id)->first();
+                return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
             }elseif($request->type && $request->type == "_EdiT"){
                 $new = DispocicionFiscal::find($request->id);
                 if ($new) {
@@ -64,8 +70,8 @@ class ExpedienteController extends Controller
                     $new->plazo = $request->plazo ? $request->plazo : $new->plazo;
                     $new->plazo_ampliacion = $request->plazo_ampliacion ? $request->plazo_ampliacion : $new->plazo_ampliacion;
                     $new->plazo_reduccion = $request->plazo_reduccion ? $request->plazo_reduccion : $new->plazo_reduccion;
-                    $new->fecha_hora_inicio = $request->fecha_hora_inicio ? $request->fecha_hora_inicio : $new->fecha_hora_inicio;
-                    $new->fecha_hora_termino = $request->fecha_hora_termino ? $request->fecha_hora_termino : $new->fecha_hora_termino;
+                    $new->fecha_inicio = $request->fecha_inicio ? $request->fecha_inicio : $new->fecha_inicio;
+                    $new->fecha_termino = $request->fecha_termino ? $request->fecha_termino : $new->fecha_termino;
                     $new->estado_id = $request->estado_id ? $request->estado_id : $new->estado_id;
                     $new->referencia_fiscal_anterior = $request->referencia_fiscal_anterior ? $request->referencia_fiscal_anterior : $new->referencia_fiscal_anterior;
                     $new->save();
@@ -76,7 +82,7 @@ class ExpedienteController extends Controller
                
             }elseif($request->type && $request->type == "_EXPEDIENTES"){
                 return response()->json([
-                    'data' => DispocicionFiscal::with(['getFiscal','getFiscalAdjunto','getPlazo','getEstado'])->all(),
+                    'data' => DispocicionFiscal::with(['getFiscal','getFiscalAdjunto','getPlazo','getEstado'])->get(),
                 ]);
             }elseif($request->type && $request->type == "_EXPEDIENTE"){
                 return response()->json([

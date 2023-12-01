@@ -23,7 +23,7 @@ class DispocicionFiscal extends Model
     }
     public function getEstado()
     {
-        return $this->hasOne(EstadoDisposicionFiscal::class, 'id', 'estado_disposicion_fiscals');
+        return $this->hasOne(EstadoDisposicionFiscal::class, 'id', 'estado_id');
     }
    
 }
