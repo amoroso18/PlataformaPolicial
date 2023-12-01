@@ -330,8 +330,8 @@
                                 });
                             } else {
                                 this.data.tableData = response.data.data;
-                                this.expe_culminados = this.filtrarPorEstado(1);
-                                this.expe_pendientes = this.filtrarPorEstado(2);
+                                this.expe_culminados = this.filtrarPorEstado(2);
+                                this.expe_pendientes = this.filtrarPorEstado(1);
                                 // const DATARETURN = response.data.data;
                                 console.log(response)
                                 // const index = this.BuscarIndice(DATARETURN.id);
