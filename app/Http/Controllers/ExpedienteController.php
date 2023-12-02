@@ -14,6 +14,7 @@ use App\Models\TipoUnidad;
 use App\Models\TipoDelitos;
 use App\Models\TipoPlazo;
 use App\Models\EntidadPolicia;
+use App\Models\EntidadFiscal;
 use App\Http\Controllers\AuditoriaController;
 use App\Http\Controllers\ReportesController;
 
@@ -32,16 +33,14 @@ class ExpedienteController extends Controller
     public function ExpedienteWS(Request $request)
     {
         try {
+            // return $request->all();
+
             if($request->type && $request->type == "_SAVE"){
-                // return $request->all();
                 $new = new DispocicionFiscal;
                 $new->caso = $request->caso ? $request->caso:  "Sin caso";
                 $new->nro = $request->nro ? $request->nro : "Sin nro";
                 if($request->fecha_disposicion){
                     $new->fecha_disposicion = $request->fecha_disposicion;
-                }
-                if($request->fiscal_responsable_id){
-                    $new->fiscal_responsable_id = $request->fiscal_responsable_id;
                 }
                 $new->fiscal_responsable_id = $request->fiscal_responsable_id ? $request->fiscal_responsable_id : 1;
                 $new->fiscal_asistente_id = $request->fiscal_asistente_id  ? $request->fiscal_asistente_id : 1;
@@ -83,11 +82,33 @@ class ExpedienteController extends Controller
             }elseif($request->type && $request->type == "_EXPEDIENTES"){
                 return response()->json([
                     'data' => DispocicionFiscal::with(['getFiscal','getFiscalAdjunto','getPlazo','getEstado'])->get(),
+                    'data_fiscal' => EntidadFiscal::get(),
                 ]);
             }elseif($request->type && $request->type == "_EXPEDIENTE"){
                 return response()->json([
                     'data' => DispocicionFiscal::with(['getFiscal','getFiscalAdjunto','getPlazo','getEstado'])->where('id',$request->id)->first(),
                 ]);
+            }elseif($request->type && $request->type == "_GETFISCAL"){
+                return response()->json([
+                    'data' => EntidadFiscal::get(),
+                ]);
+            }elseif($request->type && $request->type == "_SAVE_FISCAL"){
+                $new = new EntidadFiscal;
+                $new->carnet = $request->carnet ? $request->carnet: null;
+                $new->dni = $request->dni ? $request->dni:  null;
+                $new->nombres = $request->nombres ? $request->nombres:  null;
+                $new->paterno = $request->paterno ? $request->paterno: null;
+                $new->celular = $request->celular ? $request->celular:  null;
+                $new->materno = $request->materno ? $request->materno:  null;
+                $new->correo = $request->correo ? $request->correo: null;
+                $new->procedencia = $request->procedencia ? $request->procedencia:  null;
+                $new->ficalia = $request->ficalia ? $request->ficalia:  null;
+                $new->despacho = $request->despacho ? $request->despacho:  null;
+                $new->ubigeo = $request->ubigeo ? $request->ubigeo:  null;
+                $new->save();
+                $data = EntidadFiscal::where('id',$new->id)->first();
+                return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
+
             }
            
         } catch (\Throwable $e) {

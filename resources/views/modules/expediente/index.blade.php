@@ -53,7 +53,7 @@
     <div class="nk-block">
         <p><strong>Resumen de expedientes</strong></p>
         <p v-if="loadingTable"><em class="icon ni ni-loader"></em> Cargando....</p>
-        <div class="row g-gs"  v-if="!loadingTable">
+        <div class="row g-gs" v-if="!loadingTable">
             <div class="col-md-4">
                 <div class="card card-bordered ">
                     <div class="card-inner">
@@ -149,6 +149,23 @@
                         <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-plazo" v-model="dataExpe.plazo"><label class="form-label-outlined" for="outlined-plazo">Días de Plazo</label></div>
                     </div>
                     <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap">
+                            <select class="form-select form-control" data-ui="xl" id="outlined-select" v-model="dataExpe.fiscal_responsable_id" @input="handleSelectChange">
+                                <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
+                            </select>
+                            <label class="form-label-outlined" for="outlined-select">Fiscal Responsable</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap">
+                            <select class="form-select form-control" data-ui="xl" id="outlined-select2" v-model="dataExpe.fiscal_asistente_id">
+                                <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
+                            </select>
+                            <label class="form-label-outlined" for="outlined-select2">Fiscal Asistente</label>
+                        </div>
+                    </div>
+                    <div class="mt-2 mb-2 ml-2"><a class="form-note" data-toggle="modal" data-target="#modalADDFiscal"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más fiscales.</a></div>
+                    <div class="col-sm-12 mt-3">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-observaciones" v-model="dataExpe.observaciones"><label class="form-label-outlined" for="outlined-observaciones">Observaciones</label></div>
                     </div>
                     <div class="col-sm-12 mt-3">
@@ -191,6 +208,60 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalADDFiscal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Fiscales</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-carnet" v-model="dataFiscalAdd.carnet"><label class="form-label-outlined" for="outlined-carnet">Carnet</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-dni" v-model="dataFiscalAdd.dni"><label class="form-label-outlined" for="outlined-dni">DNI</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-nombres" v-model="dataFiscalAdd.nombres"><label class="form-label-outlined" for="outlined-nombres">Nombres</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-paterno" v-model="dataFiscalAdd.paterno"><label class="form-label-outlined" for="outlined-paterno">Paterno</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-materno" v-model="dataFiscalAdd.materno"><label class="form-label-outlined" for="outlined-materno">Materno</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-celular" v-model="dataFiscalAdd.celular"><label class="form-label-outlined" for="outlined-celular">Celular</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-correo" v-model="dataFiscalAdd.correo"><label class="form-label-outlined" for="outlined-correo">Correo</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-procedencia" v-model="dataFiscalAdd.procedencia"><label class="form-label-outlined" for="outlined-procedencia">Procedencia</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-ficalia" v-model="dataFiscalAdd.ficalia"><label class="form-label-outlined" for="outlined-ficalia">Ficalia</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-despacho" v-model="dataFiscalAdd.despacho"><label class="form-label-outlined" for="outlined-despacho">Despacho</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-ubigeo" v-model="dataFiscalAdd.ubigeo"><label class="form-label-outlined" for="outlined-ubigeo">Ubigeo</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <button class="btn btn-primary" v-if="!loadingModalNuevoFiscal" v-on:click="GrabarNuevoFiscal">Registrar</button>
+                        <p v-if="loadingModalNuevoFiscal"><em class="icon ni ni-loader"></em> Cargando....</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -204,16 +275,17 @@
                 expe_pendientes: 0,
                 uri: URL_REGISTRAR,
                 situacion: "",
+                loadingModalNuevoFiscal: false,
                 loadingModal: false,
                 loadingBody: false,
                 loadingTable: false,
                 dataEdit: {},
                 dataExpe: {
+                    fecha_disposicion: null,
+                    fiscal_responsable_id: 0,
+                    fiscal_asistente_id: 0,
                     nro: "",
                     caso: "",
-                    fecha_disposicion: null,
-                    fiscal_responsable_id: null,
-                    fiscal_asistente_id: null,
                     resumen: "",
                     observaciones: "",
                     plazo_id: 1,
@@ -222,8 +294,23 @@
                     fecha_termino: null,
                     tipo_plazo: "Días Naturales"
                 },
+                dataFiscales: [],
+                dataFiscalEdit: {},
+                dataFiscalAdd: {
+                    carnet: 0,
+                    dni: 0,
+                    nombres: "",
+                    paterno: "",
+                    materno: "",
+                    celular: 0,
+                    correo: "",
+                    procedencia: "MINISTERIO PÚBLICO",
+                    ficalia: "2DA FÍSCALIA PROVINCIAL PENAL COPORATIVA DE CARABAYLLO",
+                    despacho: "SEGUNDO DESPACHO",
+                    ubigeo: "DISTRITO FISCAL DE LIMA NORTE"
+                },
                 data: {
-                    columns: ['nro','caso', 'resumen','plazo','get_fiscal','get_fiscal_adjunto','estado', 'opciones'],
+                    columns: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', 'estado', 'opciones'],
                     tableData: [],
                     options: {
                         toMomentFormat: true,
@@ -244,7 +331,7 @@
                             estado: 'SITUACION',
                             opciones: 'OPCIONES',
                         },
-                        filterable: ['nro', 'caso', 'resumen','plazo','get_fiscal','get_fiscal_adjunto',],
+                        filterable: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', ],
                         texts: {
                             limit: 'Mostrar:',
                             count: 'Total de {count} registros encontrados',
@@ -260,29 +347,63 @@
                     }
                 },
             },
-            mounted(){
+            mounted() {
                 this.Get();
             },
             methods: {
+                handleSelectChange() {
+                    console.log('Selected value:', this.dataExpe.fiscal_responsable_id);
+                },
                 Grabar() {
                     this.loadingModal = true;
                     const formData = new FormData();
                     formData.append('type', "_SAVE");
-                    if(this.dataExpe.nro){ formData.append('nro', this.dataExpe.nro);}
-                    if(this.dataExpe.caso){ formData.append('caso', this.dataExpe.caso);}
-                    if(this.dataExpe.fecha_disposicion){ formData.append('fecha_disposicion', this.dataExpe.fecha_disposicion);}
-                  
-                    if(this.dataExpe.resumen){ formData.append('resumen', this.dataExpe.resumen);}
-                    if(this.dataExpe.observaciones){ formData.append('observaciones', this.dataExpe.observaciones);}
-                    if(this.dataExpe.plazo_id){ formData.append('plazo_id', this.dataExpe.plazo_id);}
+                    if (this.dataExpe.nro) {
+                        formData.append('nro', this.dataExpe.nro);
+                    }
+                    if (this.dataExpe.caso) {
+                        formData.append('caso', this.dataExpe.caso);
+                    }
+                    if (this.dataExpe.fecha_disposicion) {
+                        formData.append('fecha_disposicion', this.dataExpe.fecha_disposicion);
+                    }
 
-                    if(this.dataExpe.plazo){ formData.append('plazo', this.dataExpe.plazo);}
-                    if(this.dataExpe.fecha_inicio){ formData.append('fecha_inicio', this.dataExpe.fecha_inicio);}
-                    if(this.dataExpe.fecha_termino){ formData.append('fecha_termino', this.dataExpe.fecha_termino);}
-                    if(this.dataExpe.tipo_plazo){ formData.append('tipo_plazo', this.dataExpe.tipo_plazo);}
+                    if (this.dataExpe.resumen) {
+                        formData.append('resumen', this.dataExpe.resumen);
+                    }
+                    if (this.dataExpe.observaciones) {
+                        formData.append('observaciones', this.dataExpe.observaciones);
+                    }
+                    if (this.dataExpe.plazo_id) {
+                        formData.append('plazo_id', this.dataExpe.plazo_id);
+                    }
 
-                    if(this.dataExpe.fiscal_responsable_id){ formData.append('fiscal_responsable_id', this.dataExpe.fiscal_responsable_id);}
-                    if(this.dataExpe.fiscal_asistente_id){ formData.append('fiscal_asistente_id', this.dataExpe.fiscal_asistente_id);}
+                    if (this.dataExpe.plazo) {
+                        formData.append('plazo', this.dataExpe.plazo);
+                    }
+                    if (this.dataExpe.fecha_inicio) {
+                        formData.append('fecha_inicio', this.dataExpe.fecha_inicio);
+                    }
+                    if (this.dataExpe.fecha_termino) {
+                        formData.append('fecha_termino', this.dataExpe.fecha_termino);
+                    }
+                    if (this.dataExpe.tipo_plazo) {
+                        formData.append('tipo_plazo', this.dataExpe.tipo_plazo);
+                    }
+
+                    if (this.dataExpe.fiscal_responsable_id) {
+                        formData.append('fiscal_responsable_id', this.dataExpe.fiscal_responsable_id);
+                    } else {
+                        this.loadingModal = false;
+                        return alert(this.dataExpe.fiscal_responsable_id)
+                    }
+                    if (this.dataExpe.fiscal_asistente_id) {
+                        formData.append('fiscal_asistente_id', this.dataExpe.fiscal_asistente_id);
+                    } else {
+                        this.loadingModal = false;
+                        return alert(this.dataExpe.fiscal_asistente_id)
+                    }
+
 
                     axios.post(URL_REGISTRAR, formData)
                         .then(response => {
@@ -314,7 +435,75 @@
                         });
 
                 },
-                Get(){
+                GrabarNuevoFiscal() {
+                    this.loadingModalNuevoFiscal = true;
+                    const formData = new FormData();
+                    formData.append('type', "_SAVE_FISCAL");
+                    if (this.dataFiscalAdd.carnet) {
+                        formData.append('carnet', this.dataFiscalAdd.carnet);
+                    }
+                    if (this.dataFiscalAdd.dni) {
+                        formData.append('dni', this.dataFiscalAdd.dni);
+                    }
+                    if (this.dataFiscalAdd.nombres) {
+                        formData.append('nombres', this.dataFiscalAdd.nombres);
+                    }
+                    if (this.dataFiscalAdd.paterno) {
+                        formData.append('paterno', this.dataFiscalAdd.paterno);
+                    }
+                    if (this.dataFiscalAdd.materno) {
+                        formData.append('materno', this.dataFiscalAdd.materno);
+                    }
+                    if (this.dataFiscalAdd.celular) {
+                        formData.append('celular', this.dataFiscalAdd.celular);
+                    }
+                    if (this.dataFiscalAdd.correo) {
+                        formData.append('correo', this.dataFiscalAdd.correo);
+                    }
+                    if (this.dataFiscalAdd.procedencia) {
+                        formData.append('procedencia', this.dataFiscalAdd.procedencia);
+                    }
+                    if (this.dataFiscalAdd.ficalia) {
+                        formData.append('ficalia', this.dataFiscalAdd.ficalia);
+                    }
+                    if (this.dataFiscalAdd.despacho) {
+                        formData.append('despacho', this.dataFiscalAdd.despacho);
+                    }
+                    if (this.dataFiscalAdd.ubigeo) {
+                        formData.append('ubigeo', this.dataFiscalAdd.ubigeo);
+                    }
+
+                    axios.post(URL_REGISTRAR, formData)
+                        .then(response => {
+                            if (response.data.error) {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: `${JSON.stringify(response.data.error)}`,
+                                    icon: 'info',
+                                    confirmButtonText: '¡Entendido!',
+                                });
+                            } else {
+                                this.dataFiscales.push(response.data.data)
+                                // const DATARETURN = response.data.data;
+                                console.log(response)
+                                // const index = this.BuscarIndice(DATARETURN.id);
+                                // console.log(index)
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: 'Error',
+                                text: `Error al realizar la solicitud: ${JSON.stringify(error)}`,
+                                icon: 'error',
+                                confirmButtonText: '¡Entendido!',
+                            });
+                        }).finally(() => {
+                            this.loadingModalNuevoFiscal = false;
+                            $('#modalADDFiscal').modal('hide');
+                        });
+
+                },
+                Get() {
                     this.loadingTable = true;
                     const formData = new FormData();
                     formData.append('dd', "_SAVE");
@@ -332,8 +521,9 @@
                                 this.data.tableData = response.data.data;
                                 this.expe_culminados = this.filtrarPorEstado(2);
                                 this.expe_pendientes = this.filtrarPorEstado(1);
+                                this.dataFiscales = response.data.data_fiscal;
                                 // const DATARETURN = response.data.data;
-                                console.log(response)
+                                console.log(this.data.tableData)
                                 // const index = this.BuscarIndice(DATARETURN.id);
                                 // console.log(index)
                             }
@@ -457,7 +647,7 @@
                     //     });
                 },
                 OpenEdit(data) {
-                   this.dataEdit = data;
+                    this.dataEdit = data;
                 }
             }
         });
