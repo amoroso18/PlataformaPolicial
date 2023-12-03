@@ -46,7 +46,6 @@
     </div><!-- .nk-block-head-content -->
     <div class="nk-block-head-content">
         <button class="btn btn-primary" data-toggle="modal" data-target="#modalADD"><em class="icon ni ni-plus"></em></button>
-        <a target="_blank" href="{{route('administrador_reporte_usuarios')}}" class="btn btn-info"><em class="icon ni ni-printer-fill"></em></a>
     </div><!-- .nk-block-head-content -->
 </div>
 <div id="miapp" class="mt-3">
@@ -54,7 +53,7 @@
         <p><strong>Resumen de expedientes</strong></p>
         <p v-if="loadingTable"><em class="icon ni ni-loader"></em> Cargando....</p>
         <div class="row g-gs" v-if="!loadingTable">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card card-bordered ">
                     <div class="card-inner">
                         <div class="card-title-group align-start mb-0">
@@ -66,7 +65,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card card-bordered ">
                     <div class="card-inner">
                         <div class="card-title-group align-start mb-0">
@@ -78,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card card-bordered ">
                     <div class="card-inner">
                         <div class="card-title-group align-start mb-0">
@@ -90,9 +89,20 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-3">
+                <div class="card card-bordered ">
+                    <div class="card-inner">
+                        <div class="card-title-group align-start mb-0">
+                            <div class="card-title">
+                                <h6 class="subtitle">Caducados</h6>
+                            </div>
+                        </div>
+                        <div class="card-amount"><span class="amount" v-text="expe_caducados"></span></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
     <div class="nk-block">
         <p><strong>Expedientes</strong></p>
         <p v-if="situacion" v-text="situacion"></p>
@@ -104,10 +114,10 @@
                     <div class="text-danger" v-if="props.row.estado_id != 1"> INACTIVO</div>
                 </div>
                 <div slot="get_fiscal" slot-scope="props" v-if="props.row.get_fiscal.id != 1">
-                    <span v-text="props.row.get_fiscal.procedencia"> </span>
+                    <span v-text="props.row.get_fiscal.carnet + ' ' +props.row.get_fiscal.nombres + ' ' + props.row.get_fiscal.paterno + ' ' + props.row.get_fiscal.materno + ' ' + props.row.get_fiscal.ficalia"> </span>
                 </div>
                 <div slot="get_fiscal_adjunto" slot-scope="props" v-if="props.row.get_fiscal_adjunto.id != 1">
-                    <span v-text="props.row.get_fiscal_adjunto.procedencia"> </span>
+                    <span v-text="props.row.get_fiscal_adjunto.carnet + ' ' +props.row.get_fiscal_adjunto.nombres + ' ' + props.row.get_fiscal_adjunto.paterno + ' ' + props.row.get_fiscal_adjunto.materno + ' ' + props.row.get_fiscal_adjunto.ficalia"> </span>
                 </div>
                 <div slot="opciones" slot-scope="props">
                     <div class="btn-group dropup">
@@ -125,9 +135,10 @@
                     <em class="icon ni ni-cross"></em>
                 </a>
                 <div class="modal-header">
-                    <h5 class="modal-title">Nuevo expediente</h5>
+                    <h5 class="modal-title">Formulario de nuevo expediente</h5>
                 </div>
                 <div class="modal-body">
+                    <h5>Expediente</h5>
                     <div class="col-sm-12 mt-3">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-Caso" v-model="dataExpe.caso"><label class="form-label-outlined" for="outlined-Caso">Caso</label></div>
                     </div>
@@ -148,9 +159,17 @@
                     <div class="col-sm-12 mt-3">
                         <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-plazo" v-model="dataExpe.plazo"><label class="form-label-outlined" for="outlined-plazo">Días de Plazo</label></div>
                     </div>
+
+                    <h5 class="mt-3">Referencias</h5>
+
+                    <h5 class="mt-3">Tipo de videovigilancia</h5>
+
+                    <h5 class="mt-3">Objeto de videovigilancia</h5>
+                    
+                    <h5 class="mt-3">Fiscales</h5>
                     <div class="col-sm-12 mt-3">
                         <div class="form-control-wrap">
-                            <select class="form-select form-control" data-ui="xl" id="outlined-select" v-model="dataExpe.fiscal_responsable_id" @input="handleSelectChange">
+                            <select class="form-control form-control-xl form-control-outlined" id="outlined-select" v-model="dataExpe.fiscal_responsable_id" @input="handleSelectChange">
                                 <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
                             </select>
                             <label class="form-label-outlined" for="outlined-select">Fiscal Responsable</label>
@@ -158,16 +177,20 @@
                     </div>
                     <div class="col-sm-12 mt-3">
                         <div class="form-control-wrap">
-                            <select class="form-select form-control" data-ui="xl" id="outlined-select2" v-model="dataExpe.fiscal_asistente_id">
+                            <select class="form-control form-control-xl form-control-outlined" data-ui="xl" id="outlined-select2" v-model="dataExpe.fiscal_asistente_id">
                                 <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
                             </select>
                             <label class="form-label-outlined" for="outlined-select2">Fiscal Asistente</label>
                         </div>
                     </div>
                     <div class="mt-2 mb-2 ml-2"><a class="form-note" data-toggle="modal" data-target="#modalADDFiscal"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más fiscales.</a></div>
+
+                    <h5 class="mt-3">Observaciones</h5>
                     <div class="col-sm-12 mt-3">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-observaciones" v-model="dataExpe.observaciones"><label class="form-label-outlined" for="outlined-observaciones">Observaciones</label></div>
                     </div>
+
+                    <h5 class="mt-3">Calendario de inicio y termino</h5>
                     <div class="col-sm-12 mt-3">
                         <div class="form-control-wrap">
                             <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="text" class="form-control form-control-xl form-control-outlined date-picker" id="outlined-date-picker" v-model="dataExpe.fecha_inicio"><label class="form-label-outlined" for="outlined-date-picker">Fecha de inicio</label>
@@ -197,10 +220,34 @@
                     <em class="icon ni ni-cross"></em>
                 </a>
                 <div class="modal-header">
-                    <h5 class="modal-title">Editar expediente</h5>
+                    <h5 class="modal-title">Expediente</h5>
                 </div>
                 <div class="modal-body">
+                    <div id="accordion" class="accordion">
+                        <div class="accordion-item">
+                            <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1">
+                                <h6 class="title">Editar expediente</h6>
+                                <span class="accordion-icon"></span>
+                            </a>
+                            <div class="accordion-body collapse" id="accordion-item-1" data-parent="#accordion">
+                                <div class="accordion-inner">
 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-2">
+                                <h6 class="title">Editar Situación</h6>
+                                <span class="accordion-icon"></span>
+                            </a>
+                            <div class="accordion-body collapse" id="accordion-item-2" data-parent="#accordion">
+                                <div class="accordion-inner">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -273,6 +320,7 @@
             data: {
                 expe_culminados: 0,
                 expe_pendientes: 0,
+                expe_caducados: 0,
                 uri: URL_REGISTRAR,
                 situacion: "",
                 loadingModalNuevoFiscal: false,
@@ -287,7 +335,7 @@
                     nro: "",
                     caso: "",
                     resumen: "",
-                    observaciones: "",
+                    observaciones: "Sin observaciones",
                     plazo_id: 1,
                     plazo: 0,
                     fecha_inicio: null,
@@ -309,8 +357,11 @@
                     despacho: "SEGUNDO DESPACHO",
                     ubigeo: "DISTRITO FISCAL DE LIMA NORTE"
                 },
+                dataFiscales: [],
+                dataTipoDocumentos: [],
+                dataTipoVideovigilancia: [],
                 data: {
-                    columns: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', 'estado', 'opciones'],
+                    columns: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', 'estado','progreso', 'opciones'],
                     tableData: [],
                     options: {
                         toMomentFormat: true,
@@ -329,9 +380,10 @@
                             get_fiscal: 'FISCAL',
                             get_fiscal_adjunto: 'FISCAL ADJUNTO',
                             estado: 'SITUACION',
+                            progreso: 'PROGRESO',
                             opciones: 'OPCIONES',
                         },
-                        filterable: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', ],
+                        filterable: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto' ],
                         texts: {
                             limit: 'Mostrar:',
                             count: 'Total de {count} registros encontrados',
@@ -522,6 +574,8 @@
                                 this.expe_culminados = this.filtrarPorEstado(2);
                                 this.expe_pendientes = this.filtrarPorEstado(1);
                                 this.dataFiscales = response.data.data_fiscal;
+                                this.dataTipoDocumentos = response.data.data_tipo_documentos;
+                                this.dataTipoVideovigilancia = response.data.data_tipo_videovigilancia;
                                 // const DATARETURN = response.data.data;
                                 console.log(this.data.tableData)
                                 // const index = this.BuscarIndice(DATARETURN.id);
@@ -647,6 +701,7 @@
                     //     });
                 },
                 OpenEdit(data) {
+                    console.log(data);
                     this.dataEdit = data;
                 }
             }

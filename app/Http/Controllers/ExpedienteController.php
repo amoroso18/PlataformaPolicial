@@ -9,8 +9,8 @@ use PDOException;
 use Illuminate\Database\QueryException;
 
 use App\Models\DispocicionFiscal;
-use App\Models\TipoPerfil;
-use App\Models\TipoUnidad;
+use App\Models\TipoDocumentosReferencia;
+use App\Models\TipoVideoVigilancia;
 use App\Models\TipoDelitos;
 use App\Models\TipoPlazo;
 use App\Models\EntidadPolicia;
@@ -83,6 +83,8 @@ class ExpedienteController extends Controller
                 return response()->json([
                     'data' => DispocicionFiscal::with(['getFiscal','getFiscalAdjunto','getPlazo','getEstado'])->get(),
                     'data_fiscal' => EntidadFiscal::get(),
+                    'data_tipo_documentos' => TipoDocumentosReferencia::get(),
+                    'data_tipo_videovigilancia' => TipoVideoVigilancia::get(),
                 ]);
             }elseif($request->type && $request->type == "_EXPEDIENTE"){
                 return response()->json([

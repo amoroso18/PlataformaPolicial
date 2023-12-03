@@ -173,7 +173,6 @@
                                 </div>
                             </div>
                         </div>
-                      
                         <div class="accordion-item">
                             <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-6">
                                 <h6 class="title">Perfil</h6>
