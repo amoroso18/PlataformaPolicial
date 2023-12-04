@@ -16,26 +16,29 @@
         }
     );
 </script>
-<style>
-    /* Ajusta el estilo del input según tus preferencias */
-    input[type="date"] {
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
-        padding-right: 24px;
-        /* Ajusta según el ancho del icono */
+<style lang="scss" scoped>
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        background: transparent;
+        cursor: pointer;
+        position: absolute;
+        width: auto;
+        height: 7%;
+        left: 0;
+        right: 0;
     }
 
-    .custom-date-input::before {
-        content: '\1F4C5';
-        /* Unicode del icono de calendario (puedes cambiarlo según tus preferencias) */
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+        background: transparent;
+        cursor: pointer;
         position: absolute;
-        top: 50%;
-        right: 8px;
-        transform: translateY(-50%);
-        color: blue;
-        /* Cambia el color del icono según tus preferencias */
+        width: auto;
+        height: 7%;
+        left: 0;
+        right: 0;
+    }
+
+    .pointer {
+        cursor: pointer;
     }
 </style>
 @endpush
@@ -139,73 +142,167 @@
                 </div>
                 <div class="modal-body">
                     <h5>Expediente</h5>
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-Caso" v-model="dataExpe.caso"><label class="form-label-outlined" for="outlined-Caso">Caso</label></div>
-                    </div>
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-nro" v-model="dataExpe.nro"><label class="form-label-outlined" for="outlined-nro">Número</label></div>
-                    </div>
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-control-wrap">
-                            <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="text" class="form-control form-control-xl form-control-outlined date-picker" id="outlined-date-picker3" v-model="dataExpe.fecha_disposicion"><label class="form-label-outlined" for="outlined-date-picker3">Fecha de disposición</label>
+                    <section>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-Caso" v-model="dataExpe.caso"><label class="form-label-outlined" for="outlined-Caso">Caso</label></div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-resumen" v-model="dataExpe.resumen"><label class="form-label-outlined" for="outlined-resumen">Resumen</label></div>
-                    </div>
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-Tipo" v-model="dataExpe.tipo_plazo"><label class="form-label-outlined" for="outlined-Tipo">Tipo de Plazo</label></div>
-                    </div>
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-plazo" v-model="dataExpe.plazo"><label class="form-label-outlined" for="outlined-plazo">Días de Plazo</label></div>
-                    </div>
-
-                    <h5 class="mt-3">Referencias</h5>
-
-                    <h5 class="mt-3">Tipo de videovigilancia</h5>
-
-                    <h5 class="mt-3">Objeto de videovigilancia</h5>
-                    
-                    <h5 class="mt-3">Fiscales</h5>
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-control-wrap">
-                            <select class="form-control form-control-xl form-control-outlined" id="outlined-select" v-model="dataExpe.fiscal_responsable_id" @input="handleSelectChange">
-                                <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
-                            </select>
-                            <label class="form-label-outlined" for="outlined-select">Fiscal Responsable</label>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-nro" v-model="dataExpe.nro"><label class="form-label-outlined" for="outlined-nro">Número</label></div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-control-wrap">
-                            <select class="form-control form-control-xl form-control-outlined" data-ui="xl" id="outlined-select2" v-model="dataExpe.fiscal_asistente_id">
-                                <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
-                            </select>
-                            <label class="form-label-outlined" for="outlined-select2">Fiscal Asistente</label>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap">
+                                <input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-picker3" v-model="dataExpe.fecha_disposicion">
+                                <label class="form-label-outlined" for="outlined-date-picker3">Fecha de disposición </label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mt-2 mb-2 ml-2"><a class="form-note" data-toggle="modal" data-target="#modalADDFiscal"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más fiscales.</a></div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-resumen" v-model="dataExpe.resumen"><label class="form-label-outlined" for="outlined-resumen">Resumen</label></div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-Tipo" v-model="dataExpe.tipo_plazo"><label class="form-label-outlined" for="outlined-Tipo">Tipo de Plazo</label></div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-plazo" v-model="dataExpe.plazo"><label class="form-label-outlined" for="outlined-plazo">Días de Plazo</label></div>
+                        </div>
+                    </section>
+                    <h5 class="mt-5">Calendario de inicio y termino</h5>
+                    <section>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap">
+                                <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-picker" v-model="dataExpe.fecha_inicio"><label class="form-label-outlined" for="outlined-date-picker">Fecha de inicio</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap">
+                                <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-picker2" v-model="dataExpe.fecha_termino"><label class="form-label-outlined" for="outlined-date-picker2">Fecha de termino</label>
+                            </div>
+                        </div>
+                    </section>
+                    <h5 class="mt-5">Referencias</h5>
+                    <section>
+                        <div class="col-sm-12 mt-3">
+                            <div v-for="(item, index) in dataExpe.selectdataReferenciaVideovigilancia" :key="index">
+                                <div class="card card-preview mb-2">
+                                    <div class="input-group-append pointer d-flex justify-content-end">
+                                        <em class="icon ni ni-trash-alt" @click="removeInput('REFERENCIA',index)"></em>
+                                    </div>
+                                    <div class="card-inner">
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <div class="form-control-wrap">
+                                                        <select class="form-control" data-ui="xl" id="outlined-select2" v-model="dataExpe.selectdataReferenciaVideovigilancia[index].documentos_id">
+                                                            <option v-for="item in dataTipoDocumentos" :key="item.id" :value="item" v-text="item.descripcion"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" v-model="dataExpe.selectdataReferenciaVideovigilancia[index].nro" placeholder="Número">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-control-wrap mt-2">
+                                            <input type="text" class="form-control" v-model="dataExpe.selectdataReferenciaVideovigilancia[index].siglas" placeholder="Siglas">
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="form-control-wrap">
+                                                        <input type="date" class="form-control" v-model="dataExpe.selectdataReferenciaVideovigilancia[index].fecha_documento">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <div class="form-control-wrap" v-if="!dataExpe.selectdataReferenciaVideovigilancia[index].pdf">
+                                                        <input type="file" accept="application/pdf" class="form-control" @change="handleFileChange(index,$event)">
+                                                    </div>
+                                                    <p v-if="dataExpe.selectdataReferenciaVideovigilancia[index].pdf" v-text="dataExpe.selectdataReferenciaVideovigilancia[index].pdfName"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-control-wrap mt-2">
+                                            <input type="text" class="form-control " v-model="dataExpe.selectdataReferenciaVideovigilancia[index].observaciones" placeholder="Observaciones">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-dark mt-2" @click="addInput('REFERENCIA')">Agregar más cuadros de referencia</button>
+                        </div>
+                    </section>
+                    <h5 class="mt-5">Tipo de videovigilancia</h5>
+                    <section>
+                        <div class="col-sm-12 mt-3" v-if="dataExpe.selectdataTipoVideovigilancia.length > 0">
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr v-for="(item,index) in dataExpe.selectdataTipoVideovigilancia" :key="item.id">
+                                        <td v-text="item.descripcion"></td>
+                                        <td v-on:click="selectdataTipoVideovigilanciaDelete(index)"> <a class="pointer"><em class="icon ni ni-trash-alt"></em></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap">
+                                <select class="form-control form-control-xl form-control-outlined" data-ui="xl" id="outlined-select2" v-model="selectdataTipoVideovigilancia" @change="selectdataTipoVideovigilanciaAdd()">
+                                    <option v-for="item in dataTipoVideovigilancia" :key="item.id" :value="item" v-text="item.descripcion"></option>
+                                </select>
+                                <label class="form-label-outlined" for="outlined-select2">Selecciona una o varias</label>
+                            </div>
+                        </div>
+                        <div class="mt-2 mb-2 ml-2"><a class="form-note pointer" v-on:click="modalOpenFiscalEdit()"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más Tipo de videovigilancia a la base de datos.</a></div>
 
-                    <h5 class="mt-3">Observaciones</h5>
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-observaciones" v-model="dataExpe.observaciones"><label class="form-label-outlined" for="outlined-observaciones">Observaciones</label></div>
-                    </div>
-
-                    <h5 class="mt-3">Calendario de inicio y termino</h5>
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-control-wrap">
-                            <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="text" class="form-control form-control-xl form-control-outlined date-picker" id="outlined-date-picker" v-model="dataExpe.fecha_inicio"><label class="form-label-outlined" for="outlined-date-picker">Fecha de inicio</label>
+                    </section>
+                    <h5 class="mt-5">Objeto de videovigilancia</h5>
+                    <section>
+                        <div class="col-sm-12 mt-3">
+                            <div v-for="(item, index) in dataExpe.selectdataObjetoVideovigilancia" :key="index">
+                                <div class="form-control-wrap mb-2">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" v-model="dataExpe.selectdataObjetoVideovigilancia[index]">
+                                        <div class="input-group-append pointer" @click="removeInput('OBJECTOS',index)">
+                                            <span class="input-group-text" id="basic-addon2"><em class="icon ni ni-trash-alt"></em></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-dark mt-2" @click="addInput('OBJECTOS')">Agregar más cuadros de texto</button>
                         </div>
-                    </div>
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-control-wrap">
-                            <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="text" class="form-control form-control-xl form-control-outlined date-picker" id="outlined-date-picker2" v-model="dataExpe.fecha_termino"><label class="form-label-outlined" for="outlined-date-picker2">Fecha de termino</label>
+                    </section>
+                    <h5 class="mt-5">Fiscales</h5>
+                    <section>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap">
+                                <select class="form-control form-control-xl form-control-outlined" id="outlined-select" v-model="dataExpe.fiscal_responsable_id" @input="handleSelectChange">
+                                    <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
+                                </select>
+                                <label class="form-label-outlined" for="outlined-select">Fiscal Responsable</label>
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap">
+                                <select class="form-control form-control-xl form-control-outlined" data-ui="xl" id="outlined-select2" v-model="dataExpe.fiscal_asistente_id">
+                                    <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
+                                </select>
+                                <label class="form-label-outlined" for="outlined-select2">Fiscal Asistente</label>
+                            </div>
+                        </div>
+                        <div class="mt-2 mb-2 ml-2"><a class="form-note pointer" v-on:click="modalOpenFiscalEdit()"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más fiscales a la base de datos.</a></div>
+                    </section>
+                    <h5 class="mt-5">Observaciones</h5>
+                    <section>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-observaciones" v-model="dataExpe.observaciones"><label class="form-label-outlined" for="outlined-observaciones">Observaciones</label></div>
+                        </div>
+                    </section>
                     <div class="col-sm-12 mt-3">
                         <button class="btn btn-primary" v-if="!loadingModal" v-on:click="Grabar">Registrar</button>
                         <p v-if="loadingModal"><em class="icon ni ni-loader"></em> Cargando....</p>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -309,6 +406,32 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalADDTipoVideoVigilancia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Tipo de VideoVigilancia</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-tipo-VideoVigilancia" v-model="dataTipoVideovigilanciaAdd"><label class="form-label-outlined" for="outlined-tipo-VideoVigilancia">Tipo VideoVigilancia</label></div>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <button class="btn btn-primary" v-if="!loadingModalTipoVideoVigilancia" v-on:click="GrabarTipoVideoVigilancia">Registrar</button>
+                        <p v-if="loadingModalTipoVideoVigilancia"><em class="icon ni ni-loader"></em> Cargando....</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
 </div>
 
 <script>
@@ -327,6 +450,7 @@
                 loadingModal: false,
                 loadingBody: false,
                 loadingTable: false,
+                loadingModalTipoVideoVigilancia: false,
                 dataEdit: {},
                 dataExpe: {
                     fecha_disposicion: null,
@@ -340,7 +464,10 @@
                     plazo: 0,
                     fecha_inicio: null,
                     fecha_termino: null,
-                    tipo_plazo: "Días Naturales"
+                    tipo_plazo: "Días Naturales",
+                    selectdataTipoVideovigilancia: [],
+                    selectdataObjetoVideovigilancia: [],
+                    selectdataReferenciaVideovigilancia: [],
                 },
                 dataFiscales: [],
                 dataFiscalEdit: {},
@@ -360,8 +487,10 @@
                 dataFiscales: [],
                 dataTipoDocumentos: [],
                 dataTipoVideovigilancia: [],
+                dataTipoVideovigilanciaAdd: "",
+                selectdataTipoVideovigilancia: {},
                 data: {
-                    columns: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', 'estado','progreso', 'opciones'],
+                    columns: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', 'estado', 'progreso', 'opciones'],
                     tableData: [],
                     options: {
                         toMomentFormat: true,
@@ -383,7 +512,7 @@
                             progreso: 'PROGRESO',
                             opciones: 'OPCIONES',
                         },
-                        filterable: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto' ],
+                        filterable: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto'],
                         texts: {
                             limit: 'Mostrar:',
                             count: 'Total de {count} registros encontrados',
@@ -535,7 +664,7 @@
                                     confirmButtonText: '¡Entendido!',
                                 });
                             } else {
-                                this.dataFiscales.push(response.data.data)
+                                this.dataFiscales.push(response.data.data);
                                 // const DATARETURN = response.data.data;
                                 console.log(response)
                                 // const index = this.BuscarIndice(DATARETURN.id);
@@ -552,8 +681,43 @@
                         }).finally(() => {
                             this.loadingModalNuevoFiscal = false;
                             $('#modalADDFiscal').modal('hide');
+                            $('#modalADD').modal('show');
                         });
 
+                },
+                GrabarTipoVideoVigilancia(){
+                    this.loadingModalTipoVideoVigilancia = true;
+                    const formData = new FormData();
+                    formData.append('type', "_SAVE_TipoVideoVigilancia");
+                    if (this.dataTipoVideovigilanciaAdd) {
+                        formData.append('TipoVideoVigilancia', this.dataTipoVideovigilanciaAdd);
+                    }
+                    axios.post(URL_REGISTRAR, formData)
+                        .then(response => {
+                            if (response.data.error) {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: `${JSON.stringify(response.data.error)}`,
+                                    icon: 'info',
+                                    confirmButtonText: '¡Entendido!',
+                                });
+                            } else {
+                                this.dataTipoVideovigilancia.push(response.data.data);
+                                console.log(response.data.data)
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: 'Error',
+                                text: `Error al realizar la solicitud: ${JSON.stringify(error)}`,
+                                icon: 'error',
+                                confirmButtonText: '¡Entendido!',
+                            });
+                        }).finally(() => {
+                            this.loadingModalTipoVideoVigilancia = false;
+                            $('#modalADDTipoVideoVigilancia').modal('hide');
+                            $('#modalADD').modal('show');
+                        });
                 },
                 Get() {
                     this.loadingTable = true;
@@ -703,6 +867,65 @@
                 OpenEdit(data) {
                     console.log(data);
                     this.dataEdit = data;
+                },
+                modalOpenFiscalEdit() {
+                    $('#modalADD').modal('hide');
+                    $('#modalADDFiscal').modal('show');
+                },
+                modalOpenFiscalEdit() {
+                    $('#modalADD').modal('hide');
+                    $('#modalADDTipoVideoVigilancia').modal('show');
+                },
+                selectdataTipoVideovigilanciaAdd() {
+                    this.dataExpe.selectdataTipoVideovigilancia.push(this.selectdataTipoVideovigilancia);
+                },
+                selectdataTipoVideovigilanciaDelete(indice) {
+                    this.dataExpe.selectdataTipoVideovigilancia.splice(indice, 1);
+                },
+                addInput(TIPO) {
+                    if (TIPO == "OBJECTOS") {
+                        this.dataExpe.selectdataObjetoVideovigilancia.push('');
+                    } else if (TIPO == "REFERENCIA") {
+                        this.dataExpe.selectdataReferenciaVideovigilancia.push({
+                            documentos_id: null,
+                            nro: "",
+                            fecha_documento: "",
+                            siglas: "",
+                            pdf: "",
+                            pdfName: "",
+                            observaciones: ""
+                        });
+                    }
+
+                },
+                removeInput(TIPO,index) {
+                    if (TIPO == "OBJECTOS") {
+                        this.dataExpe.selectdataObjetoVideovigilancia.splice(index, 1); // Elimina el input en el índice especificado
+                    } else if (TIPO == "REFERENCIA") {
+                        this.dataExpe.selectdataReferenciaVideovigilancia.splice(index, 1);
+                    }
+                },
+                handleFileChange(index, e) {
+                    // Accede a la información del archivo a través del evento
+                    const file = event.target.files[0];
+
+                    // Verifica si el archivo es un PDF
+                    if (file && file.type === "application/pdf") {
+                        // Asigna el nombre del archivo a una propiedad pdfName en la estructura de datos
+                        this.dataExpe.selectdataReferenciaVideovigilancia[index].pdfName = file.name;
+
+                        // Asigna el objeto de archivo a una propiedad pdf en la estructura de datos
+                        this.dataExpe.selectdataReferenciaVideovigilancia[index].pdf = file;
+
+                        // Puedes realizar otras acciones o actualizaciones necesarias aquí
+
+                        // Ejemplo: Muestra el nombre del archivo en la consola
+                        console.log(`PDF seleccionado en el índice ${index}: ${file.name}`);
+                    } else {
+                        // Maneja el caso en que el archivo no es un PDF
+                        console.error("Por favor, selecciona un archivo PDF.");
+                        // Puedes mostrar un mensaje al usuario o realizar otras acciones
+                    }
                 }
             }
         });

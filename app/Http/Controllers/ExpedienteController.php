@@ -111,6 +111,14 @@ class ExpedienteController extends Controller
                 $data = EntidadFiscal::where('id',$new->id)->first();
                 return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
 
+            }elseif($request->type && $request->type =="_SAVE_TipoVideoVigilancia"){
+                $counter = TipoVideoVigilancia::count();
+                $new = new TipoVideoVigilancia;
+                $new->id =  $counter ;
+                $new->descripcion = $request->TipoVideoVigilancia ? $request->TipoVideoVigilancia: null;
+                $new->save();
+                $data = TipoVideoVigilancia::where('id', $counter )->first();
+                return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
             }
            
         } catch (\Throwable $e) {

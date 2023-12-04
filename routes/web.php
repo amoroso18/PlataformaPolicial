@@ -46,3 +46,4 @@ Route::POST('basededatos/secundarias/save', [App\Http\Controllers\PlataformaCont
 
 Route::GET('expediente/disposicion-fiscal', [App\Http\Controllers\ExpedienteController::class, 'expedientes'])->name('expedientes');
 Route::POST('expediente/disposicion-fiscal/WS', [App\Http\Controllers\ExpedienteController::class, 'ExpedienteWS'])->name('ExpedienteWS');
+Route::GET('expediente/disposicion-fiscal/reporte', [App\Http\Controllers\ExpedienteController::class, 'expediente_reporte'])->name('expediente_reporte');
