@@ -34,11 +34,11 @@
 
 <div id="miapp" class="mt-3">
     <v-client-table :data="data.tableData" :columns="data.columns" :options="data.options" v-if="data.tableData.length > 0">
-        <div slot="opciones" slot-scope="props">
+        <!-- <div slot="opciones" slot-scope="props">
             <div class="btn-group dropup">
                 <a target="_blank" :href="urlReporte+'?contexto='+props.row.id" class="m-1" style="font-size: 22px;"><em class="icon ni ni-reports"></em></a>
             </div>
-        </div>
+        </div> -->
     </v-client-table>
 </div>
 

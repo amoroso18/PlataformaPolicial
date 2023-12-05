@@ -12,6 +12,11 @@ use App\Models\TipoPerfil;
 use App\Models\TipoUnidad;
 use App\Http\Controllers\AuditoriaController;
 
+use App\Models\DispocicionFiscal;
+use App\Models\DisposicionFiscalObjetos;
+use App\Models\DisposicionFiscalTipoVideoVigilancia;
+use App\Models\DisposicionFiscalReferencia;
+
 use Codedge\Fpdf\Fpdf\Fpdf;
 
 class PDFF extends FPDF
@@ -193,6 +198,80 @@ class ReportesController extends Controller
         }
     }
 
+    public static function expediente_reporte($idexpe){
+          // Texto o datos que deseas codificar en el QR Code
+          try {
+            $INFO = AuditoriaController::audita_usuario(Auth::user()->id, "DESCARGA REPORTE", "EXPEDIENTE", $idexpe);
+            $ContenidoTitulo = utf8_decode('CÓDIGO DE SEGURIDAD NRO.' . $INFO->id . ' | CÓDIGO USUARIO NRO.' . Auth::user()->id . ' | FECHA DESCARGA ' . $INFO->created_at);
+            $MYPDF = new PDFF($ContenidoTitulo);
+            $MYPDF->AliasNbPages();
+            $MYPDF->AddPage();
+            $MYPDF->image('images/sivipol/BannerSivipol.png', 75, 10, 60);
+            //$MYPDF->image('images/qrvalidar.png', 172.5, 31.5, 31);
+            $MYPDF->Ln(10);
+            // $MYPDF->SetFont('Arial', 'B', 18);
+            // $MYPDF->multicell(192, -2, "REPORTE DE USUARIO", 0, 'C');
+            $MYPDF->Ln(10);
+            $MYPDF->SetFont('Arial', 'B', 11);
+            $MYPDF->SetTextColor(89, 90, 90);
+            $MYPDF->multicell(192, -2, "REPORTE DE EXPEDIENTE", 0, 'C');
+            $MYPDF->Ln(4);
+
+            $expe = DispocicionFiscal::find($idexpe);
+            $expeREFERENCIA = DisposicionFiscalReferencia::where("df_id",$expe->id)->get();
+            $expeOBJETOVV = DisposicionFiscalObjetos::where("df_id",$expe->id)->get();
+            $expeTIPOVV = DisposicionFiscalTipoVideoVigilancia::where("df_id",$expe->id)->get();
+            $MYPDF->Ln(4);
+
+            $MYPDF->multicell(192, 5, "DETALLE", 0, 'L');
+            $MYPDF->Ln(4);
+            self::generateLineText($MYPDF,  "CASO", $expe->caso);
+            self::generateLineText($MYPDF,  "NRO", $expe->nro);
+            self::generateLineText($MYPDF,  "FECHA DISPOSICION", $expe->fecha_disposicion);
+            self::generateLineText($MYPDF,  "FECHA DE INICIO", $expe->fecha_inicio);
+            self::generateLineText($MYPDF,  "FECHA DE TERMINO", $expe->fecha_termino);
+
+            self::generateLineText($MYPDF,  "TIPO DE PLAZO", $expe->getPlazo->descripcion);
+            self::generateLineText($MYPDF,  "DIAS DE PLAZO", $expe->plazo);
+
+            self::generateLineText($MYPDF,  "FISCAL RESPONSABLE", "DNI: ".$expe->getFiscal->dni." | ".$expe->getFiscal->nombres." ".$expe->getFiscal->paterno." ".$expe->getFiscal->materno." | ".$expe->getFiscal->procedencia." ".$expe->getFiscal->ficalia." ".$expe->getFiscal->despacho." ".$expe->getFiscal->ubigeo." | CORREO: ".$expe->getFiscal->correo." | CELULAR:".$expe->getFiscal->celular);
+            self::generateLineText($MYPDF,  "FISCAL ASISTENTE", "DNI: ".$expe->getFiscalAdjunto->dni." | ".$expe->getFiscalAdjunto->nombres." ".$expe->getFiscalAdjunto->paterno." ".$expe->getFiscalAdjunto->materno." | ".$expe->getFiscalAdjunto->procedencia." ".$expe->getFiscalAdjunto->ficalia." ".$expe->getFiscalAdjunto->despacho." ".$expe->getFiscalAdjunto->ubigeo." | CORREO: ".$expe->getFiscalAdjunto->correo." | CELULAR:".$expe->getFiscalAdjunto->celular);
+            self::generateLineText($MYPDF,  "RESUMEN", $expe->resumen);
+            self::generateLineText($MYPDF,  "OBSERVACIONES", $expe->observaciones);
+            self::generateLineText($MYPDF,  "SITUACION", $expe->getEstado->descripcion);
+           
+            
+            $MYPDF->Ln(5);
+            $MYPDF->SetFont('Arial', 'B', 11);
+            $MYPDF->multicell(192, 5, "REFERENCIA", 0, 'L');
+            foreach ($expeREFERENCIA  as $key => $value) {
+                self::generateLineText($MYPDF,  "TIPO DOC REFERENCIA", $value->geTipoDocumentosReferencia->descripcion);
+                self::generateLineText($MYPDF,  "NRO", $value->nro);
+                self::generateLineText($MYPDF,  "FECHA", $value->fecha_documento);
+                self::generateLineText($MYPDF,  "SIGLAS", $value->siglas);
+                self::generateLineText($MYPDF,  "ARCHIVO", $value->pdf);
+            }
+            $MYPDF->Ln(5);
+            $MYPDF->SetFont('Arial', 'B', 11);
+            $MYPDF->multicell(192, 5, "TIPO DE VIDEOVIGILANCIA", 0, 'L');
+            foreach ($expeTIPOVV  as $key => $value) {
+                self::generateLineText($MYPDF,  $value->geTipoVideovigilancia->descripcion, "");
+            }
+
+            $MYPDF->Ln(5);
+            $MYPDF->SetFont('Arial', 'B', 11);
+            $MYPDF->multicell(192, 5, "OBJECTO DE VIDEOVIGILANCIA", 0, 'L');
+            foreach ($expeOBJETOVV  as $key => $value) {
+                self::generateLineText($MYPDF,  $value->descripcion, "");
+            }
+          
+            $MYPDF->Output(('ReporteDeExpediente.pdf'), 'I');
+            //$MYPDF->Output('D', "ReporteReferenciaSerpol.pdf", true);
+            exit();
+        } catch (\Exception $e) {
+            // dd($e);
+        }
+    }
     private static function generateLineTextForDetail($pdf, $tipo, $contenido)
     {
         // if (isset($contenido) && !empty($contenido)) {

@@ -71,6 +71,8 @@
         });
     </script>
 
+@stack('scriptsFooter')
+
 </body>
 
 </html>

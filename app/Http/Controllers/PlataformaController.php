@@ -25,7 +25,18 @@ class PlataformaController extends Controller
 
     public function dashboard()
     {
-        return view('modules.dashboard.index');
+        $usuarios = User::get();
+        return view('modules.dashboard.index', compact('usuarios'));
+    }
+
+    public function modulo_reportes_inmueble()
+    {
+        return view('modules.reportes.inmueble');
+    }
+
+    public function modulo_reportes_personas()
+    {
+        return view('modules.reportes.personas');
     }
 
     public function administrador_consulta_policial(Request $request)

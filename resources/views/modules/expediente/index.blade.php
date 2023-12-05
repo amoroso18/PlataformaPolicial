@@ -124,13 +124,13 @@
                 </div>
                 <div slot="opciones" slot-scope="props">
                     <div class="btn-group dropup">
-                        <a v-on:click="OpenEdit(props.row)" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
+                    <a target="_blank" :href="uriExpe+'?contexto='+props.row.id" class="m-1" style="font-size: 22px;"><em class="icon ni ni-reports"></em></a>  
+                    <a v-on:click="OpenEdit(props.row)" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
                     </div>
                 </div>
             </v-client-table>
         </div>
     </div>
-
     <div class="modal fade" id="modalADD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -225,9 +225,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-control-wrap mt-2">
+                                        <!-- <div class="form-control-wrap mt-2">
                                             <input type="text" class="form-control " v-model="dataExpe.selectdataReferenciaVideovigilancia[index].observaciones" placeholder="Observaciones">
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -270,14 +270,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-dark mt-2" @click="addInput('OBJECTOS')">Agregar más cuadros de texto</button>
+                            <button class="btn btn-dark mt-2" @click="addInput('OBJECTOS')">+ Personas</button>
+                            <button class="btn btn-dark mt-2" @click="addInput('OBJECTOS')">+ Inmueble</button>
+                            <button class="btn btn-dark mt-2" @click="addInput('OBJECTOS')">+ Vehiculo</button>
                         </div>
                     </section>
                     <h5 class="mt-5">Fiscales</h5>
                     <section>
                         <div class="col-sm-12 mt-3">
                             <div class="form-control-wrap">
-                                <select class="form-control form-control-xl form-control-outlined" id="outlined-select" v-model="dataExpe.fiscal_responsable_id" @input="handleSelectChange">
+                                <select class="form-control form-control-xl form-control-outlined" id="outlined-select" v-model="dataExpe.fiscal_responsable_id" >
                                     <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
                                 </select>
                                 <label class="form-label-outlined" for="outlined-select">Fiscal Responsable</label>
@@ -431,11 +433,12 @@
         </div>
     </div>
 
-    
+
 </div>
 
 <script>
     const URL_REGISTRAR = "{{route('ExpedienteWS')}}";
+    const URL_EXPEDIENTE = "{{route('expediente_reporte')}}";
     document.addEventListener('DOMContentLoaded', async function() {
         Vue.use(VueTables.ClientTable);
         const app = new Vue({
@@ -445,6 +448,7 @@
                 expe_pendientes: 0,
                 expe_caducados: 0,
                 uri: URL_REGISTRAR,
+                uriExpe: URL_EXPEDIENTE,
                 situacion: "",
                 loadingModalNuevoFiscal: false,
                 loadingModal: false,
@@ -453,17 +457,17 @@
                 loadingModalTipoVideoVigilancia: false,
                 dataEdit: {},
                 dataExpe: {
-                    fecha_disposicion: null,
+                    fecha_disposicion: "",
                     fiscal_responsable_id: 0,
                     fiscal_asistente_id: 0,
                     nro: "",
                     caso: "",
                     resumen: "",
                     observaciones: "Sin observaciones",
-                    plazo_id: 1,
+                    plazo_id: 0,
                     plazo: 0,
-                    fecha_inicio: null,
-                    fecha_termino: null,
+                    fecha_inicio: "",
+                    fecha_termino: "",
                     tipo_plazo: "Días Naturales",
                     selectdataTipoVideovigilancia: [],
                     selectdataObjetoVideovigilancia: [],
@@ -496,7 +500,7 @@
                         toMomentFormat: true,
                         compileTemplates: false,
                         filterByColumn: true,
-                        perPage: 20,
+                        perPage: 10,
                         pagination: {
                             chunk: 15,
                             dropdown: true
@@ -532,13 +536,11 @@
                 this.Get();
             },
             methods: {
-                handleSelectChange() {
-                    console.log('Selected value:', this.dataExpe.fiscal_responsable_id);
-                },
                 Grabar() {
                     this.loadingModal = true;
                     const formData = new FormData();
                     formData.append('type', "_SAVE");
+                    formData.append('dd', "_SAVE");
                     if (this.dataExpe.nro) {
                         formData.append('nro', this.dataExpe.nro);
                     }
@@ -548,7 +550,6 @@
                     if (this.dataExpe.fecha_disposicion) {
                         formData.append('fecha_disposicion', this.dataExpe.fecha_disposicion);
                     }
-
                     if (this.dataExpe.resumen) {
                         formData.append('resumen', this.dataExpe.resumen);
                     }
@@ -558,7 +559,6 @@
                     if (this.dataExpe.plazo_id) {
                         formData.append('plazo_id', this.dataExpe.plazo_id);
                     }
-
                     if (this.dataExpe.plazo) {
                         formData.append('plazo', this.dataExpe.plazo);
                     }
@@ -574,20 +574,34 @@
 
                     if (this.dataExpe.fiscal_responsable_id) {
                         formData.append('fiscal_responsable_id', this.dataExpe.fiscal_responsable_id);
-                    } else {
-                        this.loadingModal = false;
-                        return alert(this.dataExpe.fiscal_responsable_id)
                     }
                     if (this.dataExpe.fiscal_asistente_id) {
                         formData.append('fiscal_asistente_id', this.dataExpe.fiscal_asistente_id);
-                    } else {
-                        this.loadingModal = false;
-                        return alert(this.dataExpe.fiscal_asistente_id)
                     }
-
-
+                    for (let i = 0; i < this.dataExpe.selectdataObjetoVideovigilancia.length; i++) {
+                        if (this.dataExpe.selectdataObjetoVideovigilancia[i]) {
+                            formData.append(`selectdataObjetoVideovigilancia_[${i}]`, this.dataExpe.selectdataObjetoVideovigilancia[i]);
+                        }
+                    }
+                    console.log(this.dataExpe);
+                    for (let i = 0; i < this.dataExpe.selectdataReferenciaVideovigilancia.length; i++) {
+                        if (this.dataExpe.selectdataReferenciaVideovigilancia[i]) {
+                            formData.append(`selectdataReferenciaVideovigilancia_documentos_id_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].documentos_id.id);
+                            formData.append(`selectdataReferenciaVideovigilancia_fecha_documento_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].fecha_documento);
+                            formData.append(`selectdataReferenciaVideovigilancia_nro_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].nro);
+                            formData.append(`selectdataReferenciaVideovigilancia_pdf_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].pdf);
+                            formData.append(`selectdataReferenciaVideovigilancia_siglas_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].siglas);
+                        }
+                    }
+                    for (let i = 0; i < this.dataExpe.selectdataTipoVideovigilancia.length; i++) {
+                        if (this.dataExpe.selectdataTipoVideovigilancia[i].id) {
+                            formData.append(`selectdataTipoVideovigilancia_[${i}]`, this.dataExpe.selectdataTipoVideovigilancia[i].id);
+                        }
+                    }
+                    // console.log(formData);
                     axios.post(URL_REGISTRAR, formData)
                         .then(response => {
+                            console.log(response);
                             if (response.data.error) {
                                 Swal.fire({
                                     title: 'Error',
@@ -596,11 +610,13 @@
                                     confirmButtonText: '¡Entendido!',
                                 });
                             } else {
+                                Swal.fire({
+                                    title: 'Felicidades',
+                                    text: 'Registrado correctamente',
+                                    icon: 'success',
+                                    confirmButtonText: '¡Entendido!',
+                                });
                                 this.data.tableData.push(response.data.data)
-                                // const DATARETURN = response.data.data;
-                                console.log(response)
-                                // const index = this.BuscarIndice(DATARETURN.id);
-                                // console.log(index)
                             }
                         })
                         .catch(error => {
@@ -685,7 +701,7 @@
                         });
 
                 },
-                GrabarTipoVideoVigilancia(){
+                GrabarTipoVideoVigilancia() {
                     this.loadingModalTipoVideoVigilancia = true;
                     const formData = new FormData();
                     formData.append('type', "_SAVE_TipoVideoVigilancia");
@@ -887,7 +903,7 @@
                         this.dataExpe.selectdataObjetoVideovigilancia.push('');
                     } else if (TIPO == "REFERENCIA") {
                         this.dataExpe.selectdataReferenciaVideovigilancia.push({
-                            documentos_id: null,
+                            documentos_id: {id: 0 , descripcion: "INFORME POLICIAL"},
                             nro: "",
                             fecha_documento: "",
                             siglas: "",
@@ -898,7 +914,7 @@
                     }
 
                 },
-                removeInput(TIPO,index) {
+                removeInput(TIPO, index) {
                     if (TIPO == "OBJECTOS") {
                         this.dataExpe.selectdataObjetoVideovigilancia.splice(index, 1); // Elimina el input en el índice especificado
                     } else if (TIPO == "REFERENCIA") {
@@ -907,18 +923,15 @@
                 },
                 handleFileChange(index, e) {
                     // Accede a la información del archivo a través del evento
-                    const file = event.target.files[0];
+                    const file = e.target.files[0];
 
                     // Verifica si el archivo es un PDF
                     if (file && file.type === "application/pdf") {
                         // Asigna el nombre del archivo a una propiedad pdfName en la estructura de datos
                         this.dataExpe.selectdataReferenciaVideovigilancia[index].pdfName = file.name;
-
                         // Asigna el objeto de archivo a una propiedad pdf en la estructura de datos
                         this.dataExpe.selectdataReferenciaVideovigilancia[index].pdf = file;
-
                         // Puedes realizar otras acciones o actualizaciones necesarias aquí
-
                         // Ejemplo: Muestra el nombre del archivo en la consola
                         console.log(`PDF seleccionado en el índice ${index}: ${file.name}`);
                     } else {

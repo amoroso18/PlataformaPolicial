@@ -29,7 +29,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="nk-menu-item has-sub">
+            <!-- <li class="nk-menu-item has-sub">
                 <a href="#" class="nk-menu-link nk-menu-toggle">
                     <span class="nk-menu-icon"><em class="icon ni ni-db"></em></span>
                     <span class="nk-menu-text">Entidades</span>
@@ -75,8 +75,8 @@
                         <a href="{{route('entidades_policial')}}" class="nk-menu-link"><span
                                 class="nk-menu-text">Inmuebles</span></a>
                     </li>
-                </ul><!-- .nk-menu-sub -->
-            </li><!-- .nk-menu-item -->
+                </ul>
+            </li>
             <li class="nk-menu-item has-sub">
                 <a href="#" class="nk-menu-link nk-menu-toggle">
                     <span class="nk-menu-icon"><em class="icon ni ni-db"></em></span>
@@ -103,8 +103,8 @@
                         <a href="{{route('basededatos_secundarias_unidades')}}" class="nk-menu-link"><span
                                 class="nk-menu-text">Unidades</span></a>
                     </li>
-                </ul><!-- .nk-menu-sub -->
-            </li><!-- .nk-menu-item -->
+                </ul>
+            </li> -->
             <li class="nk-menu-heading">
                 <h6 class="overline-title text-primary-alt">Disposición Fiscal</h6>
             </li><!-- .nk-menu-heading -->
@@ -115,45 +115,27 @@
                 </a>
                 <ul class="nk-menu-sub">
                     <li class="nk-menu-item">
-                        <a href="{{route('expedientes')}}" class="nk-menu-link"><span class="nk-menu-text">Nuevo
-                                expediente</span></a>
-                    </li>
-                    <li class="nk-menu-item">
-                        <a href="html/project-list.html" class="nk-menu-link"><span class="nk-menu-text">Buscar
-                                expediente</span></a>
-                    </li>
-                    <li class="nk-menu-item">
-                        <a href="html/project-list.html" class="nk-menu-link"><span class="nk-menu-text">Bandeja de
-                                expedientes</span></a>
+                        <a href="{{route('expedientes')}}" class="nk-menu-link"><span class="nk-menu-text">Gestión</span></a>
                     </li>
                 </ul><!-- .nk-menu-sub -->
             </li><!-- .nk-menu-item -->
             <li class="nk-menu-item has-sub">
                 <a href="#" class="nk-menu-link nk-menu-toggle">
-                    <span class="nk-menu-icon"><em class="icon ni ni-tranx"></em></span>
-                    <span class="nk-menu-text">Situación</span>
-                </a>
-                <ul class="nk-menu-sub">
-                    <li class="nk-menu-item">
-                        <a href="html/user-list-regular.html" class="nk-menu-link"><span
-                                class="nk-menu-text">Expedientes pendientes</span></a>
-                    </li>
-                    <li class="nk-menu-item">
-                        <a href="html/user-list-compact.html" class="nk-menu-link"><span
-                                class="nk-menu-text">Expedientes caducados</span></a>
-                    </li>
-                    <li class="nk-menu-item">
-                        <a href="html/user-details-regular.html" class="nk-menu-link"><span
-                                class="nk-menu-text">Expedientes culminados</span></a>
-                    </li>
-                </ul><!-- .nk-menu-sub -->
-            </li><!-- .nk-menu-item -->
-            <li class="nk-menu-item">
-                <a href="html/email-templates.html" class="nk-menu-link">
                     <span class="nk-menu-icon"><em class="icon ni ni-text-rich"></em></span>
                     <span class="nk-menu-text">Reportes</span>
                 </a>
-            </li>
+                <ul class="nk-menu-sub">
+                    <li class="nk-menu-item">
+                        <a href="{{route('modulo_reportes_personas')}}" class="nk-menu-link"><span
+                                class="nk-menu-text">Infosombra</span></a>
+                    </li>
+                    <li class="nk-menu-item">
+                        <a href="{{route('modulo_reportes_inmueble')}}" class="nk-menu-link"><span
+                                class="nk-menu-text">InfoZona</span></a>
+                    </li>
+                </ul><!-- .nk-menu-sub -->
+            </li><!-- .nk-menu-item -->
+           
 
         </ul><!-- .nk-menu -->
     </div><!-- .nk-sidebar-menu -->
