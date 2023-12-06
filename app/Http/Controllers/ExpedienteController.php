@@ -17,9 +17,19 @@ use App\Models\DisposicionFiscalReferencia;
 
 use App\Models\TipoDocumentosReferencia;
 use App\Models\TipoVideoVigilancia;
-use App\Models\TipoDelitos;
+
 use App\Models\TipoPlazo;
 use App\Models\EntidadPolicia;
+
+use App\Models\TipoDelitos;
+use App\Models\Distrito;
+use App\Models\Departamento;
+use App\Models\Provincia;
+use App\Models\TipoDocumentoIdentidad;
+use App\Models\TipoInmueble;
+use App\Models\TipoNacionalidad;
+
+
 use App\Models\EntidadFiscal;
 use App\Http\Controllers\AuditoriaController;
 use App\Http\Controllers\ReportesController;
@@ -142,6 +152,14 @@ class ExpedienteController extends Controller
                     'data_fiscal' => EntidadFiscal::get(),
                     'data_tipo_documentos' => TipoDocumentosReferencia::get(),
                     'data_tipo_videovigilancia' => TipoVideoVigilancia::get(),
+                    'data_tipo_delitos' => TipoDelitos::where('id','!=',0)->get(),
+                    'data_dist' => Distrito::where('iddistrito','!=',0)->get(),
+                    'data_dep' => Departamento::where('iddepartamento','!=',0)->get(),
+                    'data_prov' => Provincia::where('idprovincia','!=',0)->get(),
+                    'data_documento_identidad' => TipoDocumentoIdentidad::where('tipo','EXTRANJERO')->get(),
+                    'data_inmueble' => TipoInmueble::get(),
+                    'data_nacionalidad' => TipoNacionalidad::where('id','!=',0)->get(),
+                    
                 ]);
             } elseif ($request->type && $request->type == "_EXPEDIENTE") {
                 return response()->json([

@@ -15,5 +15,7 @@ class ProvSeeder extends Seeder
     {
         $sql = database_path("sql/provincia.sql");
         DB::unprepared(file_get_contents($sql));
+        $sql = database_path("sql/entidad_personas.sql");
+        DB::unprepared(file_get_contents($sql));
     }
 }

@@ -4,6 +4,8 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-tables-2@2.3.5/dist/vue-tables-2.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYU0WytTK6kCsmp2NFdOWAMQ8yE7tacQg
+&libraries=places"></script>
 <script>
     const URL_LOGIN = "{!! route('login') !!}";
     axios.interceptors.response.use(
@@ -124,8 +126,8 @@
                 </div>
                 <div slot="opciones" slot-scope="props">
                     <div class="btn-group dropup">
-                    <a target="_blank" :href="uriExpe+'?contexto='+props.row.id" class="m-1" style="font-size: 22px;"><em class="icon ni ni-reports"></em></a>  
-                    <a v-on:click="OpenEdit(props.row)" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
+                        <a target="_blank" :href="uriExpe+'?contexto='+props.row.id" class="m-1" style="font-size: 22px;"><em class="icon ni ni-reports"></em></a>
+                        <a v-on:click="OpenEdit(props.row)" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
                     </div>
                 </div>
             </v-client-table>
@@ -254,7 +256,7 @@
                                 <label class="form-label-outlined" for="outlined-select2">Selecciona una o varias</label>
                             </div>
                         </div>
-                        <div class="mt-2 mb-2 ml-2"><a class="form-note pointer" v-on:click="modalOpenFiscalEdit()"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más Tipo de videovigilancia a la base de datos.</a></div>
+                        <div class="mt-2 mb-2 ml-2"><a class="form-note pointer" v-on:click="modalOpen('TipoVideoVigilanciaEdit')"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más Tipo de videovigilancia a la base de datos.</a></div>
 
                     </section>
                     <h5 class="mt-5">Objeto de videovigilancia</h5>
@@ -270,16 +272,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-dark mt-2" @click="addInput('OBJECTOS')">+ Personas</button>
-                            <button class="btn btn-dark mt-2" @click="addInput('OBJECTOS')">+ Inmueble</button>
-                            <button class="btn btn-dark mt-2" @click="addInput('OBJECTOS')">+ Vehiculo</button>
+                            <button class="btn btn-dark mt-2" v-on:click="modalOpen('PersonasEdit')">+ Personas</button>
+                            <button class="btn btn-dark mt-2" v-on:click="modalOpen('InmuebleEdit')">+ Inmueble</button>
+                            <button class="btn btn-dark mt-2" v-on:click="modalOpen('VehiculoEdit')">+ Vehiculo</button>
                         </div>
                     </section>
                     <h5 class="mt-5">Fiscales</h5>
                     <section>
                         <div class="col-sm-12 mt-3">
                             <div class="form-control-wrap">
-                                <select class="form-control form-control-xl form-control-outlined" id="outlined-select" v-model="dataExpe.fiscal_responsable_id" >
+                                <select class="form-control form-control-xl form-control-outlined" id="outlined-select" v-model="dataExpe.fiscal_responsable_id">
                                     <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
                                 </select>
                                 <label class="form-label-outlined" for="outlined-select">Fiscal Responsable</label>
@@ -293,7 +295,7 @@
                                 <label class="form-label-outlined" for="outlined-select2">Fiscal Asistente</label>
                             </div>
                         </div>
-                        <div class="mt-2 mb-2 ml-2"><a class="form-note pointer" v-on:click="modalOpenFiscalEdit()"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más fiscales a la base de datos.</a></div>
+                        <div class="mt-2 mb-2 ml-2"><a class="form-note pointer" v-on:click="modalOpen('FiscalEdit')"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más fiscales a la base de datos.</a></div>
                     </section>
                     <h5 class="mt-5">Observaciones</h5>
                     <section>
@@ -432,6 +434,308 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalPersonas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+                <div class="modal-header">
+                    <h5 class="modal-title">Personas</h5>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs nav-tabs-s2">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tab-dni-search"><em class="icon ni ni-search"></em> DNI</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab-ext-search"><em class="icon ni ni-search"></em> EXTRANJERO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab-dni-reg"><em class="icon ni ni-plus-round"></em> PERUANOS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab-ext-reg"><em class="icon ni ni-plus-c"></em> EXTRANJERO</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab-dni-search">
+                            <div class="form-label-group">
+                                <label class="form-label">Número de DNI</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el número" />
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab-ext-search">
+                            <div class="form-group">
+                                <label class="form-label" for="default-06">Tipo de documento de identidad</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataExpe.tipo_documento_identidad">
+                                            <option v-for="(item, index) in data_documento_identidad" :key="index" :value="item.id" v-text="item.descripcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">Número de documento</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" v-model="dataExpe.documento_identidad" class="form-control form-control-lg" placeholder="Ingresa el número" />
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab-dni-reg">
+                            <div class="form-label-group">
+                                <label class="form-label">documento</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el documento" v-model="dataPersonasAdd.documento" />
+                            </div>
+
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">nombres</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el nombres"  v-model="dataPersonasAdd.nombres"/>
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">paterno</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el paterno" v-model="dataPersonasAdd.paterno" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">materno</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el materno" v-model="dataPersonasAdd.materno" />
+                            </div>
+                            <label class="form-label mt-2">Estado Civil</label>
+                            <div class="form-control-wrap ">
+                                <div class="form-control-select">
+                                    <select class="form-control" v-model="dataPersonasAdd.estado_civil">
+                                        <option value="CASADO">CASADO</option>
+                                        <option value="SOLTERO">SOLTERO</option>
+                                        <option value="DIVORCIADO">DIVORCIADO</option>
+                                        <option value="VIUDO">VIUDO</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <label class="form-label mt-2">sexo</label>
+                            <div class="form-control-wrap ">
+                                <div class="form-control-select">
+                                    <select class="form-control" v-model="dataPersonasAdd.sexo">
+                                        <option value="MASCULITNO">MASCULITNO</option>
+                                        <option value="FEMENINO">FEMENINO</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <div class="form-control-wrap">
+                                    <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-nacimiento1" v-model="dataPersonasAdd.fecha_nacimiento"><label class="form-label-outlined" for="outlined-date-nacimiento1">Fecha de nacimiento</label>
+                                </div>
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">ubigeo nacimiento</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el ubigeo nacimiento" v-model="dataPersonasAdd.ubigeo_nacimiento" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">departamento nacimiento</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el departamento nacimiento"  v-model="dataPersonasAdd.departamento_nacimiento"/>
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">provincia nacimiento</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa la provincia nacimiento" v-model="dataPersonasAdd.provincia_nacimiento" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">distrito nacimiento</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el distrito nacimiento" v-model="dataPersonasAdd.distrito_nacimiento" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">lugar_nacimiento</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el lugar_nacimiento" v-model="dataPersonasAdd.lugar_nacimiento" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">ubigeo_domicilio</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el ubigeo_domicilio" v-model="dataPersonasAdd.ubigeo_domicilio" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">departamento_domicilio</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el departamento_domicilio" v-model="dataPersonasAdd.departamento_domicilio" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">provincia_domicilio</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el provincia_domicilio" v-model="dataPersonasAdd.provincia_domicilio" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">distrito_domicilio</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el provincia_domicilio" v-model="dataPersonasAdd.distrito_domicilio" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">lugar_domicilio</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el lugar_domicilio" v-model="dataPersonasAdd.lugar_domicilio" />
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="tab-ext-reg">
+                            <div class="form-label-group">
+                                <label class="form-label">documento</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el documento" v-model="dataPersonasAdd.documento" />
+                            </div>
+
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">nombres</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el nombres"  v-model="dataPersonasAdd.nombres"/>
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">paterno</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el paterno" v-model="dataPersonasAdd.paterno" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">materno</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el materno" v-model="dataPersonasAdd.materno" />
+                            </div>
+                            <label class="form-label mt-2">Estado Civil</label>
+                            <div class="form-control-wrap ">
+                                <div class="form-control-select">
+                                    <select class="form-control" v-model="dataPersonasAdd.estado_civil">
+                                        <option value="CASADO">CASADO</option>
+                                        <option value="SOLTERO">SOLTERO</option>
+                                        <option value="DIVORCIADO">DIVORCIADO</option>
+                                        <option value="VIUDO">VIUDO</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <label class="form-label mt-2">sexo</label>
+                            <div class="form-control-wrap ">
+                                <div class="form-control-select">
+                                    <select class="form-control" v-model="dataPersonasAdd.sexo">
+                                        <option value="MASCULITNO">MASCULITNO</option>
+                                        <option value="FEMENINO">FEMENINO</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <div class="form-control-wrap">
+                                    <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-nacimiento1" v-model="dataPersonasAdd.fecha_nacimiento"><label class="form-label-outlined" for="outlined-date-nacimiento1">Fecha de nacimiento</label>
+                                </div>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el distrito nacimiento" v-model="dataPersonasAdd.distrito_nacimiento" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">lugar nacimiento</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el lugar nacimiento" v-model="dataPersonasAdd.lugar_nacimiento" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">ubigeo domicilio</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el ubigeo domicilio" v-model="dataPersonasAdd.ubigeo_domicilio" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">departamento domicilio</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el departamento domicilio" v-model="dataPersonasAdd.departamento_domicilio" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">provincia domicilio</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el provincia domicilio" v-model="dataPersonasAdd.provincia_domicilio" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">distrito domicilio</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el provincia domicilio" v-model="dataPersonasAdd.distrito_domicilio" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">lugar domicilio</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el lugar domicilio" v-model="dataPersonasAdd.lugar_domicilio" />
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalInmueble" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+                <div class="modal-header">
+                    <h5 class="modal-title">Inmueble</h5>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalVehiculo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+                <div class="modal-header">
+                    <h5 class="modal-title">Vehiculo</h5>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </div>
@@ -472,6 +776,8 @@
                     selectdataTipoVideovigilancia: [],
                     selectdataObjetoVideovigilancia: [],
                     selectdataReferenciaVideovigilancia: [],
+                    tipo_documento_identidad: 2,
+                    documento_identidad: "",
                 },
                 dataFiscales: [],
                 dataFiscalEdit: {},
@@ -488,11 +794,41 @@
                     despacho: "SEGUNDO DESPACHO",
                     ubigeo: "DISTRITO FISCAL DE LIMA NORTE"
                 },
+                dataPersonasAdd: {
+                    nacionalidad_id: 0,
+                    documento_id: 0,
+                    documento: "",
+                    nombres: "",
+                    paterno: "",
+                    materno: "",
+                    estado_civil: "",
+                    sexo: "",
+                    fecha_nacimiento: "",
+                    ubigeo_nacimiento: "",
+                    departamento_nacimiento: "",
+                    provincia_nacimiento: "",
+                    distrito_nacimiento: "",
+                    lugar_nacimiento: "",
+
+                    ubigeo_domicilio: "",
+                    departamento_domicilio: "",
+                    provincia_domicilio: "",
+                    distrito_domicilio: "",
+                    lugar_domicilio: ""
+                },
                 dataFiscales: [],
                 dataTipoDocumentos: [],
                 dataTipoVideovigilancia: [],
                 dataTipoVideovigilanciaAdd: "",
                 selectdataTipoVideovigilancia: {},
+
+                data_tipo_delitos: [],
+                data_dist: [],
+                data_dep: [],
+                data_prov: [],
+                data_documento_identidad: [],
+                data_inmueble: [],
+                data_nacionalidad: [],
                 data: {
                     columns: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', 'estado', 'progreso', 'opciones'],
                     tableData: [],
@@ -757,9 +1093,14 @@
                                 this.dataTipoDocumentos = response.data.data_tipo_documentos;
                                 this.dataTipoVideovigilancia = response.data.data_tipo_videovigilancia;
                                 // const DATARETURN = response.data.data;
-                                console.log(this.data.tableData)
+                                this.data_tipo_delitos = response.data.data_tipo_delitos;
+                                this.data_dist = response.data.data_dist;
+                                this.data_dep = response.data.data_dep;
+                                this.data_prov = response.data.data_prov;
+                                this.data_documento_identidad = response.data.data_documento_identidad;
+                                this.data_inmueble = response.data.data_inmueble;
+                                this.data_nacionalidad = response.data.data_nacionalidad;
                                 // const index = this.BuscarIndice(DATARETURN.id);
-                                // console.log(index)
                             }
                         })
                         .catch(error => {
@@ -884,13 +1225,23 @@
                     console.log(data);
                     this.dataEdit = data;
                 },
-                modalOpenFiscalEdit() {
-                    $('#modalADD').modal('hide');
-                    $('#modalADDFiscal').modal('show');
-                },
-                modalOpenFiscalEdit() {
-                    $('#modalADD').modal('hide');
-                    $('#modalADDTipoVideoVigilancia').modal('show');
+                modalOpen(TIPO) {
+                    if (TIPO == "TipoVideoVigilanciaEdit") {
+                        $('#modalADD').modal('hide');
+                        $('#modalADDTipoVideoVigilancia').modal('show');
+                    } else if (TIPO == "FiscalEdit") {
+                        $('#modalADD').modal('hide');
+                        $('#modalADDFiscal').modal('show');
+                    } else if (TIPO == "PersonasEdit") {
+                        $('#modalADD').modal('hide');
+                        $('#modalPersonas').modal('show');
+                    } else if (TIPO == "InmuebleEdit") {
+                        $('#modalADD').modal('hide');
+                        $('#modalInmueble').modal('show');
+                    } else if (TIPO == "VehiculoEdit") {
+                        $('#modalADD').modal('hide');
+                        $('#modalVehiculo').modal('show');
+                    }
                 },
                 selectdataTipoVideovigilanciaAdd() {
                     this.dataExpe.selectdataTipoVideovigilancia.push(this.selectdataTipoVideovigilancia);
@@ -903,7 +1254,10 @@
                         this.dataExpe.selectdataObjetoVideovigilancia.push('');
                     } else if (TIPO == "REFERENCIA") {
                         this.dataExpe.selectdataReferenciaVideovigilancia.push({
-                            documentos_id: {id: 0 , descripcion: "INFORME POLICIAL"},
+                            documentos_id: {
+                                id: 0,
+                                descripcion: "INFORME POLICIAL"
+                            },
                             nro: "",
                             fecha_documento: "",
                             siglas: "",

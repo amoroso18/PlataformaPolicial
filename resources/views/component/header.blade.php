@@ -2,7 +2,7 @@
     <div class="container-lg wide-xl">
         <div class="nk-header-wrap">
             <div class="nk-header-brand">
-                <a href="{{route('perfil')}}" class="logo-link">
+                <a href="{{route('dashboard')}}" class="logo-link">
                     <img class="logo-light logo-img" src="{{asset('images/sivipol/BannerSivipolTemaOscuro.png')}}" srcset="{{asset('images/sivipol/BannerSivipolTemaOscuro.png')}}" alt="logo">
                     <img class="logo-dark logo-img" src="{{asset('images/sivipol/BannerSivipol.png')}}" srcset="{{asset('images/sivipol/BannerSivipol.png')}} 2x" alt="logo-dark">
                 </a>
