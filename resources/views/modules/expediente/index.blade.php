@@ -486,7 +486,10 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="tab-dni-reg">
-                            <div class="form-label-group">
+
+                 
+
+                            <div class="form-label-group mt-2">
                                 <label class="form-label">documento</label>
                             </div>
                             <div class="form-control-wrap">
@@ -497,7 +500,7 @@
                                 <label class="form-label">nombres</label>
                             </div>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el nombres"  v-model="dataPersonasAdd.nombres"/>
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el nombres" v-model="dataPersonasAdd.nombres" />
                             </div>
                             <div class="form-label-group mt-2">
                                 <label class="form-label">paterno</label>
@@ -542,63 +545,127 @@
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control form-control-lg" placeholder="Ingresa el ubigeo nacimiento" v-model="dataPersonasAdd.ubigeo_nacimiento" />
                             </div>
-                            <div class="form-label-group mt-2">
+
+                            <div class="form-group mt-2">
                                 <label class="form-label">departamento nacimiento</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataPersonasAdd.departamento_nacimiento" @change="handleChangeUbigeoNaci('DEP')">
+                                            <option v-for="(item, index) in data_dep" :key="index" :value="item.opcion" v-text="item.opcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el departamento nacimiento"  v-model="dataPersonasAdd.departamento_nacimiento"/>
-                            </div>
-                            <div class="form-label-group mt-2">
+
+                            <div class="form-group mt-2">
                                 <label class="form-label">provincia nacimiento</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataPersonasAdd.provincia_nacimiento" @change="handleChangeUbigeoNaci('PROV')">
+                                            <option v-for="(item, index) in data_filtro.nacimiento.provincia_nacimiento" :key="index" :value="item.opcion" v-text="item.opcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa la provincia nacimiento" v-model="dataPersonasAdd.provincia_nacimiento" />
-                            </div>
-                            <div class="form-label-group mt-2">
+
+                            <div class="form-group mt-2">
                                 <label class="form-label">distrito nacimiento</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataPersonasAdd.distrito_nacimiento">
+                                            <option v-for="(item, index) in data_filtro.nacimiento.distrito_nacimiento" :key="index" :value="item.opcion" v-text="item.opcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">lugar nacimiento</label>
                             </div>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el distrito nacimiento" v-model="dataPersonasAdd.distrito_nacimiento" />
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el lugar nacimiento" v-model="dataPersonasAdd.lugar_nacimiento" />
                             </div>
                             <div class="form-label-group mt-2">
-                                <label class="form-label">lugar_nacimiento</label>
+                                <label class="form-label">ubigeo domicilio</label>
                             </div>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el lugar_nacimiento" v-model="dataPersonasAdd.lugar_nacimiento" />
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el ubigeo domicilio" v-model="dataPersonasAdd.ubigeo_domicilio" />
+                            </div>
+
+                            <div class="form-group mt-2">
+                                <label class="form-label">departamento domicilio</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataPersonasAdd.departamento_domicilio" @change="handleChangeUbigeoNaci('DEP_DOM')">
+                                            <option v-for="(item, index) in data_dep" :key="index" :value="item.opcion" v-text="item.opcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-2">
+                                <label class="form-label">provincia domicilio</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataPersonasAdd.provincia_domicilio" @change="handleChangeUbigeoNaci('PROV_DOM')">
+                                            <option v-for="(item, index) in data_filtro.domicilio.provincia_domicilio" :key="index" :value="item.opcion" v-text="item.opcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-2">
+                                <label class="form-label">distrito domicilio</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataPersonasAdd.distrito_domicilio">
+                                            <option v-for="(item, index) in data_filtro.domicilio.distrito_domicilio" :key="index" :value="item.opcion" v-text="item.opcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-label-group mt-2">
-                                <label class="form-label">ubigeo_domicilio</label>
+                                <label class="form-label">lugar domicilio</label>
                             </div>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el ubigeo_domicilio" v-model="dataPersonasAdd.ubigeo_domicilio" />
-                            </div>
-                            <div class="form-label-group mt-2">
-                                <label class="form-label">departamento_domicilio</label>
-                            </div>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el departamento_domicilio" v-model="dataPersonasAdd.departamento_domicilio" />
-                            </div>
-                            <div class="form-label-group mt-2">
-                                <label class="form-label">provincia_domicilio</label>
-                            </div>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el provincia_domicilio" v-model="dataPersonasAdd.provincia_domicilio" />
-                            </div>
-                            <div class="form-label-group mt-2">
-                                <label class="form-label">distrito_domicilio</label>
-                            </div>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el provincia_domicilio" v-model="dataPersonasAdd.distrito_domicilio" />
-                            </div>
-                            <div class="form-label-group mt-2">
-                                <label class="form-label">lugar_domicilio</label>
-                            </div>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el lugar_domicilio" v-model="dataPersonasAdd.lugar_domicilio" />
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el lugar domicilio" v-model="dataPersonasAdd.lugar_domicilio" />
+                            </div> 
+
+                            <div class="col-sm-12 mt-3 mb-5">
+                                <div class="form-group">
+                                    <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="GrabarPersonas('PERUANOS')">Registrar</button>
+                                    <p v-if="loadingPersonas">Cargando....</p>
+                                </div>
                             </div>
 
                         </div>
                         <div class="tab-pane" id="tab-ext-reg">
+
+                               
+                        <div class="form-group mt-2">
+                                <label class="form-label">Nacionalidad</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataPersonasAdd.nacionalidad_id">
+                                            <option v-for="(item, index) in data_nacionalidad" :key="index" :value="item.id" v-text="item.descripcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                                   
+                        <div class="form-group mt-2">
+                                <label class="form-label">Tipo documento</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataPersonasAdd.documento_id">
+                                        <option v-for="(item, index) in data_documento_identidad" :key="index" :value="item.id" v-text="item.descripcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-label-group">
                                 <label class="form-label">documento</label>
                             </div>
@@ -610,7 +677,7 @@
                                 <label class="form-label">nombres</label>
                             </div>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el nombres"  v-model="dataPersonasAdd.nombres"/>
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el nombres" v-model="dataPersonasAdd.nombres" />
                             </div>
                             <div class="form-label-group mt-2">
                                 <label class="form-label">paterno</label>
@@ -664,34 +731,52 @@
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control form-control-lg" placeholder="Ingresa el ubigeo domicilio" v-model="dataPersonasAdd.ubigeo_domicilio" />
                             </div>
-                            <div class="form-label-group mt-2">
+                            <div class="form-group mt-2">
                                 <label class="form-label">departamento domicilio</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataPersonasAdd.departamento_domicilio" @change="handleChangeUbigeoNaci('DEP_DOM')">
+                                            <option v-for="(item, index) in data_dep" :key="index" :value="item.opcion" v-text="item.opcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el departamento domicilio" v-model="dataPersonasAdd.departamento_domicilio" />
-                            </div>
-                            <div class="form-label-group mt-2">
+
+                            <div class="form-group mt-2">
                                 <label class="form-label">provincia domicilio</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataPersonasAdd.provincia_domicilio" @change="handleChangeUbigeoNaci('PROV_DOM')">
+                                            <option v-for="(item, index) in data_filtro.domicilio.provincia_domicilio" :key="index" :value="item.opcion" v-text="item.opcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el provincia domicilio" v-model="dataPersonasAdd.provincia_domicilio" />
-                            </div>
-                            <div class="form-label-group mt-2">
+
+                            <div class="form-group mt-2">
                                 <label class="form-label">distrito domicilio</label>
-                            </div>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el provincia domicilio" v-model="dataPersonasAdd.distrito_domicilio" />
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" v-model="dataPersonasAdd.distrito_domicilio">
+                                            <option v-for="(item, index) in data_filtro.domicilio.distrito_domicilio" :key="index" :value="item.opcion" v-text="item.opcion"></option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-label-group mt-2">
                                 <label class="form-label">lugar domicilio</label>
                             </div>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control form-control-lg" placeholder="Ingresa el lugar domicilio" v-model="dataPersonasAdd.lugar_domicilio" />
+                            </div> 
+                            <div class="col-sm-12 mt-3 mb-5">
+                                <div class="form-group">
+                                    <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="GrabarPersonas('EXTRANJEROS')">Registrar</button>
+                                    <p v-if="loadingPersonas">Cargando....</p>
+                                </div>
                             </div>
 
                         </div>
-
-
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -758,6 +843,7 @@
                 loadingModal: false,
                 loadingBody: false,
                 loadingTable: false,
+                loadingPersonas: false,
                 loadingModalTipoVideoVigilancia: false,
                 dataEdit: {},
                 dataExpe: {
@@ -809,23 +895,32 @@
                     provincia_nacimiento: "",
                     distrito_nacimiento: "",
                     lugar_nacimiento: "",
-
                     ubigeo_domicilio: "",
                     departamento_domicilio: "",
                     provincia_domicilio: "",
                     distrito_domicilio: "",
                     lugar_domicilio: ""
                 },
+                dataPersonas: [],
                 dataFiscales: [],
                 dataTipoDocumentos: [],
                 dataTipoVideovigilancia: [],
                 dataTipoVideovigilanciaAdd: "",
                 selectdataTipoVideovigilancia: {},
-
                 data_tipo_delitos: [],
                 data_dist: [],
                 data_dep: [],
                 data_prov: [],
+                data_filtro: {
+                    domicilio: {
+                        provincia_domicilio: [],
+                        distrito_domicilio: []
+                    },
+                    nacimiento: {
+                        provincia_nacimiento: [],
+                        distrito_nacimiento: []
+                    }
+                },
                 data_documento_identidad: [],
                 data_inmueble: [],
                 data_nacionalidad: [],
@@ -1071,6 +1166,61 @@
                             $('#modalADD').modal('show');
                         });
                 },
+                GrabarPersonas(TIPO) {
+                    this.loadingPersonas = true;
+                    const formData = new FormData();
+                    formData.append('type', "_SAVE_personas");
+                    if (TIPO == "PERUANOS") {
+                        formData.append('ubigeo_nacimiento', this.dataPersonasAdd.ubigeo_nacimiento);
+                        formData.append('departamento_nacimiento', this.dataPersonasAdd.departamento_nacimiento);
+                        formData.append('provincia_nacimiento', this.dataPersonasAdd.provincia_nacimiento);
+                        formData.append('distrito_nacimiento', this.dataPersonasAdd.distrito_nacimiento);
+                    } else if (TIPO == "EXTRANJEROS") {
+                        formData.append('documento_id', this.dataPersonasAdd.documento_id);
+                        formData.append('nacionalidad_id', this.dataPersonasAdd.nacionalidad_id);
+                        formData.append('lugar_nacimiento', this.dataPersonasAdd.lugar_nacimiento);
+                    }
+                    formData.append('documento', this.dataPersonasAdd.documento);
+                    formData.append('nombres', this.dataPersonasAdd.nombres);
+                    formData.append('paterno', this.dataPersonasAdd.paterno);
+                    formData.append('materno', this.dataPersonasAdd.materno);
+                    formData.append('estado_civil', this.dataPersonasAdd.estado_civil);
+                    formData.append('sexo', this.dataPersonasAdd.sexo);
+                    formData.append('fecha_nacimiento', this.dataPersonasAdd.fecha_nacimiento);
+
+                    formData.append('ubigeo_domicilio', this.dataPersonasAdd.ubigeo_domicilio);
+                    formData.append('departamento_domicilio', this.dataPersonasAdd.departamento_domicilio);
+                    formData.append('provincia_domicilio', this.dataPersonasAdd.provincia_domicilio);
+                    formData.append('distrito_domicilio', this.dataPersonasAdd.distrito_domicilio);
+                    formData.append('lugar_domicilio', this.dataPersonasAdd.lugar_domicilio);
+
+                    axios.post(URL_REGISTRAR, formData)
+                        .then(response => {
+                            if (response.data.error) {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: `${JSON.stringify(response.data.error)}`,
+                                    icon: 'info',
+                                    confirmButtonText: '¡Entendido!',
+                                });
+                            } else {
+                                this.dataPersonas.push(response.data.data);
+                                console.log(this.dataPersonas)
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: 'Error',
+                                text: `Error al realizar la solicitud: ${JSON.stringify(error)}`,
+                                icon: 'error',
+                                confirmButtonText: '¡Entendido!',
+                            });
+                        }).finally(() => {
+                            this.loadingPersonas = false;
+                            $('#modalPersonas').modal('hide');
+                            $('#modalADD').modal('show');
+                        });
+                },
                 Get() {
                     this.loadingTable = true;
                     const formData = new FormData();
@@ -1293,6 +1443,79 @@
                         console.error("Por favor, selecciona un archivo PDF.");
                         // Puedes mostrar un mensaje al usuario o realizar otras acciones
                     }
+                },
+                handleChangeUbigeoNaci(TIPO) {
+                    if (TIPO == "DEP") {
+                        this.data_filtro.provincia_nacimiento = [];
+                        this.data_filtro.distrito_nacimiento = [];
+
+                        //filtrar departamento
+                        const opciones = this.data_dep;
+                        const igualdad = this.dataPersonasAdd.departamento_nacimiento;
+                        var indice = opciones.findIndex(function(opcion) {
+                            return opcion.opcion == igualdad;
+                        });
+                        const iddepartamento = this.data_dep[indice].iddepartamento;
+
+                        // traer provincia
+                        const opciones2 = this.data_prov;
+                        var data2 = opciones2.filter(function(opcion) {
+                            return opcion.relacion == iddepartamento;
+                        });
+                        this.data_filtro.nacimiento.provincia_nacimiento = data2;
+
+                    } else if (TIPO == "PROV") {
+                        this.data_filtro.distrito_nacimiento = [];
+                        const opciones = this.data_prov;
+                        const igualdad = this.dataPersonasAdd.provincia_nacimiento;
+                        var indice = opciones.findIndex(function(opcion) {
+                            return opcion.opcion == igualdad;
+                        });
+                        const idprovincia = this.data_prov[indice].idprovincia;
+                        // traer distrito
+                        const opciones2 = this.data_dist;
+                        var data2 = opciones2.filter(function(opcion) {
+                            return opcion.relacion == idprovincia;
+                        });
+                        this.data_filtro.nacimiento.distrito_nacimiento = data2;
+
+                    } else if (TIPO == "DEP_DOM") {
+
+                        this.data_filtro.provincia_domicilio = [];
+                        this.data_filtro.distrito_domicilio = [];
+
+                        //filtrar departamento
+                        const opciones = this.data_dep;
+                        const igualdad = this.dataPersonasAdd.departamento_domicilio;
+                        var indice = opciones.findIndex(function(opcion) {
+                            return opcion.opcion == igualdad;
+                        });
+                        const iddepartamento = this.data_dep[indice].iddepartamento;
+
+                        // traer provincia
+                        const opciones2 = this.data_prov;
+                        var data2 = opciones2.filter(function(opcion) {
+                            return opcion.relacion == iddepartamento;
+                        });
+                        this.data_filtro.domicilio.provincia_domicilio = data2;
+
+                    } else if (TIPO == "PROV_DOM") {
+                        this.data_filtro.distrito_domicilio = [];
+                        const opciones = this.data_prov;
+                        const igualdad = this.dataPersonasAdd.provincia_domicilio;
+                        var indice = opciones.findIndex(function(opcion) {
+                            return opcion.opcion == igualdad;
+                        });
+                        const idprovincia = this.data_prov[indice].idprovincia;
+                        // traer distrito
+                        const opciones2 = this.data_dist;
+                        var data2 = opciones2.filter(function(opcion) {
+                            return opcion.relacion == idprovincia;
+                        });     
+                        this.data_filtro.domicilio.distrito_domicilio = data2;
+
+                    }
+
                 }
             }
         });

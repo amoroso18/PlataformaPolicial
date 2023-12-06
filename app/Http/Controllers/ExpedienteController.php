@@ -19,7 +19,7 @@ use App\Models\TipoDocumentosReferencia;
 use App\Models\TipoVideoVigilancia;
 
 use App\Models\TipoPlazo;
-use App\Models\EntidadPolicia;
+use App\Models\EntidadPersona;
 
 use App\Models\TipoDelitos;
 use App\Models\Distrito;
@@ -192,6 +192,30 @@ class ExpedienteController extends Controller
                 $new->descripcion = $request->TipoVideoVigilancia ? $request->TipoVideoVigilancia : null;
                 $new->save();
                 $data = TipoVideoVigilancia::where('id', $counter)->first();
+                return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
+            } elseif ($request->type && $request->type == "_SAVE_personas"){
+                $new = new EntidadPersona;
+                $new->nacionalidad_id = $request->nacionalidad_id ?? 1;
+                $new->documento_id = $request->documento_id ?? 1;
+                $new->documento = $request->documento ?? null;
+                $new->nombres = $request->nombres ?? null;
+                $new->paterno = $request->paterno ?? null;
+                $new->materno = $request->materno ?? null;
+                $new->estado_civil = $request->estado_civil ?? null;
+                $new->sexo = $request->sexo ?? null;
+                $new->fecha_nacimiento = $request->fecha_nacimiento ?? null;
+                $new->ubigeo_nacimiento = $request->ubigeo_nacimiento ?? null;
+                $new->departamento_nacimiento = $request->departamento_nacimiento ?? null;
+                $new->provincia_nacimiento = $request->provincia_nacimiento ?? null;
+                $new->distrito_nacimiento = $request->distrito_nacimiento ?? null;
+                $new->lugar_nacimiento = $request->lugar_nacimiento ?? null;
+                $new->ubigeo_domicilio = $request->ubigeo_domicilio ?? null;
+                $new->departamento_domicilio = $request->departamento_domicilio ?? null;
+                $new->provincia_domicilio = $request->provincia_domicilio ?? null;
+                $new->distrito_domicilio = $request->distrito_domicilio ?? null;
+                $new->lugar_domicilio = $request->lugar_domicilio ?? null;
+                $new->save();
+                $data = EntidadPersona::where('id', $new->id)->first();
                 return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
             }
         } catch (\Throwable $e) {
