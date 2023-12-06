@@ -13,9 +13,21 @@ return new class extends Migration
     {
         Schema::create('entidad_vehiculos', function (Blueprint $table) {
             $table->id();
+            $table->string('placa')->nullable();
+            $table->string('serie')->nullable();
+            $table->string('vin')->nullable();
+            $table->string('numero_motor')->nullable();
+            $table->string('color')->nullable();
+            $table->string('marca')->nullable();
+            $table->string('modelo')->nullable();
+            $table->string('placaanterior')->nullable();
+            $table->string('estado')->default("EN CIRCULACION");
+            $table->string('sede')->nullable();
             $table->timestamps();
         });
     }
+
+
 
     /**
      * Reverse the migrations.
