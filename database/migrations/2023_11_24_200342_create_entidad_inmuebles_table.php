@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('direccion',1000)->nullable();
             $table->string('departamento')->nullable();
             $table->string('provincia')->nullable();
+            $table->string('distrito')->nullable();
             $table->string('referencia',1000)->nullable();
             $table->string('color_interior')->nullable();
             $table->string('color_exterior')->nullable();
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->string('internet')->nullable();
             $table->string('cable')->nullable();
             $table->string('pisos')->nullable();
+            $table->string('ubigeo')->nullable();
             $table->string('latitud')->nullable();
             $table->string('longitud')->nullable();
 

@@ -20,6 +20,8 @@ use App\Models\TipoVideoVigilancia;
 
 use App\Models\TipoPlazo;
 use App\Models\EntidadPersona;
+use App\Models\EntidadInmueble;
+use App\Models\EntidadVehiculos;
 
 use App\Models\TipoDelitos;
 use App\Models\Distrito;
@@ -228,10 +230,37 @@ class ExpedienteController extends Controller
                     ->where('materno', 'like', '%' . $request->materno . '%')
                     ->where('paterno', 'like', '%' . $request->paterno . '%')
                     ->get();
+                }elseif($request->subtype == "_get_domicilio"){
+                    $data = EntidadInmueble::with(['getTipoInmueble'])
+                    ->where('inmuebles_id', $request->inmuebles_id)
+                    ->where('direccion', 'like', '%' . $request->direccion . '%')
+                    ->where('departamento', 'like', '%' . $request->departamento . '%')
+                    ->where('provincia', 'like', '%' . $request->provincia . '%')
+                    ->where('distrito', 'like', '%' . $request->distrito . '%')
+                    ->where('referencia', 'like', '%' . $request->referencia . '%')
+                    ->get();
                 }else{
-                    return response()->json(['message' => 'Procesado correctamente', 'data' => []]); 
+                    return response()->json(['message' => 'Sin coincidencias', 'data' => []]); 
                 }
                 return response()->json(['message' => 'Procesado correctamente', 'data' => $data]);
+            } else if($request->type && $request->type == "_SAVE_inmueble"){
+                $new = new EntidadInmueble;
+                $new->inmuebles_id = $request->inmuebles_id ?? 1;
+                $new->direccion = $request->direccion ?? null;
+                $new->departamento = $request->departamento ?? null;
+                $new->provincia = $request->provincia ?? null;
+                $new->distrito = $request->distrito ?? null;
+                $new->referencia = $request->referencia ?? null;
+                $new->color_exterior = $request->color_exterior ?? null;
+                $new->caracteristicas_especiales = $request->caracteristicas_especiales ?? null;
+                $new->estado_conservacion = $request->estado_conservacion ?? null;
+                $new->pisos = $request->pisos ?? null;
+                $new->latitud = $request->latitud ?? null;
+                $new->longitud = $request->longitud ?? null;
+                $new->observaciones = $request->observaciones ?? null;
+                $new->save();
+                $data = EntidadInmueble::with(['getTipoInmueble'])->where('id', $new->id)->first();
+                return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
             }
         } catch (\Throwable $e) {
             $errorInfo = AuditoriaController::detect_errors_return_json($e);
