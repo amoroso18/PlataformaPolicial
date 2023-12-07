@@ -156,9 +156,9 @@ class ExpedienteController extends Controller
                     'data_dist' => Distrito::where('iddistrito','!=',0)->get(),
                     'data_dep' => Departamento::where('iddepartamento','!=',0)->get(),
                     'data_prov' => Provincia::where('idprovincia','!=',0)->get(),
-                    'data_documento_identidad' => TipoDocumentoIdentidad::where('tipo','EXTRANJERO')->get(),
+                    'data_documento_identidad' => TipoDocumentoIdentidad::where('id','>', 1)->get(),
                     'data_inmueble' => TipoInmueble::get(),
-                    'data_nacionalidad' => TipoNacionalidad::where('id','!=',0)->get(),
+                    'data_nacionalidad' => TipoNacionalidad::where('id','>',1)->get(),
                     
                 ]);
             } elseif ($request->type && $request->type == "_EXPEDIENTE") {
@@ -215,8 +215,23 @@ class ExpedienteController extends Controller
                 $new->distrito_domicilio = $request->distrito_domicilio ?? null;
                 $new->lugar_domicilio = $request->lugar_domicilio ?? null;
                 $new->save();
-                $data = EntidadPersona::where('id', $new->id)->first();
+                $data = EntidadPersona::with(['getTipoNacionalidad', 'getTipoDocumentoIdentidad'])->where('id', $new->id)->first();
                 return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
+            } elseif ($request->type && $request->type == "_get_personas"){
+                if($request->subtype == "_get_persona_peru"){
+                    $data = EntidadPersona::with(['getTipoNacionalidad', 'getTipoDocumentoIdentidad'])->where([['documento_id',1],['documento',$request->documento]])->first();
+                }elseif($request->subtype == "_get_persona_extranjero"){
+                    $data = EntidadPersona::with(['getTipoNacionalidad', 'getTipoDocumentoIdentidad'])->where([['documento_id',$request->documento_id],['documento',$request->documento]])->first();
+                }elseif($request->subtype == "_get_persona_nacionalidad_nombres"){
+                    $data = EntidadPersona::with(['getTipoNacionalidad', 'getTipoDocumentoIdentidad'])
+                    ->where('nombres', 'like', '%' . $request->nombres . '%')
+                    ->where('materno', 'like', '%' . $request->materno . '%')
+                    ->where('paterno', 'like', '%' . $request->paterno . '%')
+                    ->get();
+                }else{
+                    return response()->json(['message' => 'Procesado correctamente', 'data' => []]); 
+                }
+                return response()->json(['message' => 'Procesado correctamente', 'data' => $data]);
             }
         } catch (\Throwable $e) {
             $errorInfo = AuditoriaController::detect_errors_return_json($e);

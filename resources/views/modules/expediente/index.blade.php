@@ -11,7 +11,7 @@
     axios.interceptors.response.use(
         response => response,
         error => {
-            if (error.response && error.response.status === 401) {
+            if (error.response && error.response.status == 401) {
                 window.location.href = URL_LOGIN;
             }
             return Promise.reject(error);
@@ -276,6 +276,26 @@
                             <button class="btn btn-dark mt-2" v-on:click="modalOpen('InmuebleEdit')">+ Inmueble</button>
                             <button class="btn btn-dark mt-2" v-on:click="modalOpen('VehiculoEdit')">+ Vehiculo</button>
                         </div>
+                        <table class="table mt-3" v-if="dataPersonasSearch.length > 0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nacionalidad</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item, index) in dataPersonas" :key="index" :value="item.id">
+                                    <td v-text="item.get_tipo_nacionalidad.descripcion"></td>
+                                    <td>
+                                        <span v-text="item.nombres"></span>,
+                                        <span v-text="item.paterno"></span>
+                                        <span v-text="item.materno"></span>
+                                    </td>
+                                    <td v-on:click="BuscarPersonasDeleteExpediente(index)"> <a class="pointer"><em class="icon ni ni-trash-alt"></em></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </section>
                     <h5 class="mt-5">Fiscales</h5>
                     <section>
@@ -434,22 +454,22 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalPersonas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="modalPersonas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel5" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <a href="#" class="close" data-dismiss="modal" aria-label="Close">
                     <em class="icon ni ni-cross"></em>
                 </a>
-                <div class="modal-header">
-                    <h5 class="modal-title">Personas</h5>
-                </div>
                 <div class="modal-body">
-                    <ul class="nav nav-tabs nav-tabs-s2">
+                    <ul class="nk-nav nav nav-tabs">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#tab-dni-search"><em class="icon ni ni-search"></em> DNI</a>
+                            <a class="nav-link active" data-toggle="tab" href="#tab-dni-search"><em class="icon ni ni-search"></em> PERUANO</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tab-ext-search"><em class="icon ni ni-search"></em> EXTRANJERO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab-ext-search-nacionalidad"><em class="icon ni ni-flag"></em> NOMBRES</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tab-dni-reg"><em class="icon ni ni-plus-round"></em> PERUANOS</a>
@@ -464,7 +484,13 @@
                                 <label class="form-label">Número de DNI</label>
                             </div>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el número" />
+                                <input type="text" v-model="dataPersonasAdd.documento" class="form-control form-control-lg" placeholder="Ingresa el número" />
+                            </div>
+                            <div class="col-sm-12 mt-3 mb-5">
+                                <div class="form-group">
+                                    <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="BuscarPersonas('_get_persona_peru')">Buscar</button>
+                                    <p v-if="loadingPersonas">Cargando....</p>
+                                </div>
                             </div>
                         </div>
                         <div class="tab-pane" id="tab-ext-search">
@@ -472,7 +498,7 @@
                                 <label class="form-label" for="default-06">Tipo de documento de identidad</label>
                                 <div class="form-control-wrap ">
                                     <div class="form-control-select">
-                                        <select class="form-control" v-model="dataExpe.tipo_documento_identidad">
+                                        <select class="form-control" v-model="dataPersonasAdd.documento_id">
                                             <option v-for="(item, index) in data_documento_identidad" :key="index" :value="item.id" v-text="item.descripcion"></option>
                                         </select>
                                     </div>
@@ -482,13 +508,64 @@
                                 <label class="form-label">Número de documento</label>
                             </div>
                             <div class="form-control-wrap">
-                                <input type="text" v-model="dataExpe.documento_identidad" class="form-control form-control-lg" placeholder="Ingresa el número" />
+                                <input type="text" v-model="dataPersonasAdd.documento" class="form-control form-control-lg" placeholder="Ingresa el número" />
+                            </div>
+                            <div class="col-sm-12 mt-3 mb-5">
+                                <div class="form-group">
+                                    <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="BuscarPersonas('_get_persona_extranjero')">Buscar</button>
+                                    <p v-if="loadingPersonas">Cargando....</p>
+                                </div>
                             </div>
                         </div>
+                        <div class="tab-pane" id="tab-ext-search-nacionalidad">
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">Nombres</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el nombres" v-model="dataPersonasAdd.nombres" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">Apellido paterno</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el Apellido paterno" v-model="dataPersonasAdd.paterno" />
+                            </div>
+                            <div class="form-label-group mt-2">
+                                <label class="form-label">Apellido materno</label>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control form-control-lg" placeholder="Ingresa el Apellido materno" v-model="dataPersonasAdd.materno" />
+                            </div>
+                            <div class="col-sm-12 mt-3 mb-5">
+                                <div class="form-group">
+                                    <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="BuscarPersonas('_get_persona_nacionalidad_nombres')">Buscar</button>
+                                    <p v-if="loadingPersonas">Cargando....</p>
+                                </div>
+                            </div>
+
+                            <table class="table" v-if="dataPersonasSearch.length > 0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nacionalidad</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">#</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) in dataPersonasSearch" :key="index" :value="item.id">
+                                        <td v-text="item.get_tipo_nacionalidad.descripcion"></td>
+                                        <td>
+                                            <span v-text="item.nombres"></span>,
+                                            <span v-text="item.paterno"></span>
+                                            <span v-text="item.materno"></span>
+                                        </td>
+                                        <td><button class="btn btn-primary" v-on:click="BuscarPersonasAddExpediente(item)">Agregar</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
                         <div class="tab-pane" id="tab-dni-reg">
-
-                 
-
                             <div class="form-label-group mt-2">
                                 <label class="form-label">documento</label>
                             </div>
@@ -630,7 +707,7 @@
                             </div>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control form-control-lg" placeholder="Ingresa el lugar domicilio" v-model="dataPersonasAdd.lugar_domicilio" />
-                            </div> 
+                            </div>
 
                             <div class="col-sm-12 mt-3 mb-5">
                                 <div class="form-group">
@@ -641,9 +718,7 @@
 
                         </div>
                         <div class="tab-pane" id="tab-ext-reg">
-
-                               
-                        <div class="form-group mt-2">
+                            <div class="form-group mt-2">
                                 <label class="form-label">Nacionalidad</label>
                                 <div class="form-control-wrap ">
                                     <div class="form-control-select">
@@ -654,13 +729,13 @@
                                 </div>
                             </div>
 
-                                   
-                        <div class="form-group mt-2">
+
+                            <div class="form-group mt-2">
                                 <label class="form-label">Tipo documento</label>
                                 <div class="form-control-wrap ">
                                     <div class="form-control-select">
                                         <select class="form-control" v-model="dataPersonasAdd.documento_id">
-                                        <option v-for="(item, index) in data_documento_identidad" :key="index" :value="item.id" v-text="item.descripcion"></option>
+                                            <option v-for="(item, index) in data_documento_identidad" :key="index" :value="item.id" v-text="item.descripcion"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -768,7 +843,7 @@
                             </div>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control form-control-lg" placeholder="Ingresa el lugar domicilio" v-model="dataPersonasAdd.lugar_domicilio" />
-                            </div> 
+                            </div>
                             <div class="col-sm-12 mt-3 mb-5">
                                 <div class="form-group">
                                     <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="GrabarPersonas('EXTRANJEROS')">Registrar</button>
@@ -778,49 +853,51 @@
 
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modalInmueble" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
-                    <em class="icon ni ni-cross"></em>
-                </a>
-                <div class="modal-header">
-                    <h5 class="modal-title">Inmueble</h5>
-                </div>
-                <div class="modal-body">
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalVehiculo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
-                    <em class="icon ni ni-cross"></em>
-                </a>
-                <div class="modal-header">
-                    <h5 class="modal-title">Vehiculo</h5>
-                </div>
-                <div class="modal-body">
+</div>
+<div class="modal fade" id="modalInmueble" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel6" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                <em class="icon ni ni-cross"></em>
+            </a>
+            <div class="modal-header">
+                <h5 class="modal-title">Inmueble</h5>
+            </div>
+            <div class="modal-body">
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
+</div>
+<div class="modal fade" id="modalVehiculo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel7" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                <em class="icon ni ni-cross"></em>
+            </a>
+            <div class="modal-header">
+                <h5 class="modal-title">Vehiculo</h5>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 </div>
@@ -902,6 +979,7 @@
                     lugar_domicilio: ""
                 },
                 dataPersonas: [],
+                dataPersonasSearch: [],
                 dataFiscales: [],
                 dataTipoDocumentos: [],
                 dataTipoVideovigilancia: [],
@@ -1166,10 +1244,11 @@
                             $('#modalADD').modal('show');
                         });
                 },
-                GrabarPersonas(TIPO) {
+                GrabarPersonas(Subtipo) {
                     this.loadingPersonas = true;
                     const formData = new FormData();
-                    formData.append('type', "_SAVE_personas");
+                    formData.append('type', "_get_personas");
+                    formData.append('subtype', subtype);
                     if (TIPO == "PERUANOS") {
                         formData.append('ubigeo_nacimiento', this.dataPersonasAdd.ubigeo_nacimiento);
                         formData.append('departamento_nacimiento', this.dataPersonasAdd.departamento_nacimiento);
@@ -1220,6 +1299,67 @@
                             $('#modalPersonas').modal('hide');
                             $('#modalADD').modal('show');
                         });
+                },
+                BuscarPersonas(TIPO) {
+                    this.dataPersonasSearch = [];
+                    this.loadingPersonas = true;
+                    const formData = new FormData();
+                    formData.append('type', "_get_personas");
+                    formData.append('subtype', TIPO);
+                    formData.append('dd', "_get_personas");
+                    if (TIPO == "_get_persona_nacionalidad_nombres") {
+                        formData.append('nombres', this.dataPersonasAdd.nombres);
+                        formData.append('paterno', this.dataPersonasAdd.paterno);
+                        formData.append('materno', this.dataPersonasAdd.materno);
+                    } else if (TIPO == "_get_persona_extranjero") {
+                        formData.append('documento_id', this.dataPersonasAdd.documento_id);
+                        formData.append('documento', this.dataPersonasAdd.documento);
+                    } else if (TIPO == "_get_persona_peru") {
+                        formData.append('documento', this.dataPersonasAdd.documento);
+                    }
+                    axios.post(URL_REGISTRAR, formData)
+                        .then(response => {
+                            if (response.data.error) {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: `${JSON.stringify(response.data.error)}`,
+                                    icon: 'info',
+                                    confirmButtonText: '¡Entendido!',
+                                });
+                            } else {
+                                console.log(response.data)
+                                if (TIPO == "_get_persona_nacionalidad_nombres") {
+                                    this.dataPersonasSearch = response.data.data;
+                                } else if (TIPO == "_get_persona_extranjero" || TIPO == "_get_persona_peru") {
+                                    this.dataPersonas.push(response.data.data);
+                                    $('#modalPersonas').modal('hide');
+                                    $('#modalADD').modal('show');
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: 'Error',
+                                text: `Error al realizar la solicitud: ${JSON.stringify(error)}`,
+                                icon: 'error',
+                                confirmButtonText: '¡Entendido!',
+                            });
+                        }).finally(() => {
+                            this.loadingPersonas = false;
+                        });
+                },
+                BuscarPersonasAddExpediente(DATA) {
+                    Swal.fire({
+                        title: 'Felicidades',
+                        text: 'Agregado al expediente',
+                        icon: 'success',
+                        confirmButtonText: '¡Entendido!',
+                    });
+                    this.dataPersonas.push(DATA);
+                },
+                BuscarPersonasDeleteExpediente(INDEX) {
+                    console.log(INDEX)
+                    this.dataPersonas.splice(INDEX, 1);
                 },
                 Get() {
                     this.loadingTable = true;
@@ -1511,7 +1651,7 @@
                         const opciones2 = this.data_dist;
                         var data2 = opciones2.filter(function(opcion) {
                             return opcion.relacion == idprovincia;
-                        });     
+                        });
                         this.data_filtro.domicilio.distrito_domicilio = data2;
 
                     }
