@@ -45,7 +45,7 @@
 
                             </div><!-- .nk-block -->
                             <div class="nk-block nk-auth-footer">
-                                <div class="nk-block-between">
+                                <!-- <div class="nk-block-between">
                                     <ul class="nav nav-sm">
                                         <li class="nav-item">
                                             <a class="nav-link" href="#">Nuevo usuario</a>
@@ -56,8 +56,8 @@
                                         <li class="nav-item">
                                             <a class="nav-link" href="#">Sugerencias</a>
                                         </li>
-                                    </ul><!-- .nav -->
-                                </div>
+                                    </ul>
+                                </div> -->
                                 <div class="mt-3">
                                     <p> SIVIPOL &copy; 2023</p>
                                 </div>

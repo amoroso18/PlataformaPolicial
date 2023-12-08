@@ -31,7 +31,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary"><em class="icon ni ni-reports"></em><span>Reporte</span></a></li>
+                        <!-- <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary"><em class="icon ni ni-reports"></em><span>Reporte</span></a></li> -->
                     </ul>
                 </div>
             </div>

@@ -9,7 +9,7 @@
             </div>
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
-                    <li class="dropdown notification-dropdown">
+                    <!-- <li class="dropdown notification-dropdown">
                         <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
                             <div class="icon-status icon-status-info"><em class="icon ni ni-bell"></em></div>
                         </a>
@@ -23,13 +23,13 @@
                             <div class="dropdown-body">
                                 <div class="nk-notification">
                                   
-                                </div><!-- .nk-notification -->
-                            </div><!-- .nk-dropdown-body -->
+                                </div>
+                            </div>
                             <div class="dropdown-foot center">
                                 <a href="{{route('actualizacion')}}">Ver historial de actividad de usuario</a>
                             </div>
                         </div>
-                    </li><!-- .dropdown -->
+                    </li> -->
                     <li class="dropdown actividad-dropdown">
                         <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
                             <div class="icon-status icon-status-danger"><em class="icon ni ni-activity-alt"></em></div>
