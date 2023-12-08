@@ -37,6 +37,8 @@ Route::GET('entidades/policial', [App\Http\Controllers\PlataformaController::cla
 
 Route::GET('reporte/inmueble', [App\Http\Controllers\PlataformaController::class, 'modulo_reportes_inmueble'])->name('modulo_reportes_inmueble');
 Route::GET('reporte/personas', [App\Http\Controllers\PlataformaController::class, 'modulo_reportes_personas'])->name('modulo_reportes_personas');
+Route::GET('reporte/inmueble/PDF', [App\Http\Controllers\PlataformaController::class, 'modulo_reportes_inmueble_pdf'])->name('modulo_reportes_inmueble_pdf');
+Route::GET('reporte/personas/PDF', [App\Http\Controllers\PlataformaController::class, 'modulo_reportes_personas_pdf'])->name('modulo_reportes_personas_pdf');
 
 
 Route::GET('basededatos/secundarias/delitos', [App\Http\Controllers\PlataformaController::class, 'basededatos_secundarias_delitos'])->name('basededatos_secundarias_delitos');

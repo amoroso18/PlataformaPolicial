@@ -137,7 +137,6 @@ class ReportesController extends Controller
             // dd($e);
         }
     }
-
     public static function reporteUsuarios()
     {
         // Texto o datos que deseas codificar en el QR Code
@@ -203,7 +202,6 @@ class ReportesController extends Controller
             // dd($e);
         }
     }
-
     public static function expediente_reporte($idexpe){
           // Texto o datos que deseas codificar en el QR Code
           try {
@@ -382,6 +380,43 @@ class ReportesController extends Controller
         } catch (\Exception $e) {
             dd($e);
         }
+    }
+    public static function reporte_infozona($idexpe){
+        $INFO = AuditoriaController::audita_usuario(Auth::user()->id, "DESCARGA REPORTE", "INFOZONA", $idexpe);
+        $ContenidoTitulo = utf8_decode('CÓDIGO DE SEGURIDAD NRO.' . $INFO->id . ' | CÓDIGO USUARIO NRO.' . Auth::user()->id . ' | FECHA DESCARGA ' . $INFO->created_at);
+        $MYPDF = new PDFF($ContenidoTitulo);
+        $MYPDF->AliasNbPages();
+        $MYPDF->AddPage();
+        $MYPDF->image('images/sivipol/BannerSivipol.png', 75, 10, 60);
+        //$MYPDF->image('images/qrvalidar.png', 172.5, 31.5, 31);
+        $MYPDF->Ln(10);
+        // $MYPDF->SetFont('Arial', 'B', 18);
+        // $MYPDF->multicell(192, -2, "REPORTE DE USUARIO", 0, 'C');
+        $MYPDF->Ln(10);
+        $MYPDF->SetFont('Arial', 'B', 11);
+        $MYPDF->SetTextColor(89, 90, 90);
+        $MYPDF->multicell(192, -2, "REPORTE DE INFOZONA", 0, 'C');
+        $MYPDF->Ln(4);
+        $MYPDF->Output(('ReporteInfozona.pdf'), 'I');
+
+    }
+    public static function reporte_infosombra($idexpe){
+        $INFO = AuditoriaController::audita_usuario(Auth::user()->id, "DESCARGA REPORTE", "INFOSOMBRA", $idexpe);
+        $ContenidoTitulo = utf8_decode('CÓDIGO DE SEGURIDAD NRO.' . $INFO->id . ' | CÓDIGO USUARIO NRO.' . Auth::user()->id . ' | FECHA DESCARGA ' . $INFO->created_at);
+        $MYPDF = new PDFF($ContenidoTitulo);
+        $MYPDF->AliasNbPages();
+        $MYPDF->AddPage();
+        $MYPDF->image('images/sivipol/BannerSivipol.png', 75, 10, 60);
+        //$MYPDF->image('images/qrvalidar.png', 172.5, 31.5, 31);
+        $MYPDF->Ln(10);
+        // $MYPDF->SetFont('Arial', 'B', 18);
+        // $MYPDF->multicell(192, -2, "REPORTE DE USUARIO", 0, 'C');
+        $MYPDF->Ln(10);
+        $MYPDF->SetFont('Arial', 'B', 11);
+        $MYPDF->SetTextColor(89, 90, 90);
+        $MYPDF->multicell(192, -2, "REPORTE DE INFOSOMBRA", 0, 'C');
+        $MYPDF->Ln(4);
+        $MYPDF->Output(('ReporteInfoSombra.pdf'), 'I');
     }
     private static function generateLineTextForDetail($pdf, $tipo, $contenido)
     {

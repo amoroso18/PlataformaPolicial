@@ -41,19 +41,17 @@ class PlataformaController extends Controller
 
     public function administrador_consulta_policial(Request $request)
     {
-        if($request->cip){
-            $edit = User::where("carnet",$request->cip)->exists();
-            if($edit){
+        if ($request->cip) {
+            $edit = User::where("carnet", $request->cip)->exists();
+            if ($edit) {
                 return response()->json(['error' => 'Ya existe el usuario']);
             }
-        }else if($request->dni){
-            $edit = User::where("dni",$request->dni)->exists();
-            if($edit){
+        } else if ($request->dni) {
+            $edit = User::where("dni", $request->dni)->exists();
+            if ($edit) {
                 return response()->json(['error' => 'Ya existe el usuario']);
             }
         }
-       
-
         $TipoGrado = TipoGrado::inRandomOrder()->where("id", "!=", 0)->first();
         $TipoUnidad = TipoUnidad::inRandomOrder()->where("id", "!=", 0)->first();
         return response()->json([
@@ -154,6 +152,15 @@ class PlataformaController extends Controller
     {
         $database = EntidadPolicia::get();
         return view('modules.entidades.bandejaPolicia', compact('database'));
+    }
+
+    public function modulo_reportes_inmueble_pdf(Request $request)
+    {
+        return ReportesController::reporte_infozona($request->contexto);
+    }
+    public function modulo_reportes_personas_pdf(Request $request)
+    {
+        return ReportesController::reporte_infosombra($request->contexto);
     }
     public function administrador_reporte_usuario(Request $request)
     {
