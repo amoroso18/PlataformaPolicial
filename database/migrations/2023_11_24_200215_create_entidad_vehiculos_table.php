@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('modelo')->nullable();
             $table->string('ano')->nullable();
             $table->string('tipo_carroceria')->nullable();
-            $table->string('vin')->unique()->nullable();
+            $table->string('vin')->nullable();
             $table->string('tipo_motor')->nullable();
             $table->string('cilindrada_motor')->nullable();
             $table->string('tipo_combustible')->nullable();
