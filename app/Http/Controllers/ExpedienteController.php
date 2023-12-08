@@ -14,6 +14,7 @@ use App\Models\DispocicionFiscal;
 use App\Models\DisposicionFiscalObjetos;
 use App\Models\DisposicionFiscalTipoVideoVigilancia;
 use App\Models\DisposicionFiscalReferencia;
+use App\Models\DisposicionFiscalDelitos;
 
 use App\Models\TipoDocumentosReferencia;
 use App\Models\TipoVideoVigilancia;
@@ -31,6 +32,7 @@ use App\Models\TipoDocumentoIdentidad;
 use App\Models\TipoInmueble;
 use App\Models\TipoNacionalidad;
 
+use App\Models\DisposicionFiscalEntidadVigilancia;
 
 use App\Models\EntidadFiscal;
 use App\Http\Controllers\AuditoriaController;
@@ -48,7 +50,6 @@ class ExpedienteController extends Controller
             $this->upload_files = '/files';
         }
     }
-
     public function expedientes()
     {
         return view('modules.expediente.index');
@@ -94,7 +95,6 @@ class ExpedienteController extends Controller
                                 $objeto->save();
                         }
                     }
-
                     if ($request->selectdataReferenciaVideovigilancia_documentos_id_) {
                         for ($i = 0; $i < count($request->selectdataReferenciaVideovigilancia_documentos_id_); $i++) {
                             if ($request->selectdataReferenciaVideovigilancia_documentos_id_[$i]) {
@@ -119,10 +119,62 @@ class ExpedienteController extends Controller
                             }
                         }
                     }
+                    if ($request->dataVehiculo_) {
+                        for ($i = 0; $i < count($request->dataVehiculo_); $i++) {
+                            if ($request->dataVehiculo_[$i]) {
+                                $objeto = new DisposicionFiscalEntidadVigilancia;
+                                $objeto->df_id =  $new->id;
+                                $objeto->users_id = Auth::user()->id;
+                                $objeto->entidads_id =  3;
+                                $objeto->codigo_relacion =  $request->dataVehiculo_[$i];
+                                $objeto->estado = 1;
+                                $objeto->save();
+                            }
+                        }
+                    }
+                    if ($request->dataInmueble_) {
+                        for ($i = 0; $i < count($request->dataInmueble_); $i++) {
+                            if ($request->dataInmueble_[$i]) {
+                                $objeto = new DisposicionFiscalEntidadVigilancia;
+                                $objeto->df_id =  $new->id;
+                                $objeto->users_id = Auth::user()->id;
+                                $objeto->entidads_id =  4;
+                                $objeto->codigo_relacion =  $request->dataInmueble_[$i];
+                                $objeto->estado = 1;
+                                $objeto->save();
+                            }
+                        }
+                    }
+                    if ($request->dataPersonas_) {
+                        for ($i = 0; $i < count($request->dataPersonas_); $i++) {
+                            if ($request->dataPersonas_[$i]) {
+                                $objeto = new DisposicionFiscalEntidadVigilancia;
+                                $objeto->df_id =  $new->id;
+                                $objeto->users_id = Auth::user()->id;
+                                if($request->dataPersonas_nacionalidad_[$i] == 1){
+                                    $objeto->entidads_id =  1;
+                                }else{
+                                    $objeto->entidads_id =  2;
+                                }
+                                $objeto->codigo_relacion =  $request->dataPersonas_[$i];
+                                $objeto->estado = 1;
+                                $objeto->save();
+                            }
+                        }
+                    }
+                    if ($request->dataDelitos_) {
+                        for ($i = 0; $i < count($request->dataDelitos_); $i++) {
+                            if ($request->dataDelitos_[$i]) {
+                                $objeto = new DisposicionFiscalDelitos;
+                                $objeto->df_id =  $new->id;
+                                $objeto->users_id = Auth::user()->id;
+                                $objeto->delitos_id =  $request->dataDelitos_[$i];
+                                $objeto->estado = 1;
+                                $objeto->save();
+                            }
+                        }
+                    }
                 }
-
-
-
                 $data = DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado'])->where('id', $new->id)->first();
                 return response()->json(['message' => 'Registrado correctamente', 'data' => $data, 'request' => $request->all()]);
             } elseif ($request->type && $request->type == "_EdiT") {
@@ -231,14 +283,25 @@ class ExpedienteController extends Controller
                     ->where('paterno', 'like', '%' . $request->paterno . '%')
                     ->get();
                 }elseif($request->subtype == "_get_domicilio"){
-                    $data = EntidadInmueble::with(['getTipoInmueble'])
-                    ->where('inmuebles_id', $request->inmuebles_id)
-                    ->where('direccion', 'like', '%' . $request->direccion . '%')
-                    ->where('departamento', 'like', '%' . $request->departamento . '%')
-                    ->where('provincia', 'like', '%' . $request->provincia . '%')
-                    ->where('distrito', 'like', '%' . $request->distrito . '%')
-                    ->where('referencia', 'like', '%' . $request->referencia . '%')
-                    ->get();
+                    $data = EntidadInmueble::with(['getTipoInmueble'])->where('inmuebles_id', $request->inmuebles_id);
+
+                    if ($request->direccion) {
+                        $data = $data->where('direccion', 'like', '%' . $request->direccion . '%');
+                    }
+
+                    if ($request->departamento) {
+                        $data = $data->where('departamento', 'like', '%' . $request->departamento . '%');
+                    }
+                    if ($request->provincia) {
+                        $data = $data->where('provincia', 'like', '%' . $request->provincia . '%');
+                    }
+                    if ($request->distrito) {
+                        $data = $data->where('distrito', 'like', '%' . $request->distrito . '%');
+                    }
+                    if ($request->referencia) {
+                        $data = $data->where('referencia', 'like', '%' . $request->referencia . '%');
+                    }
+                    $data =  $data->get();
                 }else{
                     return response()->json(['message' => 'Sin coincidencias', 'data' => []]); 
                 }
@@ -261,6 +324,38 @@ class ExpedienteController extends Controller
                 $new->save();
                 $data = EntidadInmueble::with(['getTipoInmueble'])->where('id', $new->id)->first();
                 return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
+            } else if($request->type && $request->type == "_SAVE_VEHICULO"){
+                $new = new EntidadVehiculos;
+                $new->placa = $request->placa ?? null;
+                $new->serie = $request->serie ?? null;
+                $new->numero_motor = $request->numero_motor ?? null;
+                $new->color = $request->color ?? null;
+                $new->marca = $request->marca ?? null;
+                $new->modelo = $request->modelo ?? null;
+                $new->ano = $request->ano ?? null;
+                $new->tipo_carroceria = $request->tipo_carroceria ?? null;
+                $new->vin = $request->vin ?? null;
+                $new->tipo_motor = $request->tipo_motor ?? null;
+                $new->cilindrada_motor = $request->cilindrada_motor ?? null;
+                $new->tipo_combustible = $request->tipo_combustible ?? null;
+                $new->tipo_transmision = $request->tipo_transmision ?? null;
+                $new->tipo_traccion = $request->tipo_traccion ?? null;
+                $new->kilometraje = $request->kilometraje ?? null;
+                $new->placaanterior = $request->placaanterior ?? null;
+                $new->estado_vehiculo = $request->estado_vehiculo ?? "EN_CIRCULACION";
+                $new->save();
+                $data = EntidadVehiculos::where('id', $new->id)->first();
+                return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
+            } else if($request->type && $request->type == "_SEARCH_VEHICULO"){
+                $data = EntidadVehiculos::where('placa', $request->placa)->first();
+                if($data){
+                    return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
+                }else{
+                    return response()->json([
+                        'message' => "No se encontro el vehículo",
+                        'error' => "No se encontro el vehículo"
+                    ]);
+                }
             }
         } catch (\Throwable $e) {
             $errorInfo = AuditoriaController::detect_errors_return_json($e);

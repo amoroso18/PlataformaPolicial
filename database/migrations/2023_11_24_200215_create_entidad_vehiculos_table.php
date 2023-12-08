@@ -15,14 +15,21 @@ return new class extends Migration
             $table->id();
             $table->string('placa')->nullable();
             $table->string('serie')->nullable();
-            $table->string('vin')->nullable();
             $table->string('numero_motor')->nullable();
             $table->string('color')->nullable();
             $table->string('marca')->nullable();
             $table->string('modelo')->nullable();
+            $table->string('ano')->nullable();
+            $table->string('tipo_carroceria')->nullable();
+            $table->string('vin')->unique()->nullable();
+            $table->string('tipo_motor')->nullable();
+            $table->string('cilindrada_motor')->nullable();
+            $table->string('tipo_combustible')->nullable();
+            $table->string('tipo_transmision')->nullable();
+            $table->string('tipo_traccion')->nullable();
+            $table->string('kilometraje')->nullable()->default(0);
             $table->string('placaanterior')->nullable();
-            $table->string('estado')->default("EN CIRCULACION");
-            $table->string('sede')->nullable();
+            $table->enum('estado_vehiculo', ['EN_CIRCULACION', 'EN_REPARACION'])->nullable()->default('EN_CIRCULACION');
             $table->timestamps();
         });
     }
