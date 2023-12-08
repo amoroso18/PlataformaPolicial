@@ -12,6 +12,8 @@ use App\Models\TipoUnidad;
 use App\Models\TipoDelitos;
 use App\Models\TipoPlazo;
 use App\Models\EntidadPolicia;
+use App\Models\TipoInmueble;
+
 use App\Http\Controllers\AuditoriaController;
 use App\Http\Controllers\ReportesController;
 
@@ -31,7 +33,8 @@ class PlataformaController extends Controller
 
     public function modulo_reportes_inmueble()
     {
-        return view('modules.reportes.inmueble');
+        $data_inmueble = TipoInmueble::get();
+        return view('modules.reportes.inmueble',compact('data_inmueble'));
     }
 
     public function modulo_reportes_personas()
@@ -153,7 +156,6 @@ class PlataformaController extends Controller
         $database = EntidadPolicia::get();
         return view('modules.entidades.bandejaPolicia', compact('database'));
     }
-
     public function modulo_reportes_inmueble_pdf(Request $request)
     {
         return ReportesController::reporte_infozona($request->contexto);

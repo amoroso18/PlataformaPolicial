@@ -396,7 +396,35 @@ class ReportesController extends Controller
         $MYPDF->SetFont('Arial', 'B', 11);
         $MYPDF->SetTextColor(89, 90, 90);
         $MYPDF->multicell(192, -2, "REPORTE DE INFOZONA", 0, 'C');
-        $MYPDF->Ln(4);
+        $MYPDF->Ln(6);
+        $MYPDF->SetFont('Arial', 'B', 11);
+        $MYPDF->multicell(192, 5, "DETALLE", 0, 'L');
+        $MYPDF->Ln(2);
+        $EntidadInmueble = EntidadInmueble::with(['getTipoInmueble'])->where('id',$idexpe)->first();
+        self::generateLineTextSpace($MYPDF, strtoupper('tipo'), strtoupper($EntidadInmueble->getTipoInmueble->descripcion)); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('direccion'), $EntidadInmueble->direccion); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('departamento'), $EntidadInmueble->departamento); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('provincia'), $EntidadInmueble->provincia); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('distrito'), $EntidadInmueble->distrito); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('referencia'), $EntidadInmueble->referencia); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('color_exterior'), $EntidadInmueble->color_exterior); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('caract. especiales'), $EntidadInmueble->caracteristicas_especiales); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('estado conservacion'), $EntidadInmueble->estado_conservacion); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('ubigeo'), $EntidadInmueble->ubigeo); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('latitud'), $EntidadInmueble->latitud); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('longitud'), $EntidadInmueble->longitud); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('mapa'), "https://maps.google.com/?q=".$EntidadInmueble->latitud.",".$EntidadInmueble->longitud.""); $MYPDF->Ln(1);
+        self::generateLineTextSpace($MYPDF, strtoupper('observaciones'), $EntidadInmueble->observaciones);
+        $MYPDF->Ln(5);
+
+        $MYPDF->SetFont('Arial', 'B', 11);
+        $MYPDF->multicell(192, 5, "PROPIETARIOS", 0, 'L');
+        $MYPDF->Ln(2);
+
+        $MYPDF->SetFont('Arial', 'B', 11);
+        $MYPDF->multicell(192, 5, "EXPEDIENTES RELACIONADOS", 0, 'L');
+        $MYPDF->Ln(2);
+
         $MYPDF->Output(('ReporteInfozona.pdf'), 'I');
 
     }
@@ -415,7 +443,67 @@ class ReportesController extends Controller
         $MYPDF->SetFont('Arial', 'B', 11);
         $MYPDF->SetTextColor(89, 90, 90);
         $MYPDF->multicell(192, -2, "REPORTE DE INFOSOMBRA", 0, 'C');
+        $MYPDF->Ln(6);
+
+
+        $MYPDF->SetFont('Arial', 'B', 11);
+        $MYPDF->multicell(192, 5, "DETALLE", 0, 'L');
+        $MYPDF->Ln(2);
+        $EntidadPersona = EntidadPersona::with(['getTipoNacionalidad', 'getTipoDocumentoIdentidad'])->where('id',$idexpe)->first();
+        self::generateLineTextForDetailSpace($MYPDF, 'NACIONALIDAD', $EntidadPersona->getTipoNacionalidad->descripcion);
+        self::generateLineTextForDetailSpace($MYPDF, 'TIPO DOCUMENTO', $EntidadPersona->getTipoDocumentoIdentidad->descripcion);
         $MYPDF->Ln(4);
+        self::generateLineTextForDetailSpace($MYPDF, 'DOCUMENTO', strtoupper($EntidadPersona->documento));
+        self::generateLineTextForDetailSpace($MYPDF, 'NOMBRES', $EntidadPersona->nombres);
+        $MYPDF->Ln(4);
+        self::generateLineTextForDetailSpace($MYPDF, 'APELLIDO PATERNO', strtoupper($EntidadPersona->paterno));
+        self::generateLineTextForDetailSpace($MYPDF, 'APELLIDO MATERNO', $EntidadPersona->materno);
+        $MYPDF->Ln(4);
+        self::generateLineTextForDetailSpace($MYPDF, 'ESTADO CIVIL', $EntidadPersona->estado_civil);
+        self::generateLineTextForDetailSpace($MYPDF, 'SEXO', $EntidadPersona->sexo);
+        $MYPDF->Ln(4);
+        self::generateLineTextForDetailSpace($MYPDF, 'FECHA NAC.', $EntidadPersona->fecha_nacimiento);
+        if($EntidadPersona->nacionalidad_id == 1){
+            self::generateLineTextForDetailSpace($MYPDF, strtoupper('ubigeo nacimiento'), $EntidadPersona->ubigeo_nacimiento);
+            $MYPDF->Ln(4);
+            self::generateLineTextForDetailSpace($MYPDF, strtoupper('depart. nacimiento'), $EntidadPersona->departamento_nacimiento);
+            self::generateLineTextForDetailSpace($MYPDF, strtoupper('provincia nacimiento'), $EntidadPersona->provincia_nacimiento);
+            $MYPDF->Ln(4);
+            self::generateLineTextForDetailSpace($MYPDF, strtoupper('distrito nacimiento'), $EntidadPersona->distrito_nacimiento);
+            $MYPDF->Ln(4);
+        }else{
+            $MYPDF->Ln(5);
+            self::generateLineTextSpace($MYPDF, strtoupper('lugar nacimiento'), $EntidadPersona->lugar_nacimiento);
+        }
+        self::generateLineTextForDetailSpace($MYPDF, strtoupper('ubigeo domicilio'), $EntidadPersona->ubigeo_domicilio);
+        $MYPDF->Ln(4);
+        self::generateLineTextForDetailSpace($MYPDF, strtoupper('depart. domicilio'), $EntidadPersona->departamento_domicilio);
+        self::generateLineTextForDetailSpace($MYPDF, strtoupper('provincia domicilio'), $EntidadPersona->provincia_domicilio);
+        $MYPDF->Ln(4);
+        self::generateLineTextForDetailSpace($MYPDF, strtoupper('distrito domicilio'), $EntidadPersona->distrito_domicilio);
+        $MYPDF->Ln(5);
+        self::generateLineTextSpace($MYPDF, strtoupper('lugar domicilio'), $EntidadPersona->lugar_domicilio);
+        // self::generateLineTextForDetailSpace($MYPDF, 'foto', $EntidadPersona->foto);
+        // self::generateLineTextForDetailSpace($MYPDF, 'firma', $EntidadPersona->firma);
+        $MYPDF->Ln(5);
+
+        $MYPDF->SetFont('Arial', 'B', 11);
+        $MYPDF->multicell(192, 5, "REQUISITORIA", 0, 'L');
+        $MYPDF->Ln(2);
+
+        $MYPDF->SetFont('Arial', 'B', 11);
+        $MYPDF->multicell(192, 5, "ANTECEDENTES", 0, 'L');
+        $MYPDF->Ln(2);
+
+        $MYPDF->SetFont('Arial', 'B', 11);
+        $MYPDF->multicell(192, 5, "DENUNCIAS", 0, 'L');
+        $MYPDF->Ln(2);
+
+        $MYPDF->SetFont('Arial', 'B', 11);
+        $MYPDF->multicell(192, 5, "EXPEDIENTES RELACIONADOS", 0, 'L');
+        $MYPDF->Ln(2);
+
+
         $MYPDF->Output(('ReporteInfoSombra.pdf'), 'I');
     }
     private static function generateLineTextForDetail($pdf, $tipo, $contenido)

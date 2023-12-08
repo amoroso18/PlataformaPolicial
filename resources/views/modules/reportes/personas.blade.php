@@ -29,8 +29,6 @@
     </div>
 
 </div>
-
-
 <div id="miapp">
 
     <ul class="nav nav-tabs nav-tabs-s2">
