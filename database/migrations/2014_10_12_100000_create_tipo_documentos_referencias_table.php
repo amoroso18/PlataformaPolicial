@@ -23,11 +23,15 @@ return new class extends Migration
             array(
                 [
                     'id' => 0,
-                    'descripcion' => 'INFORME POLICIAL',
+                    'descripcion' => 'DISPOSICIÒN FISCAL',
                 ],
                 [
                     'id' => 1,
                     'descripcion' => 'NOTA DE INFORMACION',
+                ],
+                [
+                    'id' => 2,
+                    'descripcion' => 'INFORME POLICIAL',
                 ],
                 [
                     'id' => 2,

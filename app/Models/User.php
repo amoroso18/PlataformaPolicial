@@ -54,7 +54,7 @@ class User extends Authenticatable
     }
     public function getGrado()
     {
-        return $this->hasOne(TipoGrado::class, 'id', 'estado_id');
+        return $this->hasOne(TipoGrado::class, 'id', 'grado_id');
     }
     public function getEstado()
     {

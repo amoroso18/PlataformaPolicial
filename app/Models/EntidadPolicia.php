@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class EntidadPolicia extends Model
 {
     use HasFactory;
+    public function getUnidad()
+    {
+        return $this->hasOne(TipoUnidad::class, 'id', 'unidad_id');
+    }
+    public function getGrado()
+    {
+        return $this->hasOne(TipoGrado::class, 'id', 'grado_id');
+    }
 }

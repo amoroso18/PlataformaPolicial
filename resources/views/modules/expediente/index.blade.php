@@ -160,12 +160,8 @@
                         <div class="col-sm-12 mt-3">
                             <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-resumen" v-model="dataExpe.resumen"><label class="form-label-outlined" for="outlined-resumen">Resumen</label></div>
                         </div>
-                        <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-Tipo" v-model="dataExpe.tipo_plazo"><label class="form-label-outlined" for="outlined-Tipo">Tipo de Plazo</label></div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-plazo" v-model="dataExpe.plazo"><label class="form-label-outlined" for="outlined-plazo">Días de Plazo</label></div>
-                        </div>
+                      
+                       
                     </section>
                     <h5 class="mt-5">Calendario de inicio y termino</h5>
                     <section>
@@ -175,8 +171,12 @@
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-plazo" v-model="dataExpe.plazo"><label class="form-label-outlined" for="outlined-plazo">Días de Plazo</label></div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
                             <div class="form-control-wrap">
-                                <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-picker2" v-model="dataExpe.fecha_termino"><label class="form-label-outlined" for="outlined-date-picker2">Fecha de termino</label>
+                                <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div>
+                                <input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-picker2" v-model="dataExpe.fecha_termino"><label class="form-label-outlined" for="outlined-date-picker2">Fecha de termino</label>
                             </div>
                         </div>
                     </section>
@@ -201,7 +201,7 @@
                             </div>
                         </div>
                     </section>
-                    <h5 class="mt-5">Referencias</h5>
+                    <h5 class="mt-5">Archivos Digitales</h5>
                     <section>
                         <div class="col-sm-12 mt-3">
                             <div v-for="(item, index) in dataExpe.selectdataReferenciaVideovigilancia" :key="index">
@@ -215,7 +215,7 @@
                                                 <div class="form-group">
                                                     <div class="form-control-wrap">
                                                         <select class="form-control" data-ui="xl" id="outlined-select2" v-model="dataExpe.selectdataReferenciaVideovigilancia[index].documentos_id">
-                                                            <option v-for="item in dataTipoDocumentos" :key="item.id" :value="item" v-text="item.descripcion"></option>
+                                                            <option v-for="item in dataTipoDocumentos" :key="item.id" :value="item.id" v-text="item.descripcion"></option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -376,6 +376,18 @@
                             </div>
                         </div>
                         <div class="mt-2 mb-2 ml-2"><a class="form-note pointer" v-on:click="modalOpen('FiscalEdit')"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más fiscales a la base de datos.</a></div>
+                    </section>
+                    <h5 class="mt-5">Oficial a cargo</h5>
+                    <section>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap">
+                                <select class="form-control form-control-xl form-control-outlined" id="outlined-select" v-model="dataExpe.oficial_acargo_id">
+                                    <option v-for="item in data_policia" :key="item.id" :value="item.id" v-text="item.carnet  + ' ' + item.get_grado.descripcion+ ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno"></option>
+                                </select>
+                                <label class="form-label-outlined" for="outlined-select">Oficial a cargo</label>
+                            </div>
+                        </div>
+                        <div class="mt-2 mb-2 ml-2"><a class="form-note pointer" v-on:click="modalOpen('OficialAdd')"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más oficiales a la base de datos.</a></div>
                     </section>
                     <h5 class="mt-5">Observaciones</h5>
                     <section>
@@ -1301,6 +1313,90 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalOficialAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel8" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close"> <em class="icon ni ni-cross"></em> </a>
+                <div class="modal-body">
+                    <!-- Carnet -->
+                    <div class="form-label-group mt-2">
+                        <label class="form-label">Carnet</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control form-control-lg" placeholder="Ingresa el Carnet" v-model="dataPoliciaAdd.carnet" />
+                    </div>
+
+                    <!-- DNI -->
+                    <div class="form-label-group mt-2">
+                        <label class="form-label">DNI</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control form-control-lg" placeholder="Ingresa el DNI" v-model="dataPoliciaAdd.dni" />
+                    </div>
+
+                    <!-- Nombres -->
+                    <div class="form-label-group mt-2">
+                        <label class="form-label">Nombres</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control form-control-lg" placeholder="Ingresa los Nombres" v-model="dataPoliciaAdd.nombres" />
+                    </div>
+
+                    <!-- Apellido Paterno -->
+                    <div class="form-label-group mt-2">
+                        <label class="form-label">Apellido Paterno</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control form-control-lg" placeholder="Ingresa el Apellido Paterno" v-model="dataPoliciaAdd.paterno" />
+                    </div>
+
+                    <!-- Apellido Materno -->
+                    <div class="form-label-group mt-2">
+                        <label class="form-label">Apellido Materno</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control form-control-lg" placeholder="Ingresa el Apellido Materno" v-model="dataPoliciaAdd.materno" />
+                    </div>
+                    <div class="form-label-group mt-2">
+                        <label class="form-label">Situación</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control form-control-lg" placeholder="Ingresa la Situación" v-model="dataPoliciaAdd.situacion" />
+                    </div>
+                    <div class="form-group mt-2">
+                        <label class="form-label">Grado</label>
+                        <div class="form-control-wrap ">
+                            <div class="form-control-select">
+                                <select class="form-control" v-model="dataPoliciaAdd.grado_id">
+                                    <option v-for="(item, index) in data_grado" :key="index" :value="item.id" v-text="item.descripcion"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label class="form-label">Unidad</label>
+                        <div class="form-control-wrap ">
+                            <div class="form-control-select">
+                                <select class="form-control" v-model="dataPoliciaAdd.unidad_id">
+                                    <option v-for="(item, index) in data_unidad" :key="index" :value="item.id" v-text="item.descripcion"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 mt-3 mb-5">
+                        <div class="form-group">
+                            <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="GrabarPolicia()">Registrar</button>
+                            <p v-if="loadingPersonas">Cargando....</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -1340,6 +1436,7 @@
                         fecha_disposicion: "",
                         fiscal_responsable_id: 0,
                         fiscal_asistente_id: 0,
+                        oficial_acargo_id: 1,
                         nro: "",
                         caso: "",
                         resumen: "",
@@ -1406,6 +1503,8 @@
                     data_dist: [],
                     data_dep: [],
                     data_prov: [],
+                    data_grado: [],
+                    data_unidad: [],
                     data_filtro: {
                         domicilio: {
                             provincia_domicilio: [],
@@ -1453,6 +1552,17 @@
                         placaanterior: '',
                         estado_vehiculo: ''
                     },
+                    dataPoliciaAdd: {
+                        carnet: 0,
+                        dni: 0,
+                        nombres: '',
+                        paterno: '',
+                        materno: '',
+                        grado_id: 1,
+                        unidad_id: 1,
+                        situacion: ''
+                    },
+                    data_policia: [],
                     dataInmuebleSearch: [],
                     data_nacionalidad: [],
                     data: {
@@ -1501,6 +1611,22 @@
                     this.initMap();
                 },
                 methods: {
+                    calcularFechaFinal() {
+                        if (this.dataExpe.fecha_inicio && this.dataExpe.plazo) {
+                            const fechaInicio = new Date(this.dataExpe.fecha_inicio);
+                            const plazoDias = parseInt(this.dataExpe.plazo, 10);
+
+                            const fechaFinal = new Date(fechaInicio);
+                            fechaFinal.setDate(fechaInicio.getDate() + plazoDias);
+                            this.dataExpe.fecha_termino = fechaFinal.toISOString().split('T')[0];
+                            // console.log()
+                            // Devolver la fecha formateada como string
+                            // return fechaFinal.toISOString().split('T')[0];
+                        }
+
+                        return 'No hay suficientes datos para calcular la fecha final';
+                     
+                    },
                     Grabar() {
                         this.loadingModal = true;
                         const formData = new FormData();
@@ -1537,6 +1663,9 @@
                             formData.append('tipo_plazo', this.dataExpe.tipo_plazo);
                         }
 
+                        if (this.dataExpe.oficial_acargo_id) {
+                            formData.append('oficial_acargo_id', this.dataExpe.oficial_acargo_id);
+                        }
                         if (this.dataExpe.fiscal_responsable_id) {
                             formData.append('fiscal_responsable_id', this.dataExpe.fiscal_responsable_id);
                         }
@@ -1551,7 +1680,7 @@
                         // console.log(this.dataExpe);
                         for (let i = 0; i < this.dataExpe.selectdataReferenciaVideovigilancia.length; i++) {
                             if (this.dataExpe.selectdataReferenciaVideovigilancia[i]) {
-                                formData.append(`selectdataReferenciaVideovigilancia_documentos_id_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].documentos_id.id);
+                                formData.append(`selectdataReferenciaVideovigilancia_documentos_id_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].documentos_id);
                                 formData.append(`selectdataReferenciaVideovigilancia_fecha_documento_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].fecha_documento);
                                 formData.append(`selectdataReferenciaVideovigilancia_nro_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].nro);
                                 formData.append(`selectdataReferenciaVideovigilancia_pdf_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].pdf);
@@ -1864,6 +1993,44 @@
                             });
 
                     },
+                    GrabarPolicia() {
+                        this.loadingPersonas = true;
+                        const formData = new FormData();
+                        formData.append('type', "_SAVE_POLICIA");
+                        formData.append('dd', "_SAVE_POLICIA");
+                        for (const key in this.dataPoliciaAdd) {
+                            formData.append(`${key}`, this.dataPoliciaAdd[key]);
+                        }
+
+
+
+                        axios.post(URL_REGISTRAR, formData)
+                            .then(response => {
+                                if (response.data.error) {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: `${JSON.stringify(response.data.error)}`,
+                                        icon: 'info',
+                                        confirmButtonText: '¡Entendido!',
+                                    });
+                                } else {
+                                    this.data_policia.push(response.data.data);
+                                    console.log(response.data)
+                                }
+                            })
+                            .catch(error => {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: `Error al realizar la solicitud: ${JSON.stringify(error)}`,
+                                    icon: 'error',
+                                    confirmButtonText: '¡Entendido!',
+                                });
+                            }).finally(() => {
+                                this.loadingPersonas = false;
+                                $('#modalOficialAdd').modal('hide');
+                                $('#modalADD').modal('show');
+                            });
+                    },
                     BuscarPersonas(TIPO) {
                         this.dataInmuebleSearch = [];
                         this.dataPersonasSearch = [];
@@ -1992,6 +2159,10 @@
                                     this.data_inmueble = response.data.data_inmueble;
                                     this.data_nacionalidad = response.data.data_nacionalidad;
                                     // const index = this.BuscarIndice(DATARETURN.id);
+                                    this.data_grado = response.data.data_grado;
+                                    this.data_unidad = response.data.data_unidad;
+                                    this.data_policia = response.data.data_policia;
+
                                 }
                             })
                             .catch(error => {
@@ -2132,6 +2303,9 @@
                         } else if (TIPO == "VehiculoEdit") {
                             $('#modalADD').modal('hide');
                             $('#modalVehiculo').modal('show');
+                        } else if (TIPO == "OficialAdd") {
+                            $('#modalADD').modal('hide');
+                            $('#modalOficialAdd').modal('show');
                         }
                     },
                     selectdataTipoVideovigilanciaAdd() {
@@ -2145,10 +2319,7 @@
                             this.dataExpe.selectdataObjetoVideovigilancia.push('');
                         } else if (TIPO == "REFERENCIA") {
                             this.dataExpe.selectdataReferenciaVideovigilancia.push({
-                                documentos_id: {
-                                    id: 0,
-                                    descripcion: "INFORME POLICIAL"
-                                },
+                                documentos_id: 0,
                                 nro: "",
                                 fecha_documento: "",
                                 siglas: "",
@@ -2310,7 +2481,11 @@
                             });
                         });
                     },
-                }
+                },
+                watch: {
+                    'dataExpe.fecha_inicio': 'calcularFechaFinal',
+                    'dataExpe.plazo': 'calcularFechaFinal',
+                },
             });
         }, false);
     }

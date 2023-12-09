@@ -20,6 +20,7 @@ use App\Models\TipoDocumentosReferencia;
 use App\Models\TipoVideoVigilancia;
 
 use App\Models\TipoPlazo;
+use App\Models\EntidadPolicia;
 use App\Models\EntidadPersona;
 use App\Models\EntidadInmueble;
 use App\Models\EntidadVehiculos;
@@ -31,6 +32,9 @@ use App\Models\Provincia;
 use App\Models\TipoDocumentoIdentidad;
 use App\Models\TipoInmueble;
 use App\Models\TipoNacionalidad;
+
+use App\Models\TipoGrado;
+use App\Models\TipoUnidad;
 
 use App\Models\DisposicionFiscalEntidadVigilancia;
 
@@ -64,6 +68,7 @@ class ExpedienteController extends Controller
                 $new->nro = $request->nro ? $request->nro : "Sin nro";
                 $new->fecha_disposicion = $request->fecha_disposicion  ? $request->fecha_disposicion : null;
                 $new->fiscal_responsable_id = $request->fiscal_responsable_id ? $request->fiscal_responsable_id : 1;
+                $new->oficial_acargo_id = $request->oficial_acargo_id ? $request->oficial_acargo_id : 1;
                 $new->fiscal_asistente_id = $request->fiscal_asistente_id  ? $request->fiscal_asistente_id : 1;
                 $new->resumen = $request->resumen ? $request->resumen : "Sin resumen";
                 $new->observaciones = $request->observaciones  ? $request->observaciones : "Sin observaciones";
@@ -105,7 +110,6 @@ class ExpedienteController extends Controller
                                     $obtenernombre = null;
                                 }
                                
-
                                 $objeto = new DisposicionFiscalReferencia;
                                 $objeto->df_id =  $new->id;
                                 $objeto->users_id = Auth::user()->id;
@@ -213,6 +217,10 @@ class ExpedienteController extends Controller
                     'data_documento_identidad' => TipoDocumentoIdentidad::where('id','>', 1)->get(),
                     'data_inmueble' => TipoInmueble::get(),
                     'data_nacionalidad' => TipoNacionalidad::where('id','>',1)->get(),
+                    'data_grado' => TipoGrado::where('id','!=',0)->get(),
+                    'data_unidad' => TipoUnidad::where('id','!=',0)->get(),
+                    'data_policia' => EntidadPolicia::with(['getUnidad', 'getGrado'])->get(),
+
                     
                 ]);
             } elseif ($request->type && $request->type == "_EXPEDIENTE") {
@@ -356,6 +364,19 @@ class ExpedienteController extends Controller
                         'error' => "No se encontro el vehículo"
                     ]);
                 }
+            } elseif ($request->type && $request->type == "_SAVE_POLICIA"){
+                $new = new EntidadPolicia;
+                $new->carnet = $request->carnet;
+                $new->dni = $request->dni;
+                $new->nombres = $request->nombres ?? null;
+                $new->paterno = $request->paterno ?? null;
+                $new->materno = $request->materno ?? null;
+                $new->grado_id = $request->grado_id;
+                $new->unidad_id = $request->unidad_id;
+                $new->situacion = $request->situacion ?? null;
+                $new->save();
+                $data = EntidadPolicia::with(['getUnidad', 'getGrado'])->where('id', $new->id)->first();
+                return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);
             }
         } catch (\Throwable $e) {
             $errorInfo = AuditoriaController::detect_errors_return_json($e);
