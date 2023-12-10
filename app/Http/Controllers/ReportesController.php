@@ -244,6 +244,9 @@ class ReportesController extends Controller
             if($expe->getFiscalAdjunto->dni){
                 self::generateLineTextSpace($MYPDF,  "FISCAL ASISTENTE", strtoupper("DNI: ".$expe->getFiscalAdjunto->dni." | ".$expe->getFiscalAdjunto->nombres." ".$expe->getFiscalAdjunto->paterno." ".$expe->getFiscalAdjunto->materno." | ".$expe->getFiscalAdjunto->procedencia." ".$expe->getFiscalAdjunto->ficalia." ".$expe->getFiscalAdjunto->despacho." ".$expe->getFiscalAdjunto->ubigeo." | CORREO: ".$expe->getFiscalAdjunto->correo." | CELULAR:".$expe->getFiscalAdjunto->celular));$MYPDF->Ln(1);
             }
+            if($expe->getOficial){
+                self::generateLineTextSpace($MYPDF,  "OFICIAL A CARGO", strtoupper($expe->getOficial->carnet." | ".$expe->getOficial->nombres." ".$expe->getOficial->paterno." ".$expe->getOficial->materno." | ".$expe->getOficial->getGrado->descripcion));$MYPDF->Ln(1);
+            }
             self::generateLineTextSpace($MYPDF,  "RESUMEN", strtoupper($expe->resumen));$MYPDF->Ln(1);
             self::generateLineTextSpace($MYPDF,  "OBSERVACIONES", strtoupper($expe->observaciones));$MYPDF->Ln(1);
             self::generateLineTextSpace($MYPDF,  "SITUACION", strtoupper($expe->getEstado->descripcion));$MYPDF->Ln(1);

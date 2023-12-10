@@ -34,7 +34,7 @@ return new class extends Migration
                     'descripcion' => 'INFORME POLICIAL',
                 ],
                 [
-                    'id' => 2,
+                    'id' => 3,
                     'descripcion' => 'CARPETA FISCAL',
                 ]
             )

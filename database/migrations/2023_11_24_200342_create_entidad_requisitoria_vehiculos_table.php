@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('entidad_requisitoria_vehiculos', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('fecha')->nullable();
+            $table->string('documento', 10)->nullable();
+            $table->string('fechadocumento')->nullable();
+            $table->string('autoridad', 40)->nullable();
+            $table->string('placa', 10)->nullable();
+            $table->string('motivo', 40)->nullable();
+            $table->string('situacion', 10)->nullable();
+            $table->timestamps(); 
         });
     }
 

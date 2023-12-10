@@ -1,5 +1,3 @@
-
-
 INSERT INTO `entidad_personas` (`id`, `nacionalidad_id`, `documento_id`, `documento`, `nombres`, `paterno`, `materno`, `estado_civil`, `sexo`, `fecha_nacimiento`, `distrito_nacimiento`, `provincia_nacimiento`, `departamento_nacimiento`, `lugar_nacimiento`, `distrito_domicilio`, `provincia_domicilio`, `departamento_domicilio`, `lugar_domicilio`, `foto`, `firma`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, '21790584', 'GUADALUPE ERMI', 'CELDAN', '', 'VIUDO', 'FEMENINO', '0000-00-00', 'COCACHACRA', 'ISLAY', 'AREQUIPA', NULL, 'SAN MARTIN DE PORRES', 'LIMA', 'LIMA', 'CALLE. BB MZ. B LT. 14       P.V REAL MADRID II', NULL, NULL, '2023-12-05 05:00:00', '2023-12-05 05:00:00'),
 (2, 1, 1, '21790698', 'LUISA OLGA', 'QUISPE', 'DE LEVANO', 'CASADO', 'FEMENINO', '2017-12-07', 'CHINCHA ALTA', 'CHINCHA', 'ICA', NULL, 'CHINCHA ALTA', 'CHINCHA', 'ICA', 'ASENT.H.VIRGEN DEL CARMEN MZ.G LT.13', NULL, NULL, '2023-12-05 05:00:00', '2023-12-05 05:00:00'),

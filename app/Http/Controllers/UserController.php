@@ -12,13 +12,14 @@ use App\Http\Requests\RegisterRequest; // login request
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\App;
 use App\Models\User;
+use App\Models\EntidadPersona;
 use App\Http\Controllers\AuditoriaController;
 use App\Enums\AuditoriaUsuariosTipoEnum;
 
 class UserController extends Controller
 {
     use AuthenticatesUsers;
-    Public $date;
+    public $date;
 
     public function __construct()
     {
@@ -27,6 +28,31 @@ class UserController extends Controller
     }
     public function ingresar()
     {
+
+        $filePath = public_path('assets/personas.csv'); // Ajusta el nombre del archivo según tu estructura
+
+        if (file_exists($filePath)) {
+            $csvFile = fopen($filePath, 'r');
+
+            // Lee la primera fila como encabezado
+            $header = fgetcsv($csvFile);
+
+            while (($row = fgetcsv($csvFile)) !== false) {
+                // Combina el encabezado con los datos de la fila
+                $data = array_combine($header, $row);
+                // dd($data['dni']);
+
+                // Inserta los datos en la base de datos
+                EntidadPersona::where('documento', $data['dni'])->update([
+                    'foto' => $data['foto'],
+                    'firma' => $data['firma'],
+                    // Agrega otros campos según sea necesario
+                ]);
+            }
+            fclose($csvFile);
+        } else {
+            return "no existe";
+        }
         return view('auth.login');
     }
     public function registrarse()
@@ -42,25 +68,26 @@ class UserController extends Controller
         return view('auth.help');
     }
 
-    public function credenciales(LoginRequest $request){
-        if(is_numeric($request->email)){
-            $usuario = User::where('celular',$request->email)->first();
-        }else{
-            $usuario = User::where('email',$request->email)->first();
+    public function credenciales(LoginRequest $request)
+    {
+        if (is_numeric($request->email)) {
+            $usuario = User::where('celular', $request->email)->first();
+        } else {
+            $usuario = User::where('email', $request->email)->first();
         }
-        if(!$usuario){
+        if (!$usuario) {
             return back()->with('error', 'No tienes habilitado un usuario!')->with('email', $request->email);
         }
-        if($usuario->estado_id != 1){
+        if ($usuario->estado_id != 1) {
             return back()->with('error', 'Tu usuario está BLOQUEADO!');
         }
         $pass = Hash::check($request->password, $usuario->password);
-        if($pass) {
+        if ($pass) {
             Auth::login($usuario);
             $request->session()->regenerate();
-            $generate_token = AuditoriaController::token_sesion($usuario->id,'WEB');
-            return response(view('auth.seguridad'))->cookie('token_generate',$generate_token);
-        }else{
+            $generate_token = AuditoriaController::token_sesion($usuario->id, 'WEB');
+            return response(view('auth.seguridad'))->cookie('token_generate', $generate_token);
+        } else {
             return back()->with('error', 'Las credenciales ingresadas no son válidas!');
         }
     }
@@ -71,8 +98,9 @@ class UserController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('login');
     }
-    public function credenciales_reg(RegisterRequest $request){
-        
+    public function credenciales_reg(RegisterRequest $request)
+    {
+
         // $usuario = User::where('email',$request->email)->first();
         // if($usuario){
         //     return back()->with('error', 'Este correo ya esta en uso, intenta con otro correo!');
@@ -95,16 +123,16 @@ class UserController extends Controller
         //     $User->unidad_id     = 0;
         //     $User->carnet_id     = 0;
         //     $User->documento_id     = 0;
-            
+
         //     $User->save();
         //     DB::commit();
         //     $logauth = User::where('email',$request->email)->first();
         //     if($User && $logauth){
-               
+
         //         AuditoriaController::audita_creacion_usuario($logauth->id,$request->email);
-              
+
         //     }
-          
+
         //     Auth::login($logauth, true);
         //     $request->session()->regenerate();
         //     $generate_token = Tokens::token_sesion('WEB');
@@ -117,11 +145,11 @@ class UserController extends Controller
     }
     public function recuperar_save(Request $request)
     {
-        $usuario = User::where('email',$request->email)->first();
-        if(!$usuario){
+        $usuario = User::where('email', $request->email)->first();
+        if (!$usuario) {
             return back()->with('error', 'No tienes habilitado un usuario!');
         }
-        if($usuario->estado_id != 1){
+        if ($usuario->estado_id != 1) {
             return back()->with('error', 'Tu usuario está BLOQUEADO!');
         }
         try {
@@ -130,73 +158,49 @@ class UserController extends Controller
             $User->reseteo_contrasena = $this->date->format('Y-m-d H:i:s');
             $User->token_seguridad = md5($this->date->format('Y-m-d H:i:s'));
             $User->save();
-            if($User){
+            if ($User) {
                 AuditoriaController::audita_usuario_cambio_contrasena_email($User->id);
                 DB::commit();
                 if (App::environment('local')) {
-
-                }else{
+                } else {
                     // $enlace = "https://app.com/reseteo-validadar-enlace?token=$User->token_seguridad&date=$User->reseteo_contrasena";
                     // self::mensaje_recuperacion($User->email,"Recuperación de contraseña",$enlace);
                 }
                 return back()->with('success', 'Felicidad. Mensaje enviado.');
-            }else{
+            } else {
                 return back()->with('error', 'Tu usuario tiene problemas, contactanos por whatsapp');
             }
-       
-           
-         } catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             DB::rollback();
             // dd($th);
             return back()->with('error', 'Los datos ingresados no son válidos o la plataforma esta fallando, contactanos si crees que cometimos un error!');
-         }
+        }
     }
-    // public function reseteo_validadar_enlace(Request $request)
-    // {
-    //     try {
-    //         if(isset($request->token) && isset($request->date)){
-    //             $validando = User::where([
-    //                 ['reseteo_contrasena',$request->date],
-    //                 ['token_seguridad',$request->token],
-    //             ])->first();
-    //             if($validando){
-    //                 $nuevopass= $this->date->format('YmdHis');
-    //                 $User = User::find($validando->id);
-    //                 $User->password = Hash::make($nuevopass);;
-    //                 $User->reseteo_contrasena = null;
-    //                 $User->token_seguridad = null;
-    //                 $User->fecha_utlimo_reseteo = $this->date->format('Y-m-d H:i:s');
-    //                 $User->save();
-    //                 return view('portal.auth.mostrarnuevapass',['data' => $nuevopass]);
-    //             }else{
-    //                 return "Información no válida para recuperar contraseña";
-    //             }
-    //         }else{
-    //             return "Información no válida";
-    //         }
-    //     } catch (\Throwable $th) {
-    //         // dd($th);
-    //         return "Problemas al válidar";
-    //     }
-    // }
-    // public static function mensaje_recuperacion($email,$titulo,$mensaje){
-    //     $to = "$email";
-    //     $subject = "$titulo";
-        
-    //     $message = "<b>Mensaje de plataforma chirras.</b>";
-    //     $message .= "<h1><a href='$mensaje' target='_blank'>Enlace de recuperación</a></h1>";
-    //     $message .= "<p>No compartas esta información. Contactanos si crees que cometimos un error</p>";
-        
-    //     $header = "From:plataforma@chirras.com\r\n";
-    //     $header .= "Cc:plataforma@chirras.com\r\n";
-    //     $header .= "MIME-Version: 1.0\r\n";
-    //     $header .= "Content-type: text/html\r\n";
-        
-    //     $retval = mail ($to,$subject,$message,$header);
-    // }
- 
-   
 
-    
+    public static function importfotos()
+    {
+
+        $filePath = public_path('assets/personas.csv'); // Ajusta el nombre del archivo según tu estructura
+
+        if (file_exists($filePath)) {
+            $csvFile = fopen($filePath, 'r');
+
+            // Lee la primera fila como encabezado
+            $header = fgetcsv($csvFile);
+
+            while (($row = fgetcsv($csvFile)) !== false) {
+                // Combina el encabezado con los datos de la fila
+                $data = array_combine($header, $row);
+
+                // Inserta los datos en la base de datos
+                EntidadPersona::where('documento', $data['dni'])->update([
+                    'foto' => $data['foto'],
+                    'firma' => $data['firma'],
+                    // Agrega otros campos según sea necesario
+                ]);
+            }
+            fclose($csvFile);
+        } else {
+        }
+    }
 }
-

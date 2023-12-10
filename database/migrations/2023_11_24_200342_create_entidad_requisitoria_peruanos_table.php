@@ -13,7 +13,18 @@ return new class extends Migration
     {
         Schema::create('entidad_requisitoria_peruanos', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('fecha')->nullable();
+            $table->string('tipo', 5)->nullable();
+            $table->string('nrodocumento', 10)->nullable();
+            $table->string('paterno', 30)->nullable();
+            $table->string('materno', 30)->nullable();
+            $table->string('nombres', 30)->nullable();
+            $table->string('delitos', 50)->nullable();
+            $table->string('situacion', 20)->nullable();
+            $table->string('autoridadjudicial', 50)->nullable();
+            $table->string('documento', 10)->nullable();
+            $table->string('fechadocumento')->nullable();
+            $table->timestamps(); // created_at y updated_at
         });
     }
 

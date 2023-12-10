@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('entidad_denuncias', function (Blueprint $table) {
+        Schema::create('entidad_antecedentes', function (Blueprint $table) {
             $table->id();
-            $table->string('comisaria', 40)->nullable();
-            $table->string('fecha_denuncia')->nullable();
+            $table->string('fecha')->nullable();
             $table->string('nrodocumento', 10)->nullable();
             $table->string('paterno', 30)->nullable();
             $table->string('materno', 30)->nullable();
             $table->string('nombres', 30)->nullable();
-            $table->string('condicion', 20)->nullable();
-            $table->string('motivo', 40)->nullable();
-            $table->text('contenido',2500)->nullable();
-            $table->string('created_at')->nullable();
-            $table->string('update_at')->nullable();
+            $table->string('delitos', 50)->nullable();
+            $table->string('situacion', 30)->nullable();
+            $table->string('autoridadjudicial', 50)->nullable();
+            $table->string('documento', 10)->nullable();
+            $table->string('fechadocumento')->nullable();
+            $table->timestamps(); // created_at y updated_at
         });
     }
 
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('entidad_denuncias');
+        Schema::dropIfExists('entidad_antecedentes');
     }
 };

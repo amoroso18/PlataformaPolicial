@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DepaSeeder::class);
         $this->call(ProvSeeder::class);
         $this->call(DistSeeder::class);
+        $this->call(EntidadesSeeder::class);
     }
 }

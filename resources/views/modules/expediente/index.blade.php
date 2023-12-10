@@ -45,16 +45,25 @@
 </style>
 @endpush
 @section('content')
-<div class="nk-block-between">
-    <div class="nk-block-head-content">
-        <h3 class="nk-block-title page-title">Expedientes de diposición fiscal</h3>
-    </div><!-- .nk-block-head-content -->
-    <div class="nk-block-head-content">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#modalADD"><em class="icon ni ni-plus"></em></button>
-    </div><!-- .nk-block-head-content -->
-</div>
+
 <div id="miapp" class="mt-3">
-    <div class="nk-block">
+    <div class="nk-block-between">
+        <div class="nk-block-head-content">
+            <h3 class="nk-block-title page-title" v-show="!ocultar">Expedientes de diposición fiscal</h3>
+        </div>
+        <div class="nk-block-head-content">
+            <ul class="nk-block-tools g-3">
+                <li class="nk-block-tools-opt">
+                    <button class="btn btn-dark" v-if="ocultar" v-on:click="ocultar = !ocultar"><em class="icon ni ni-arrow-to-up"></em></button>
+                    <button class="btn btn-dark" v-if="!ocultar" v-on:click="ocultar = !ocultar"><em class="icon ni ni-arrow-to-down"></em></button>
+                </li>
+                <li class="nk-block-tools-opt">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#modalADD"><em class="icon ni ni-plus"></em></button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="nk-block" v-show="!ocultar">
         <p><strong>Resumen de expedientes</strong></p>
         <p v-if="loadingTable"><em class="icon ni ni-loader"></em> Cargando....</p>
         <div class="row g-gs" v-if="!loadingTable">
@@ -108,7 +117,7 @@
             </div>
         </div>
     </div>
-    <div class="nk-block">
+    <div class="nk-block" v-show="!ocultar">
         <p><strong>Expedientes</strong></p>
         <p v-if="situacion" v-text="situacion"></p>
         <div class="card card-bordered card-preview">
@@ -127,10 +136,67 @@
                 <div slot="opciones" slot-scope="props">
                     <div class="btn-group dropup">
                         <a target="_blank" :href="uriExpe+'?contexto='+props.row.id" class="m-1" style="font-size: 22px;"><em class="icon ni ni-reports"></em></a>
+                        <a v-on:click="OpenEdit(props.row)" class="m-1 pointer" style="font-size: 22px;">
+                            <em class="icon ni ni-camera-fill"></em>
+                        </a>
                         <a v-on:click="OpenEdit(props.row)" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
                     </div>
                 </div>
             </v-client-table>
+        </div>
+    </div>
+    <div class="nk-block-between mt-3" v-if="ocultar">
+        <h3><strong>Actividades de expediente </strong><span class="text-primary small">Nro. 0000</span><span class="text-primary small" v-text="dataEdit.id"></span></h3>
+        <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" target="_blank" :href="uriExpe+'?contexto='+dataEdit.id"><em class="icon ni ni-printer-fill"></em></a>
+    </div>
+    <div class="nk-block" v-show="ocultar">
+        <div id="accordion-1" class="accordion accordion-s2 mt-3">
+            <div class="accordion-item">
+                <a href="#" class="accordion-head" data-toggle="collapse" data-target="#accordion-item-1-1">
+                    <h6 class="title">What is Dashlite?</h6>
+                    <span class="accordion-icon"></span>
+                </a>
+                <div class="accordion-body collapse show" id="accordion-item-1-1" data-parent="#accordion-1">
+                    <div class="accordion-inner">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-2">
+                    <h6 class="title">What are some of the benefits of receiving my bill electronically?</h6>
+                    <span class="accordion-icon"></span>
+                </a>
+                <div class="accordion-body collapse" id="accordion-item-1-2" data-parent="#accordion-1">
+                    <div class="accordion-inner">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-3">
+                    <h6 class="title">What is the relationship between Dashlite and payment?</h6>
+                    <span class="accordion-icon"></span>
+                </a>
+                <div class="accordion-body collapse" id="accordion-item-1-3" data-parent="#accordion-1">
+                    <div class="accordion-inner">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nk-search-box" v-on:click="modalOpen('FechaContenidoAdd')">
+            <div class="form-group">
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control form-control-lg" placeholder="Agregar contenido..." readonly>
+                    <button class="form-icon form-icon-right">
+                        <em class="icon ni ni-plus-sm"></em>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal fade" id="modalADD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -160,8 +226,8 @@
                         <div class="col-sm-12 mt-3">
                             <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-resumen" v-model="dataExpe.resumen"><label class="form-label-outlined" for="outlined-resumen">Resumen</label></div>
                         </div>
-                      
-                       
+
+
                     </section>
                     <h5 class="mt-5">Calendario de inicio y termino</h5>
                     <section>
@@ -1397,6 +1463,21 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalFechaContenidoAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel9" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Documento de Actividad</h5>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -1424,6 +1505,7 @@
                     uri: URL_REGISTRAR,
                     uriExpe: URL_EXPEDIENTE,
                     situacion: "",
+                    ocultar: false,
                     loadingModalNuevoFiscal: false,
                     loadingSarchInmueble: false,
                     loadingModal: false,
@@ -1605,10 +1687,27 @@
                     },
                     map: null,
                     marker: null,
+                    nuevafechadocumentovideovigilancia:{
+                        documentos_id: 2,
+                        numeroDocumento: 0,
+                        siglasDocumento: "",
+                        fechaDocumento: "",
+                        asunto: "",
+                        respondea: "",
+                        evaluacion:"",
+                        conclusiones: "",
+                        pdf: "",
+                        pdfName: "",
+                    }
                 },
                 mounted() {
                     this.Get();
                     this.initMap();
+                    setTimeout(() => {
+                        this.dataEdit = this.data.tableData[0];
+                        this.ocultar = true;
+                    }, 1500);
+
                 },
                 methods: {
                     calcularFechaFinal() {
@@ -1625,7 +1724,7 @@
                         }
 
                         return 'No hay suficientes datos para calcular la fecha final';
-                     
+
                     },
                     Grabar() {
                         this.loadingModal = true;
@@ -1744,6 +1843,7 @@
                                     confirmButtonText: '¡Entendido!',
                                 });
                             }).finally(() => {
+                                this.ocultar = false;
                                 this.loadingModal = false;
                                 $('#modalADD').modal('hide');
                             });
@@ -2284,8 +2384,9 @@
                         //     });
                     },
                     OpenEdit(data) {
-                        console.log(data);
+                        // console.log(data);
                         this.dataEdit = data;
+                        this.ocultar = true;
                     },
                     modalOpen(TIPO) {
                         if (TIPO == "TipoVideoVigilanciaEdit") {
@@ -2306,6 +2407,8 @@
                         } else if (TIPO == "OficialAdd") {
                             $('#modalADD').modal('hide');
                             $('#modalOficialAdd').modal('show');
+                        } else if (TIPO == "FechaContenidoAdd") {
+                            $('#modalFechaContenidoAdd').modal('show');
                         }
                     },
                     selectdataTipoVideovigilanciaAdd() {

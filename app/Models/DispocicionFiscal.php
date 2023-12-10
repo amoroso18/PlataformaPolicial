@@ -25,7 +25,10 @@ class DispocicionFiscal extends Model
     {
         return $this->hasOne(EstadoDisposicionFiscal::class, 'id', 'estado_id');
     }
-   
+    public function getOficial()
+    {
+        return $this->hasOne(EntidadPolicia::class, 'id', 'oficial_acargo_id');
+    }
 }
 
 
