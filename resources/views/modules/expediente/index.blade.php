@@ -1687,6 +1687,7 @@
                     },
                     map: null,
                     marker: null,
+                    nueva_vigilancias: [],
                     nuevafechadocumentovideovigilancia:{
                         documentos_id: 2,
                         numeroDocumento: 0,

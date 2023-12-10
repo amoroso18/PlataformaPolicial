@@ -29,6 +29,10 @@ class DispocicionFiscal extends Model
     {
         return $this->hasOne(EntidadPolicia::class, 'id', 'oficial_acargo_id');
     }
+    public function getNuevaVigilancia()
+    {
+        return $this->hasMany(DisposicionFiscalNuevaVigilancia::class, 'df_id', 'id');
+    }
 }
 
 

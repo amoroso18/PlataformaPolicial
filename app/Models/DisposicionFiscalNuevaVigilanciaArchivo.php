@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class DisposicionFiscalNuevaVigilanciaArchivo extends Model
 {
     use HasFactory;
+    public function getTipoArchivo()
+    {
+        return $this->hasOne(TipoContenido::class, 'id', 'ta_id');
+    }
 }

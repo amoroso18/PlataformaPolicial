@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('disposicion_fiscal_nueva_vigilancia_actividads', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('dfnv_id')->constrained('disposicion_fiscal_nueva_vigilancias')->onDelete('cascade');
+            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
+            $table->datetime('fechahora')->nullable();
+            $table->integer('estado')->default(1);
             $table->timestamps();
         });
     }
