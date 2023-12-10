@@ -425,7 +425,7 @@ class ExpedienteController extends Controller
                 $objeto->detalle =  $request->detalle ?? null;
                 $objeto->estado = 1;
                 $objeto->save();
-                $data = DisposicionFiscalNuevaVigilanciaEntidad::with(['getNuevaVigilanciaArchivo'])->where('id', $objeto->id)->first();
+                $data = DisposicionFiscalNuevaVigilanciaEntidad::with(['getNuevaVigilanciaArchivo','getEntidad'])->where('id', $objeto->id)->first();
                 return response()->json(['message' => 'Registrado correctamente', 'data' => $data, 'request' => $request->all()]);
             } elseif ($request->type && $request->type == "_DisposicionFiscalNuevaVigilanciaArchivo") {
                 $objeto = new DisposicionFiscalNuevaVigilanciaArchivo;
