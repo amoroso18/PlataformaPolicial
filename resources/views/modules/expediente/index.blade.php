@@ -133,6 +133,17 @@
                 <div slot="get_fiscal_adjunto" slot-scope="props" v-if="props.row.get_fiscal_adjunto.id != 1">
                     <span v-text="props.row.get_fiscal_adjunto.carnet + ' ' +props.row.get_fiscal_adjunto.nombres + ' ' + props.row.get_fiscal_adjunto.paterno + ' ' + props.row.get_fiscal_adjunto.materno + ' ' + props.row.get_fiscal_adjunto.ficalia"> </span>
                 </div>
+                <div slot="progreso" slot-scope="props">
+                    <div class="project-progress">
+                        <div class="project-progress-details">
+                            <div class="project-progress-task"><em class="icon ni ni-check-round-cut"></em><span>44 Tasks</span></div>
+                            <div class="project-progress-percent">65.5%</div>
+                        </div>
+                        <div class="progress progress-pill progress-md bg-light">
+                            <div class="progress-bar" data-progress="65.5" style="width: 65.5%;"></div>
+                        </div>
+                    </div>
+                </div>
                 <div slot="opciones" slot-scope="props">
                     <div class="btn-group dropup">
                         <a target="_blank" :href="uriExpe+'?contexto='+props.row.id" class="m-1" style="font-size: 22px;"><em class="icon ni ni-reports"></em></a>
@@ -2468,9 +2479,9 @@
                             });
                     },
                     GrabarVehiculo(TIPO = null) {
-                        this.dfnva_persona= {};
-                        this.dfnva_inmueble= {};
-                        this.dfnva_vehiculo= {};
+                        this.dfnva_persona = {};
+                        this.dfnva_inmueble = {};
+                        this.dfnva_vehiculo = {};
 
                         this.loadingSarchInmueble = true;
                         const formData = new FormData();
@@ -2946,13 +2957,13 @@
                                 pdfName: "",
                             });
                         } else if (TIPO == "ARCHIVOS_DIGITALES_ENTIDADES_vehiculo") {
-                            if(!this.dfnva_vehiculo.get_nueva_vigilancia_archivo){
+                            if (!this.dfnva_vehiculo.get_nueva_vigilancia_archivo) {
                                 this.dfnva_vehiculo.get_nueva_vigilancia_archivo = [{
                                     ta_id: 1,
                                     pdf: "",
                                     pdfName: "",
                                 }];
-                            }else{
+                            } else {
                                 this.dfnva_vehiculo.get_nueva_vigilancia_archivo.push({
                                     ta_id: 1,
                                     pdf: "",
@@ -2962,21 +2973,21 @@
                         } else if (TIPO == "ARCHIVOS_DIGITALES_ENTIDADES_inmueble") {
                             console.log("muebleeee")
                             console.log(this.dfnva_inmueble.get_nueva_vigilancia_archivo)
-                            if(this.dfnva_inmueble.get_nueva_vigilancia_archivo){
+                            if (this.dfnva_inmueble.get_nueva_vigilancia_archivo) {
                                 this.dfnva_inmueble.get_nueva_vigilancia_archivo.push({
                                     ta_id: 1,
                                     pdf: "",
                                     pdfName: "",
                                 });
-                            }else{
+                            } else {
                                 this.dfnva_inmueble.get_nueva_vigilancia_archivo = [{
                                     ta_id: 1,
                                     pdf: "",
                                     pdfName: "",
                                 }];
-                             
+
                             }
-                          
+
                         }
                     },
                     removeInput(TIPO, index) {
