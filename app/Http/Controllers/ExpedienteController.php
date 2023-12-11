@@ -186,7 +186,8 @@ class ExpedienteController extends Controller
                         }
                     }
                 }
-                $data = DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado'])->where('id', $new->id)->first();
+                $data = DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado','getNuevaVigilancia',
+                'getNuevaVigilancia.getNuevaVigilanciaActividad'])->where('id', $new->id)->first();
                 return response()->json(['message' => 'Registrado correctamente', 'data' => $data, 'request' => $request->all()]);
             } elseif ($request->type && $request->type == "_EdiT") {
                 $new = DispocicionFiscal::find($request->id);
@@ -213,7 +214,8 @@ class ExpedienteController extends Controller
                 }
             } elseif ($request->type && $request->type == "_EXPEDIENTES") {
                 return response()->json([
-                    'data' => DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado'])->orderBy('id', 'desc')->get(),
+                    'data' => DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado','getNuevaVigilancia',
+                    'getNuevaVigilancia.getNuevaVigilanciaActividad'])->orderBy('id', 'desc')->get(),
                     'data_fiscal' => EntidadFiscal::get(),
                     'data_tipo_documentos' => TipoDocumentosReferencia::get(),
                     'data_tipo_videovigilancia' => TipoVideoVigilancia::get(),
@@ -232,7 +234,7 @@ class ExpedienteController extends Controller
                 ]);
             } elseif ($request->type && $request->type == "_EXPEDIENTE") {
                 return response()->json([
-                    'data' => DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado'])->where('id', $request->id)->first(),
+                    'data' => DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado','getNuevaVigilancia'])->where('id', $request->id)->first(),
                 ]);
             } elseif ($request->type && $request->type == "_GETFISCAL") {
                 return response()->json([
@@ -412,8 +414,13 @@ class ExpedienteController extends Controller
                 $new = new DisposicionFiscalNuevaVigilanciaActividad;
                 $new->dfnv_id = $request->dfnv_id;
                 $new->users_id = Auth::user()->id;
-                $new->fechahora = $request->fechahora ?? null; // Asigna el valor adecuado para fechaDocumento
+                if($request->fechahora){
+                    $dateTime = new \DateTime($request->fechahora);
+                    $mysqlFormattedDate = $dateTime->format('Y-m-d H:i:s'); 
+                    $new->fechahora = $mysqlFormattedDate ?? null; 
+                }
                 $new->estado = 1;
+                $new->save();
                 $data = DisposicionFiscalNuevaVigilanciaActividad::with(['getNuevaVigilanciaEntidad'])->where('id', $new->id)->first();
                 return response()->json(['message' => 'Registrado correctamente', 'data' => $data, 'request' => $request->all()]);
             } elseif ($request->type && $request->type == "_DisposicionFiscalNuevaVigilanciaEntidad") {

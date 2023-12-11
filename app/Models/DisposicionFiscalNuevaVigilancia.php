@@ -13,4 +13,8 @@ class DisposicionFiscalNuevaVigilancia extends Model
     {
         return $this->hasMany(DisposicionFiscalNuevaVigilanciaActividad::class, 'dfnv_id', 'id');
     }
+    public function geTipoDocumentosReferencia()
+    {
+        return $this->hasOne(TipoDocumentosReferencia::class, 'id', 'documentos_id');
+    }
 }

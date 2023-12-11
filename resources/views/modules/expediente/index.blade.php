@@ -150,40 +150,68 @@
         <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" target="_blank" :href="uriExpe+'?contexto='+dataEdit.id"><em class="icon ni ni-printer-fill"></em></a>
     </div>
     <div class="nk-block" v-show="ocultar">
-        <div id="accordion-1" class="accordion accordion-s2 mt-3">
-            <div class="accordion-item">
-                <a href="#" class="accordion-head" data-toggle="collapse" data-target="#accordion-item-1-1">
-                    <h6 class="title">What is Dashlite?</h6>
-                    <span class="accordion-icon"></span>
-                </a>
-                <div class="accordion-body collapse show" id="accordion-item-1-1" data-parent="#accordion-1">
-                    <div class="accordion-inner">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <div id="accordion-1" class="accordion accordion-s2 mt-3" v-if="dataEdit.get_nueva_vigilancia">
+            <div class="accordion-item" v-for="(item,index) in dataEdit.get_nueva_vigilancia" :key="index">
+                <a href="#" class="accordion-head" data-toggle="collapse" :data-target="'#accordion-item-' + index">
+                    <div class="project-title">
+                        <div class="user-avatar sq bg-purple"><span v-text="item.id"></span></div>
+                        <div class="project-info">
+                            <h6 class="title" v-text="item.fechaDocumento"></h6>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-2">
-                    <h6 class="title">What are some of the benefits of receiving my bill electronically?</h6>
                     <span class="accordion-icon"></span>
                 </a>
-                <div class="accordion-body collapse" id="accordion-item-1-2" data-parent="#accordion-1">
+                <div class="accordion-body collapse" :id="'accordion-item-' + index" :data-parent="'#accordion-item-' + index">
                     <div class="accordion-inner">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-3">
-                    <h6 class="title">What is the relationship between Dashlite and payment?</h6>
-                    <span class="accordion-icon"></span>
-                </a>
-                <div class="accordion-body collapse" id="accordion-item-1-3" data-parent="#accordion-1">
-                    <div class="accordion-inner">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        <div class="card card-bordered h-100">
+                            <div class="card-inner">
+                                <div class="project">
+                                    <div class="project-details">
+                                        <div class="pricing-body">
+                                            <h6 class="title">Detalle de videovigilancia</h6>
+                                            <ul class="pricing-features">
+                                                <li><span class="w-50">Siglas Documento</span> : <span class="ml-auto" v-text="item.siglasDocumento"></span></li>
+                                                <li><span class="w-50">Asunto</span> : <span class="ml-auto" v-text="item.asunto"></span></li>
+                                                <li><span class="w-50">Responde a</span> : <span class="ml-auto" v-text="item.respondea"></span></li>
+                                                <li><span class="w-50">Evaluación</span> : <span class="ml-auto" v-text="item.evaluacion"></span></li>
+                                                <li><span class="w-50">Conclusiones</span> : <span class="ml-auto" v-text="item.conclusiones"></span></li>
+                                                <li><span class="w-50">Archivo</span> : <span class="ml-auto" v-text="item.archivo"></span></li>
+                                                <li><span class="w-50">Fecha creación</span> : <span class="ml-auto" v-text="item.created_at"></span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="pricing-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="title mb-0">Detalle de Actividades</h6>
+                                                <button data-toggle="modal" v-on:click="nuevafechadocumentovideovigilancia.IndexActividadAdd = index" data-target="#modalFechaActividadAdd" class="btn btn-primary"><em class="icon ni ni-plus"></em></button>
+                                            </div>
+
+                                            <div v-for="(item2,index2) in dataEdit.get_nueva_vigilancia[index].get_nueva_vigilancia_actividad" :key="index2">
+
+                                                <div class="kanban-title-board mt-3">
+                                                    <div class="kanban-title-content">
+                                                        <span class="badge badge-pill badge-outline-light text-dark" v-text="item2.id"></span>
+                                                        <h6 class="title" v-text="item2.fechahora"></h6>
+                                                    </div>
+                                                </div>
+
+
+                                                <section class="mt-2">
+                                                    <button class="btn btn-dark mt-2" v-on:click="modalOpen('PersonasEdit_actividad',index,index2)">+ Personas</button>
+                                                    <button class="btn btn-dark mt-2" v-on:click="modalOpen('InmuebleEdit_actividad'index,index2)">+ Inmueble</button>
+                                                    <button class="btn btn-dark mt-2" v-on:click="modalOpen('VehiculoEdit_actividad'index,index2)">+ Vehiculo</button>
+                                                </section>
+
+                                                <section>
+                                                   
+                                                </section>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -989,10 +1017,10 @@
 
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -1133,7 +1161,7 @@
                                 <label class="form-label">Ubicación</label>
                             </div>
                             <div class="form-control-wrap">
-                                <div id="map" style="height: 400px;"></div>
+                                <div id="mapDiv" style="height: 400px;"></div>
                             </div>
 
                             <div class="form-control-wrap">
@@ -1556,22 +1584,53 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalFechaActividadAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel10" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Fecha y hora de actividades</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="card-inner">
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Fecha y hora de obtención</label>
+                            <div class="form-control-wrap">
+                                <input type="datetime-local" class="form-control" v-model="nuevafechadocumentovideovigilancia.FechaActividadAdd">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-group">
+                                <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="GrabarActividad('_DisposicionFiscalNuevaVigilanciaActividad')">Registrar</button>
+                                <p v-if="loadingPersonas">Cargando....</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
     const URL_REGISTRAR = "{{route('ExpedienteWS')}}";
     const URL_EXPEDIENTE = "{{route('expediente_reporte')}}";
 
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDYU0WytTK6kCsmp2NFdOWAMQ8yE7tacQg&libraries=places`;
-    script.async = true;
-    script.defer = true;
-    script.onload = function() {
-        initVueSIVIPOL();
-    };
-    document.head.appendChild(script);
+    // const script = document.createElement('script');
+    // script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDYU0WytTK6kCsmp2NFdOWAMQ8yE7tacQg&libraries=places`;
+    // script.async = true;
+    // script.defer = true;
+    // script.onload = function() {
+    //     initVueSIVIPOL();
+    // };
+    // document.head.appendChild(script);
 
-    function initVueSIVIPOL() {
+    // initVueSIVIPOL();
+
+    // function initVueSIVIPOL() {
         document.addEventListener('DOMContentLoaded', async function() {
             Vue.use(VueTables.ClientTable);
             const app = new Vue({
@@ -1591,7 +1650,12 @@
                     loadingTable: false,
                     loadingPersonas: false,
                     loadingModalTipoVideoVigilancia: false,
+                    cambiarModoActividades: false,
                     dataEdit: {},
+                    disposicion_fiscal_nueva_vigilancia_actividads: {
+                        index1: null,
+                        index2: null,
+                    },
                     dataExpe: {
                         fecha_disposicion: "",
                         fiscal_responsable_id: 0,
@@ -1777,6 +1841,8 @@
                         conclusiones: "",
                         pdf: "",
                         pdfName: "",
+                        FechaActividadAdd: "",
+                        IndexActividadAdd: null
                     }
                 },
                 mounted() {
@@ -1816,8 +1882,14 @@
                                 formData.append(key, this.nuevafechadocumentovideovigilancia[key]);
                             }
                         }
+                        if (TYPE == "_DisposicionFiscalNuevaVigilanciaActividad") {
+                            const DFNV = this.dataEdit.get_nueva_vigilancia[this.nuevafechadocumentovideovigilancia.IndexActividadAdd];
+                            formData.append('dfnv_id', DFNV.id);
+                            formData.append('fechahora', this.nuevafechadocumentovideovigilancia.FechaActividadAdd);
+                        }
                         axios.post(URL_REGISTRAR, formData)
                             .then(response => {
+                                console.log(response.data);
                                 if (response.data.error) {
                                     Swal.fire({
                                         title: 'Error',
@@ -1826,8 +1898,13 @@
                                         confirmButtonText: '¡Entendido!',
                                     });
                                 } else {
-                                    this.dataEdit.get_nueva_vigilancia_actividad.push(response.data.data);
-                                    console.log(response.data.data)
+                                    if (TYPE == "_DisposicionFiscalNuevaVigilancia") {
+                                        this.dataEdit.get_nueva_vigilancia.push(response.data.data);
+                                    }
+                                    if (TYPE == "_DisposicionFiscalNuevaVigilanciaActividad") {
+                                        // console.log(this.dataEdit.get_nueva_vigilancia[this.nuevafechadocumentovideovigilancia.IndexActividadAdd]);
+                                        this.dataEdit.get_nueva_vigilancia[this.nuevafechadocumentovideovigilancia.IndexActividadAdd].get_nueva_vigilancia_actividad.push(response.data.data);
+                                    }
                                 }
                             })
                             .catch(error => {
@@ -1840,6 +1917,7 @@
                             }).finally(() => {
                                 this.loadingModalTipoVideoVigilancia = false;
                                 $('#modalFechaContenidoAdd').modal('hide');
+                                $('#modalFechaActividadAdd').modal('hide');
                             });
                     },
                     Grabar() {
@@ -2284,15 +2362,25 @@
                                 } else {
                                     console.log(response.data)
                                     if (response.data && response.data.data && response.data.data != null) {
-                                        if (TIPO == "_get_persona_nacionalidad_nombres") {
-                                            this.dataPersonasSearch = response.data.data;
-                                        } else if (TIPO == "_get_persona_extranjero" || TIPO == "_get_persona_peru") {
-                                            this.dataPersonas.push(response.data.data);
-                                            $('#modalPersonas').modal('hide');
-                                            $('#modalADD').modal('show');
-                                        } else if (TIPO == "_get_domicilio") {
-                                            this.dataInmuebleSearch = response.data.data;
-                                            console.log(this.dataInmuebleSearch);
+                                        if (this.cambiarModoActividades) {
+                                            if (TIPO == "_get_persona_nacionalidad_nombres") {
+                                                this.dataPersonasSearch = response.data.data;
+                                            } else if (TIPO == "_get_persona_extranjero" || TIPO == "_get_persona_peru") {
+                                                this.dataPersonas.push(response.data.data);
+                                            } else if (TIPO == "_get_domicilio") {
+                                                this.dataInmuebleSearch = response.data.data;
+                                            }
+                                        } else {
+                                            if (TIPO == "_get_persona_nacionalidad_nombres") {
+                                                this.dataPersonasSearch = response.data.data;
+                                            } else if (TIPO == "_get_persona_extranjero" || TIPO == "_get_persona_peru") {
+                                                this.dataPersonas.push(response.data.data);
+                                                $('#modalPersonas').modal('hide');
+                                                $('#modalADD').modal('show');
+                                            } else if (TIPO == "_get_domicilio") {
+                                                this.dataInmuebleSearch = response.data.data;
+                                                console.log(this.dataInmuebleSearch);
+                                            }
                                         }
                                     } else {
                                         Swal.fire({
@@ -2504,7 +2592,7 @@
                         this.dataEdit = data;
                         this.ocultar = true;
                     },
-                    modalOpen(TIPO) {
+                    modalOpen(TIPO, INDEX1 = null, INDEX2 = null) {
                         if (TIPO == "TipoVideoVigilanciaEdit") {
                             $('#modalADD').modal('hide');
                             $('#modalADDTipoVideoVigilancia').modal('show');
@@ -2512,12 +2600,15 @@
                             $('#modalADD').modal('hide');
                             $('#modalADDFiscal').modal('show');
                         } else if (TIPO == "PersonasEdit") {
+                            this.cambiarModoActividades = false;
                             $('#modalADD').modal('hide');
                             $('#modalPersonas').modal('show');
                         } else if (TIPO == "InmuebleEdit") {
+                            this.cambiarModoActividades = false;
                             $('#modalADD').modal('hide');
                             $('#modalInmueble').modal('show');
                         } else if (TIPO == "VehiculoEdit") {
+                            this.cambiarModoActividades = false;
                             $('#modalADD').modal('hide');
                             $('#modalVehiculo').modal('show');
                         } else if (TIPO == "OficialAdd") {
@@ -2525,6 +2616,21 @@
                             $('#modalOficialAdd').modal('show');
                         } else if (TIPO == "FechaContenidoAdd") {
                             $('#modalFechaContenidoAdd').modal('show');
+                        } else if (TIPO == "PersonasEdit_actividad") {
+                            this.disposicion_fiscal_nueva_vigilancia_actividads.index1 = INDEX1;
+                            this.disposicion_fiscal_nueva_vigilancia_actividads.index2 = INDEX2;
+                            this.cambiarModoActividades = true;
+                            $('#modalPersonas').modal('show');
+                        } else if (TIPO == "InmuebleEdit_actividad") {
+                            this.disposicion_fiscal_nueva_vigilancia_actividads.index1 = INDEX1;
+                            this.disposicion_fiscal_nueva_vigilancia_actividads.index2 = INDEX2;
+                            this.cambiarModoActividades = true;
+                            $('#modalInmueble').modal('show');
+                        } else if (TIPO == "VehiculoEdit_actividad") {
+                            this.disposicion_fiscal_nueva_vigilancia_actividads.index1 = INDEX1;
+                            this.disposicion_fiscal_nueva_vigilancia_actividads.index2 = INDEX2;
+                            this.cambiarModoActividades = true;
+                            $('#modalVehiculo').modal('show');
                         }
                     },
                     selectdataTipoVideovigilanciaAdd() {
@@ -2658,46 +2764,49 @@
 
                     },
                     initMap() {
-                        // Inicializa el mapa de Google
-                        const map = new google.maps.Map(document.getElementById('map'), {
-                            center: {
-                                lat: -12.100499,
-                                lng: -77.0272729
-                            },
-                            zoom: 13,
-                        });
+                        if (typeof google !== 'undefined' && google.maps) {
+                            console.log("si existe");
 
-                        // Agrega un marcador al centro del mapa
-                        const initialMarker = new google.maps.Marker({
-                            position: {
-                                lat: -12.100499,
-                                lng: -77.0272729
-                            },
-                            map: map,
-                            title: 'Marcador Inicial',
-                            draggable: true, // Permite mover el marcador
-                        });
+                            // const map = new google.maps.Map(document.getElementById('mapDiv'), {
+                            //     center: {
+                            //         lat: -12.100499,
+                            //         lng: -77.0272729
+                            //     },
+                            //     zoom: 13,
+                            // });
 
-                        // Agrega evento de arrastre al marcador
-                        initialMarker.addListener('dragend', () => {
-                            const markerPosition = initialMarker.getPosition();
-                            this.dataInmuebleAdd.latitud = markerPosition.lat();
-                            this.dataInmuebleAdd.longitud = markerPosition.lng();
+                            // Agrega un marcador al centro del mapa
+                            // const initialMarker = new google.maps.Marker({
+                            //     position: {
+                            //         lat: -12.100499,
+                            //         lng: -77.0272729
+                            //     },
+                            //     map: map,
+                            //     title: 'Marcador Inicial',
+                            //     draggable: true, // Permite mover el marcador
+                            // });
 
-                            // Utiliza la API de Geocodificación para obtener la dirección
-                            const geocoder = new google.maps.Geocoder();
-                            geocoder.geocode({
-                                location: markerPosition
-                            }, (results, status) => {
-                                if (status === 'OK' && results[0]) {
-                                    const address = results[0].formatted_address;
-                                    this.dataInmuebleAdd.direccion = address;
-                                    // console.log('Nueva Dirección:', address);
-                                } else {
-                                    // console.error('No se pudo obtener la dirección.');
-                                }
-                            });
-                        });
+                            // // Agrega evento de arrastre al marcador
+                            // initialMarker.addListener('dragend', () => {
+                            //     const markerPosition = initialMarker.getPosition();
+                            //     this.dataInmuebleAdd.latitud = markerPosition.lat();
+                            //     this.dataInmuebleAdd.longitud = markerPosition.lng();
+
+                            //     // Utiliza la API de Geocodificación para obtener la dirección
+                            //     const geocoder = new google.maps.Geocoder();
+                            //     geocoder.geocode({
+                            //         location: markerPosition
+                            //     }, (results, status) => {
+                            //         if (status === 'OK' && results[0]) {
+                            //             const address = results[0].formatted_address;
+                            //             this.dataInmuebleAdd.direccion = address;
+                            //             // console.log('Nueva Dirección:', address);
+                            //         } else {
+                            //             // console.error('No se pudo obtener la dirección.');
+                            //         }
+                            //     });
+                            // });
+                        }
                     },
                 },
                 watch: {
@@ -2705,7 +2814,7 @@
                     'dataExpe.plazo': 'calcularFechaFinal',
                 },
             });
-        }, false);
-    }
+        }, true);
+    // }
 </script>
 @endsection
