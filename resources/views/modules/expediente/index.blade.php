@@ -146,11 +146,11 @@
         </div>
     </div>
     <div class="nk-block-between mt-3" v-if="ocultar">
-        <h3><strong>Actividades de expediente </strong><span class="text-primary small">Nro. 0000</span><span class="text-primary small" v-text="dataEdit.id"></span></h3>
-        <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" target="_blank" :href="uriExpe+'?contexto='+dataEdit.id"><em class="icon ni ni-printer-fill"></em></a>
+        <h3 v-if="dataEdit"><strong>Actividades de expediente </strong><span class="text-primary small">Nro. 0000</span><span class="text-primary small" v-text="dataEdit.id"></span></h3>
+        <a v-if="dataEdit" class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" target="_blank" :href="uriExpe+'?contexto='+dataEdit.id"><em class="icon ni ni-printer-fill"></em></a>
     </div>
     <div class="nk-block" v-show="ocultar">
-        <div id="accordion-1" class="accordion accordion-s2 mt-3" v-if="dataEdit.get_nueva_vigilancia">
+        <div id="accordion-1" class="accordion accordion-s2 mt-3" v-if="dataEdit">
             <div class="accordion-item" v-for="(item,index) in dataEdit.get_nueva_vigilancia" :key="index">
                 <a href="#" class="accordion-head" data-toggle="collapse" :data-target="'#accordion-item-' + index">
                     <div class="project-title">
@@ -185,24 +185,17 @@
                                                 <button data-toggle="modal" v-on:click="nuevafechadocumentovideovigilancia.IndexActividadAdd = index" data-target="#modalFechaActividadAdd" class="btn btn-primary"><em class="icon ni ni-plus"></em></button>
                                             </div>
 
-                                            <div v-for="(item2,index2) in dataEdit.get_nueva_vigilancia[index].get_nueva_vigilancia_actividad" :key="index2">
-
+                                            <div v-for="(item2,index2) in item.get_nueva_vigilancia_actividad" :key="index2">
                                                 <div class="kanban-title-board mt-3">
                                                     <div class="kanban-title-content">
                                                         <span class="badge badge-pill badge-outline-light text-dark" v-text="item2.id"></span>
                                                         <h6 class="title" v-text="item2.fechahora"></h6>
                                                     </div>
                                                 </div>
-
-
                                                 <section class="mt-2">
                                                     <button class="btn btn-dark mt-2" v-on:click="modalOpen('PersonasEdit_actividad',index,index2)">+ Personas</button>
-                                                    <button class="btn btn-dark mt-2" v-on:click="modalOpen('InmuebleEdit_actividad'index,index2)">+ Inmueble</button>
-                                                    <button class="btn btn-dark mt-2" v-on:click="modalOpen('VehiculoEdit_actividad'index,index2)">+ Vehiculo</button>
-                                                </section>
-
-                                                <section>
-                                                   
+                                                    <button class="btn btn-dark mt-2" v-on:click="modalOpen('InmuebleEdit_actividad',index,index2)">+ Inmueble</button>
+                                                    <button class="btn btn-dark mt-2" v-on:click="modalOpen('VehiculoEdit_actividad',index,index2)">+ Vehiculo</button>
                                                 </section>
 
                                             </div>
@@ -723,7 +716,8 @@
                                             <span v-text="item.paterno"></span>
                                             <span v-text="item.materno"></span>
                                         </td>
-                                        <td><button class="btn btn-primary" v-on:click="BuscarPersonasAddExpediente(item, 'PERSONAS')">Agregar</button></td>
+                                        <td v-if="!cambiarModoActividades"><button class="btn btn-primary" v-on:click="BuscarPersonasAddExpediente(item, 'PERSONAS')">Agregar</button></td>
+                                        <td v-if="cambiarModoActividades"><button class="btn btn-primary" v-on:click="BuscarPersonasAddExpediente(item, 'PERSONAS_dfnva')">Agregar</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1085,6 +1079,7 @@
                                 <input type="text" class="form-control form-control-lg" placeholder="Ingresa el Referencia" v-model="dataInmuebleAdd.referencia" />
                             </div>
                             <div class="col-sm-12 mt-3 mb-5">
+
                                 <div class="form-group">
                                     <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="BuscarPersonas('_get_domicilio')">Buscar</button>
                                     <p v-if="loadingPersonas">Cargando....</p>
@@ -1109,7 +1104,8 @@
                                             <span v-text="item.distrito"></span>,
                                             <span v-text="item.referencia"></span>
                                         </td>
-                                        <td><button class="btn btn-primary" v-on:click="BuscarPersonasAddExpediente(item,'INMUEBLE')">Agregar</button></td>
+                                        <td v-if="!cambiarModoActividades"><button class="btn btn-primary" v-on:click="BuscarPersonasAddExpediente(item, 'INMUEBLE')">Agregar</button></td>
+                                        <td v-if="cambiarModoActividades"><button class="btn btn-primary" v-on:click="BuscarPersonasAddExpediente(item, 'INMUEBLE_dfnva')">Agregar</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1613,6 +1609,167 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalEntidadActividadAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel11" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Entidad de actividad de videovigilancia</h5>
+                </div>
+                <div class="modal-body" v-if="dfnva_persona.id">
+                    <div class="card-inner">
+                        <div class="pricing-body">
+                            <ul class="pricing-features">
+                                <li v-if="dfnva_persona.get_tipo_nacionalidad"><span class="w-50">Nacionalidad</span> : <span class="ml-auto" v-text="dfnva_persona.get_tipo_nacionalidad.descripcion"></span></li>
+                                <li v-if="dfnva_persona.get_tipo_documento_identidad"><span class="w-50">Documento</span> : <span class="ml-auto" v-text="dfnva_persona.get_tipo_documento_identidad.descripcion"></span></li>
+                                <li><span class="w-50">Nombres</span> : <span class="ml-auto" v-text="dfnva_persona.nombres"></span></li>
+                                <li><span class="w-50">Apellido Paterno</span> : <span class="ml-auto" v-text="dfnva_persona.paterno"></span></li>
+                                <li><span class="w-50">Apellido Materno</span> : <span class="ml-auto" v-text="dfnva_persona.materno"></span></li>
+                                <li><span class="w-50">Sexo </span> : <span class="ml-auto" v-text="dfnva_persona.sexo"></span></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-detallex" v-model="dfnva_persona.detalle"><label class="form-label-outlined" for="outlined-detallex">Detalle</label></div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div v-for="(item, index) in dfnva_persona.get_nueva_vigilancia_archivo" :key="index">
+                                <div class="card card-preview ">
+                                    <!-- <div class="input-group-append pointer d-flex justify-content-end">
+                                        <em class="icon ni ni-trash-alt" @click="removeInput('REFERENCIA',index)"></em>
+                                    </div> -->
+                                    <div class="card-inner">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="form-control-wrap">
+                                                    <select class="form-control" data-ui="xl" id="outlined-select2" v-model="item.ta_id">
+                                                        <option v-for="item2 in data_tipo_contenido" :key="item2.id" :value="item2.id" v-text="item2.descripcion"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="form-group">
+                                                <div class="form-control-wrap" v-if="!item.pdf">
+                                                    <input type="file" class="form-control" @change="handleFileChange(index,$event,'_NEWFILE_ENTIDAD')">
+                                                </div>
+                                                <p v-if="item.pdf" v-text="item.pdfName"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-dark mt-2" @click="addInput('ARCHIVOS_DIGITALES_ENTIDADES')">Agregar Archivos</button>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-group">
+                                <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="GrabarActividad('_DisposicionFiscalNuevaVigilanciaEntidad')">Registrar</button>
+                                <p v-if="loadingPersonas">Cargando....</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-body" v-if="dfnva_vehiculo.id">
+                    <div class="card-inner">
+                        <div class="pricing-body">
+                            <ul class="pricing-features">
+                                <li><span class="w-50">placa</span> : <span class="ml-auto" v-text="dfnva_vehiculo.placa"></span></li>
+                                <li><span class="w-50">color</span> : <span class="ml-auto" v-text="dfnva_vehiculo.color"></span></li>
+                                <li><span class="w-50">marca</span> : <span class="ml-auto" v-text="dfnva_vehiculo.marca"></span></li>
+                                <li><span class="w-50">modelo </span> : <span class="ml-auto" v-text="dfnva_vehiculo.modelo"></span></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-detallex" v-model="dfnva_vehiculo.detalle"><label class="form-label-outlined" for="outlined-detallex">Detalle</label></div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div v-for="(item, index) in dfnva_vehiculo.get_nueva_vigilancia_archivo" :key="index">
+                                <div class="card card-preview ">
+                                    <div class="card-inner">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="form-control-wrap">
+                                                    <select class="form-control" data-ui="xl" id="outlined-select2" v-model="item.ta_id">
+                                                        <option v-for="item2 in data_tipo_contenido" :key="item2.id" :value="item2.id" v-text="item2.descripcion"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="form-group">
+                                                <div class="form-control-wrap" v-if="!item.pdf">
+                                                    <input type="file" class="form-control" @change="handleFileChange(index,$event,'_NEWFILE_ENTIDA_VEHICULO')">
+                                                </div>
+                                                <p v-if="item.pdf" v-text="item.pdfName"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-dark mt-2" @click="addInput('ARCHIVOS_DIGITALES_ENTIDADES_vehiculo')">Agregar Archivos</button>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-group">
+                                <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="GrabarActividad('_DisposicionFiscalNuevaVigilanciaEntidad')">Registrar</button>
+                                <p v-if="loadingPersonas">Cargando....</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body" v-if="dfnva_inmueble.id">
+                    <div class="card-inner">
+                        <div class="pricing-body">
+                            <ul class="pricing-features">
+                                <li v-if="dfnva_inmueble.get_tipo_inmueble"><span class="w-50">Tipo</span> : <span class="ml-auto" v-text="dfnva_inmueble.get_tipo_inmueble.descripcion"></span></li>
+                                <li><span class="w-50">direccion</span> : <span class="ml-auto" v-text="dfnva_inmueble.direccion"></span></li>
+                                <li><span class="w-50">departamento</span> : <span class="ml-auto" v-text="dfnva_inmueble.departamento"></span></li>
+                                <li><span class="w-50">provincia</span> : <span class="ml-auto" v-text="dfnva_inmueble.provincia"></span></li>
+                                <li><span class="w-50">distrito </span> : <span class="ml-auto" v-text="dfnva_inmueble.distrito"></span></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-detallex" v-model="dfnva_inmueble.detalle"><label class="form-label-outlined" for="outlined-detallex">Detalle</label></div>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div v-for="(item, index) in dfnva_inmueble.get_nueva_vigilancia_archivo" :key="index">
+                                <div class="card card-preview ">
+                                    <div class="card-inner">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="form-control-wrap">
+                                                    <select class="form-control" data-ui="xl" id="outlined-select2" v-model="item.ta_id">
+                                                        <option v-for="item2 in data_tipo_contenido" :key="item2.id" :value="item2.id" v-text="item2.descripcion"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="form-group">
+                                                <div class="form-control-wrap" v-if="!item.pdf">
+                                                    <input type="file" class="form-control" @change="handleFileChange(index,$event,'_NEWFILE_ENTIDA_INMUEBLE')">
+                                                </div>
+                                                <p v-if="item.pdf" v-text="item.pdfName"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-dark mt-2" @click="addInput('ARCHIVOS_DIGITALES_ENTIDADES_inmueble')">Agregar Archivos</button>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-group">
+                                <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="GrabarActividad('_DisposicionFiscalNuevaVigilanciaEntidad')">Registrar</button>
+                                <p v-if="loadingPersonas">Cargando....</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -1628,9 +1785,9 @@
     // };
     // document.head.appendChild(script);
 
-    // initVueSIVIPOL();
+    initVueSIVIPOL();
 
-    // function initVueSIVIPOL() {
+    function initVueSIVIPOL() {
         document.addEventListener('DOMContentLoaded', async function() {
             Vue.use(VueTables.ClientTable);
             const app = new Vue({
@@ -1656,6 +1813,9 @@
                         index1: null,
                         index2: null,
                     },
+                    dfnva_persona: {},
+                    dfnva_inmueble: {},
+                    dfnva_vehiculo: {},
                     dataExpe: {
                         fecha_disposicion: "",
                         fiscal_responsable_id: 0,
@@ -1849,10 +2009,15 @@
                     this.Get();
                     this.initMap();
                     setTimeout(() => {
-                        this.dataEdit = this.data.tableData[0];
-                        this.ocultar = true;
-                    }, 1500);
+                        console.log(this.data.tableData)
+                        setTimeout(() => {
+                            this.dataEdit = this.data.tableData[1];
+                            // console.log(this.data.tableData)
+                            console.log(this.dataEdit);
+                            this.ocultar = true;
 
+                        }, 1500);
+                    }, 1500);
                 },
                 methods: {
                     calcularFechaFinal() {
@@ -1867,9 +2032,7 @@
                             // Devolver la fecha formateada como string
                             // return fechaFinal.toISOString().split('T')[0];
                         }
-
                         return 'No hay suficientes datos para calcular la fecha final';
-
                     },
                     GrabarActividad(TYPE) {
                         this.loadingPersonas = true;
@@ -1886,6 +2049,27 @@
                             const DFNV = this.dataEdit.get_nueva_vigilancia[this.nuevafechadocumentovideovigilancia.IndexActividadAdd];
                             formData.append('dfnv_id', DFNV.id);
                             formData.append('fechahora', this.nuevafechadocumentovideovigilancia.FechaActividadAdd);
+                        }
+                        if (TYPE == "_DisposicionFiscalNuevaVigilanciaEntidad") {
+                            const index1 = this.disposicion_fiscal_nueva_vigilancia_actividads.index1;
+                            const index2 = this.disposicion_fiscal_nueva_vigilancia_actividads.index2;
+                            formData.append('dfnva_id', this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].id);
+                            if (this.dfnva_persona.nacionalidad_id == 1) {
+                                formData.append('entidads_id', 1);
+                            } else {
+                                formData.append('entidads_id', 2);
+                            }
+                            formData.append('codigo_relacion', this.dfnva_persona.id);
+                            formData.append('detalle', this.dfnva_persona.detalle);
+
+                            for (let i = 0; i < this.dfnva_persona.get_nueva_vigilancia_archivo.length; i++) {
+                                if (this.dfnva_persona.get_nueva_vigilancia_archivo[i]) {
+                                    formData.append(`get_nueva_vigilancia_archivo_ta_id[${i}]`, this.dfnva_persona.get_nueva_vigilancia_archivo[i].ta_id);
+                                    formData.append(`get_nueva_vigilancia_archivo_file[${i}]`, this.dfnva_persona.get_nueva_vigilancia_archivo[i].pdf);
+                                }
+                            }
+
+
                         }
                         axios.post(URL_REGISTRAR, formData)
                             .then(response => {
@@ -1905,6 +2089,19 @@
                                         // console.log(this.dataEdit.get_nueva_vigilancia[this.nuevafechadocumentovideovigilancia.IndexActividadAdd]);
                                         this.dataEdit.get_nueva_vigilancia[this.nuevafechadocumentovideovigilancia.IndexActividadAdd].get_nueva_vigilancia_actividad.push(response.data.data);
                                     }
+                                    if (TYPE == "_DisposicionFiscalNuevaVigilanciaEntidad") {
+                                        // const index1 = this.disposicion_fiscal_nueva_vigilancia_actividads.index1;
+                                        // const index2 = this.disposicion_fiscal_nueva_vigilancia_actividads.index2;
+                                        // formData.append('dfnva_id', this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].);
+                                        // if(this.dfnva_persona.nacionalidad_id == 1){
+                                        //     formData.append('entidads_id', 1);
+                                        // }else{
+                                        //     formData.append('entidads_id', 2);
+                                        // }
+                                        // formData.append('codigo_relacion', this.dfnva_persona.documento_id);
+                                        // formData.append('detalle', this.dfnva_persona.detalle);
+                                    }
+
                                 }
                             })
                             .catch(error => {
@@ -1915,9 +2112,10 @@
                                     confirmButtonText: '¡Entendido!',
                                 });
                             }).finally(() => {
-                                this.loadingModalTipoVideoVigilancia = false;
+                                this.loadingPersonas = false;
                                 $('#modalFechaContenidoAdd').modal('hide');
                                 $('#modalFechaActividadAdd').modal('hide');
+                                $('#modalEntidadActividadAdd').modal('hide');
                             });
                     },
                     Grabar() {
@@ -2184,8 +2382,21 @@
                                         confirmButtonText: '¡Entendido!',
                                     });
                                 } else {
-                                    this.dataPersonas.push(response.data.data);
-                                    console.log(this.dataPersonas)
+                                    if (this.cambiarModoActividades) {
+                                        this.dfnva_persona = {
+                                            ...response.data.data,
+                                            detalle: "",
+                                            get_nueva_vigilancia_archivo: []
+                                        };
+                                        $('#modalPersonas').modal('hide');
+                                        $('#modalEntidadActividadAdd').modal('show');
+                                    } else {
+                                        this.dataPersonas.push(response.data.data);
+                                        console.log(this.dataPersonas)
+                                        $('#modalPersonas').modal('hide');
+                                        $('#modalADD').modal('show');
+                                    }
+
                                 }
                             })
                             .catch(error => {
@@ -2197,8 +2408,7 @@
                                 });
                             }).finally(() => {
                                 this.loadingPersonas = false;
-                                $('#modalPersonas').modal('hide');
-                                $('#modalADD').modal('show');
+
                             });
                     },
                     GrabarInmueble() {
@@ -2229,8 +2439,17 @@
                                         confirmButtonText: '¡Entendido!',
                                     });
                                 } else {
-                                    this.dataInmueble.push(response.data.data);
-                                    console.log(this.dataInmueble)
+                                    if (this.cambiarModoActividades) {
+                                        this.dfnva_inmueble = response.data.data;
+                                        $('#modalInmueble').modal('hide');
+                                        $('#modalEntidadActividadAdd').modal('show');
+                                        this.loadingSarchInmueble = false;
+                                        return true;
+                                    } else {
+                                        this.dataInmueble.push(response.data.data);
+                                        console.log(this.dataInmueble)
+                                    }
+
                                 }
                             })
                             .catch(error => {
@@ -2242,11 +2461,17 @@
                                 });
                             }).finally(() => {
                                 this.loadingSarchInmueble = false;
-                                $('#modalInmueble').modal('hide');
-                                $('#modalADD').modal('show');
+                                if (!this.cambiarModoActividades) {
+                                    $('#modalInmueble').modal('hide');
+                                    $('#modalADD').modal('show');
+                                }
                             });
                     },
                     GrabarVehiculo(TIPO = null) {
+                        this.dfnva_persona= {};
+                        this.dfnva_inmueble= {};
+                        this.dfnva_vehiculo= {};
+
                         this.loadingSarchInmueble = true;
                         const formData = new FormData();
                         formData.append('dd', "trae");
@@ -2269,8 +2494,16 @@
                                         confirmButtonText: '¡Entendido!',
                                     });
                                 } else {
-                                    this.dataVehiculo.push(response.data.data);
-                                    console.log(this.dataVehiculo)
+                                    if (this.cambiarModoActividades) {
+                                        this.dfnva_vehiculo = response.data.data;
+                                        $('#modalVehiculo').modal('hide');
+                                        $('#modalEntidadActividadAdd').modal('show');
+                                        this.loadingSarchInmueble = false;
+                                        return true;
+                                    } else {
+                                        this.dataVehiculo.push(response.data.data);
+                                        console.log(this.dataVehiculo)
+                                    }
                                 }
                             })
                             .catch(error => {
@@ -2282,8 +2515,10 @@
                                 });
                             }).finally(() => {
                                 this.loadingSarchInmueble = false;
-                                $('#modalVehiculo').modal('hide');
-                                $('#modalADD').modal('show');
+                                if (!this.cambiarModoActividades) {
+                                    $('#modalVehiculo').modal('hide');
+                                    $('#modalADD').modal('show');
+                                }
                             });
 
                     },
@@ -2366,7 +2601,23 @@
                                             if (TIPO == "_get_persona_nacionalidad_nombres") {
                                                 this.dataPersonasSearch = response.data.data;
                                             } else if (TIPO == "_get_persona_extranjero" || TIPO == "_get_persona_peru") {
-                                                this.dataPersonas.push(response.data.data);
+                                                this.dfnva_persona = {
+                                                    ...response.data.data,
+                                                    detalle: "",
+                                                    get_nueva_vigilancia_archivo: []
+                                                };
+                                                $('#modalPersonas').modal('hide');
+                                                $('#modalEntidadActividadAdd').modal('show');
+
+                                                // const index1 = this.disposicion_fiscal_nueva_vigilancia_actividads.index1;
+                                                // const index2 = this.disposicion_fiscal_nueva_vigilancia_actividads.index2;
+                                                // if(this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].dataPersonas){
+                                                //     this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].dataPersonas.push({
+                                                //         ...response.data.data,
+                                                //         get_nueva_vigilancia_archivo: []
+                                                //     });
+                                                // }else{
+
                                             } else if (TIPO == "_get_domicilio") {
                                                 this.dataInmuebleSearch = response.data.data;
                                             }
@@ -2404,6 +2655,40 @@
                             });
                     },
                     BuscarPersonasAddExpediente(DATA, TIPO) {
+                        this.dfnva_persona = {};
+                        this.dfnva_inmueble = {};
+                        this.dfnva_vehiculo = {};
+                        if (TIPO == "PERSONAS_dfnva") {
+                            this.dfnva_persona = {
+                                ...DATA,
+                                detalle: "",
+                                get_nueva_vigilancia_archivo: []
+                            };
+                            $('#modalPersonas').modal('hide');
+                            $('#modalEntidadActividadAdd').modal('show');
+                            return true;
+                        }
+                        if (TIPO == "INMUEBLE_dfnva") {
+                            this.dfnva_inmueble = {
+                                ...DATA,
+                                detalle: "",
+                                get_nueva_vigilancia_archivo: []
+                            };
+                            $('#modalInmueble').modal('hide');
+                            $('#modalEntidadActividadAdd').modal('show');
+                            return true;
+                        }
+                        if (TIPO == "VEHICULO_dfnva") {
+                            this.dfnva_vehiculo = {
+                                ...DATA,
+                                detalle: "",
+                                get_nueva_vigilancia_archivo: []
+                            };
+                            $('#modalVehiculo').modal('hide');
+                            $('#modalEntidadActividadAdd').modal('show');
+                            return true;
+                        }
+
 
                         if (TIPO == "PERSONAS") {
                             this.dataPersonas.push(DATA);
@@ -2466,6 +2751,7 @@
                                     this.data_grado = response.data.data_grado;
                                     this.data_unidad = response.data.data_unidad;
                                     this.data_policia = response.data.data_policia;
+                                    this.data_tipo_contenido = response.data.data_tipo_contenido;
 
                                 }
                             })
@@ -2622,6 +2908,7 @@
                             this.cambiarModoActividades = true;
                             $('#modalPersonas').modal('show');
                         } else if (TIPO == "InmuebleEdit_actividad") {
+                            console.log("entro qui")
                             this.disposicion_fiscal_nueva_vigilancia_actividads.index1 = INDEX1;
                             this.disposicion_fiscal_nueva_vigilancia_actividads.index2 = INDEX2;
                             this.cambiarModoActividades = true;
@@ -2652,6 +2939,44 @@
                                 pdfName: "",
                                 observaciones: ""
                             });
+                        } else if (TIPO == "ARCHIVOS_DIGITALES_ENTIDADES") {
+                            this.dfnva_persona.get_nueva_vigilancia_archivo.push({
+                                ta_id: 1,
+                                pdf: "",
+                                pdfName: "",
+                            });
+                        } else if (TIPO == "ARCHIVOS_DIGITALES_ENTIDADES_vehiculo") {
+                            if(!this.dfnva_vehiculo.get_nueva_vigilancia_archivo){
+                                this.dfnva_vehiculo.get_nueva_vigilancia_archivo = [{
+                                    ta_id: 1,
+                                    pdf: "",
+                                    pdfName: "",
+                                }];
+                            }else{
+                                this.dfnva_vehiculo.get_nueva_vigilancia_archivo.push({
+                                    ta_id: 1,
+                                    pdf: "",
+                                    pdfName: "",
+                                });
+                            }
+                        } else if (TIPO == "ARCHIVOS_DIGITALES_ENTIDADES_inmueble") {
+                            console.log("muebleeee")
+                            console.log(this.dfnva_inmueble.get_nueva_vigilancia_archivo)
+                            if(this.dfnva_inmueble.get_nueva_vigilancia_archivo){
+                                this.dfnva_inmueble.get_nueva_vigilancia_archivo.push({
+                                    ta_id: 1,
+                                    pdf: "",
+                                    pdfName: "",
+                                });
+                            }else{
+                                this.dfnva_inmueble.get_nueva_vigilancia_archivo = [{
+                                    ta_id: 1,
+                                    pdf: "",
+                                    pdfName: "",
+                                }];
+                             
+                            }
+                          
                         }
                     },
                     removeInput(TIPO, index) {
@@ -2669,6 +2994,15 @@
                                 this.nuevafechadocumentovideovigilancia.pdfName = file.name;
                                 this.nuevafechadocumentovideovigilancia.pdf = file;
                             }
+                        } else if (ISTO == "_NEWFILE_ENTIDAD") {
+                            this.dfnva_persona.get_nueva_vigilancia_archivo[index].pdfName = file.name;
+                            this.dfnva_persona.get_nueva_vigilancia_archivo[index].pdf = file;
+                        } else if (ISTO == "_NEWFILE_ENTIDA_INMUEBLE") {
+                            this.dfnva_inmueble.get_nueva_vigilancia_archivo[index].pdfName = file.name;
+                            this.dfnva_inmueble.get_nueva_vigilancia_archivo[index].pdf = file;
+                        } else if (ISTO == "_NEWFILE_ENTIDA_VEHICULO") {
+                            this.dfnva_vehiculo.get_nueva_vigilancia_archivo[index].pdfName = file.name;
+                            this.dfnva_vehiculo.get_nueva_vigilancia_archivo[index].pdf = file;
                         } else {
                             // Verifica si el archivo es un PDF
                             if (file && file.type === "application/pdf") {
@@ -2815,6 +3149,6 @@
                 },
             });
         }, true);
-    // }
+    }
 </script>
 @endsection
