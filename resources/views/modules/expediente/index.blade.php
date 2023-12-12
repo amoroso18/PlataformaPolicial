@@ -165,7 +165,7 @@
             <div class="accordion-item" v-for="(item,index) in dataEdit.get_nueva_vigilancia" :key="index">
                 <a href="#" class="accordion-head" data-toggle="collapse" :data-target="'#accordion-item-' + index">
                     <div class="project-title">
-                        <div class="user-avatar sq bg-purple"><span v-text="item.id"></span></div>
+                        <div class="user-avatar sq bg-purple"><span v-text="index+1"></span></div>
                         <div class="project-info">
                             <h6 class="title" v-text="item.fechaDocumento"></h6>
                         </div>
@@ -197,20 +197,46 @@
                                             </div>
 
                                             <div v-for="(item2,index2) in item.get_nueva_vigilancia_actividad" :key="index2">
-                                                <div class="kanban-title-board mt-3">
-                                                    <div class="kanban-title-content">
-                                                        <span class="badge badge-pill badge-outline-light text-dark" v-text="item2.id"></span>
-                                                        <h6 class="title" v-text="item2.fechahora"></h6>
-                                                    </div>
-                                                </div>
-                                                <section class="mt-2">
-                                                    <button class="btn btn-dark mt-2" v-on:click="modalOpen('PersonasEdit_actividad',index,index2)">+ Personas</button>
-                                                    <button class="btn btn-dark mt-2" v-on:click="modalOpen('InmuebleEdit_actividad',index,index2)">+ Inmueble</button>
-                                                    <button class="btn btn-dark mt-2" v-on:click="modalOpen('VehiculoEdit_actividad',index,index2)">+ Vehiculo</button>
+                                                <section class="mb-2 mt-3">
+                                                    
+                                                    <h6 class="title" ><span class="badge badge-pill badge-outline-light text-dark" v-text="index2+1"></span> <span v-text="item2.fechahora"></span>  
+                                                        <button class="btn btn-dark btn-sm mt-2 ml-2" v-on:click="modalOpen('PersonasEdit_actividad',index,index2)">+ Personas</button>
+                                                        <button class="btn btn-dark btn-sm mt-2 ml-2" v-on:click="modalOpen('InmuebleEdit_actividad',index,index2)">+ Inmueble</button>
+                                                        <button class="btn btn-dark btn-sm mt-2 ml-2" v-on:click="modalOpen('VehiculoEdit_actividad',index,index2)">+ Vehiculo</button>  
+                                                    </h6>
                                                 </section>
+                                                <section class="mt-3 mb-3 ml-5" v-if="item2.get_nueva_vigilancia_entidad.length > 0">
 
+                                                    <table class="table preview-reference">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th ></th>
+                                                                <th class="overline-title w-300px">Entidad</th>
+                                                                <th class="overline-title">Detalle</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr  class="table" v-for="(item3,index3) in item2.get_nueva_vigilancia_entidad" :key="index3">
+                                                                <td scope="row" v-text="index3+1"></td>
+                                                                <td v-on:click="VerEntidadActividad(item3)">
+                                                                    <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" v-if="item3.entidads_id == 1 || item3.entidads_id == 2">
+                                                                        <em  class="icon ni ni-user-fill"></em> <span class="mr-2" v-if="item3.get_tipo_entidad" v-text="item3.get_tipo_entidad.descripcion"></span>
+                                                                    </a>
+
+                                                                    <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" v-if="item3.entidads_id == 3">
+                                                                        <em  class="icon ni ni-truck"></em> <span class="mr-2" v-if="item3.get_tipo_entidad" v-text="item3.get_tipo_entidad.descripcion"></span>
+                                                                    </a>
+
+                                                                    <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" v-if="item3.entidads_id == 4">
+                                                                        <em class="icon ni ni-home"></em> <span class="mr-2" v-if="item3.get_tipo_entidad" v-text="item3.get_tipo_entidad.descripcion"></span>
+                                                                    </a>
+                                                                </td>
+                                                                <td v-text="item3.detalle"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </section>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -1639,7 +1665,12 @@
                             </ul>
                         </div>
                         <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-detallex" v-model="dfnva_persona.detalle"><label class="form-label-outlined" for="outlined-detallex">Detalle</label></div>
+                            <div class="form-group">
+                                <label class="form-label" for="default-01">Detalle</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" v-model="dfnva_persona.detalle">
+                                </div>
+                            </div>
                         </div>
                         <div class="col-sm-12 mt-3">
                             <div v-for="(item, index) in dfnva_persona.get_nueva_vigilancia_archivo" :key="index">
@@ -1690,7 +1721,12 @@
                             </ul>
                         </div>
                         <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-detallex" v-model="dfnva_vehiculo.detalle"><label class="form-label-outlined" for="outlined-detallex">Detalle</label></div>
+                            <div class="form-group">
+                                <label class="form-label" for="default-01">Detalle</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" v-model="dfnva_vehiculo.detalle">
+                                </div>
+                            </div>
                         </div>
                         <div class="col-sm-12 mt-3">
                             <div v-for="(item, index) in dfnva_vehiculo.get_nueva_vigilancia_archivo" :key="index">
@@ -1738,7 +1774,12 @@
                             </ul>
                         </div>
                         <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-detallex" v-model="dfnva_inmueble.detalle"><label class="form-label-outlined" for="outlined-detallex">Detalle</label></div>
+                            <div class="form-group">
+                                <label class="form-label" for="default-01">Detalle</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" v-model="dfnva_inmueble.detalle">
+                                </div>
+                            </div>
                         </div>
                         <div class="col-sm-12 mt-3">
                             <div v-for="(item, index) in dfnva_inmueble.get_nueva_vigilancia_archivo" :key="index">
@@ -1781,22 +1822,112 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalVerEntidadActividad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel11" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Entidad de actividad de videovigilancia</h5>
+                </div>
+                <div class="modal-body" >
+                    <div class="card-inner">
+                        <div class="pricing-body">
+                            <ul class="pricing-features" v-if="dfnva_persona.id">
+                                <li>
+                                <div class="row g-gs">
+                                        <div class="col-lg-6">
+                                        <img :style="{ width: '100%' }" v-bind:src="'data:image/jpeg;base64,' + dfnva_persona.foto" alt="Imagen">
+                                        </div>
+                                        <div class="col-lg-6">
+                                        <img :style="{ width: '100%' }" v-bind:src="'data:image/jpeg;base64,' + dfnva_persona.firma" alt="Imagen">  
+                                        </div>
+                                    </div>
+                                </li>
+                                <li v-if="dfnva_persona.get_tipo_nacionalidad"><span class="w-50">Nacionalidad</span> : <span class="ml-auto" v-text="dfnva_persona.get_tipo_nacionalidad.descripcion"></span></li>
+                                <li v-if="dfnva_persona.get_tipo_documento_identidad"><span class="w-50">Identificación</span> : <span class="ml-auto" v-text="dfnva_persona.get_tipo_documento_identidad.descripcion"></span></li>
+                                <li><span class="w-50">Documento</span> : <span class="ml-auto" v-text="dfnva_persona.documento"></span></li>
+                                <li><span class="w-50">Nombres</span> : <span class="ml-auto" v-text="dfnva_persona.nombres"></span></li>
+                                <li><span class="w-50">Apellido Paterno</span> : <span class="ml-auto" v-text="dfnva_persona.paterno"></span></li>
+                                <li><span class="w-50">Apellido Materno</span> : <span class="ml-auto" v-text="dfnva_persona.materno"></span></li>
+                                <li><span class="w-50">Sexo </span> : <span class="ml-auto" v-text="dfnva_persona.sexo"></span></li>
+
+                                <li><span class="w-50">estado_civil </span> : <span class="ml-auto" v-text="dfnva_persona.estado_civil"></span></li>
+                                <li><span class="w-50">fecha_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.fecha_nacimiento"></span></li>
+                                <li><span class="w-50">ubigeo_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.ubigeo_nacimiento"></span></li>
+                                <li><span class="w-50">departamento_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.departamento_nacimiento"></span></li>
+                                <li><span class="w-50">provincia_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.provincia_nacimiento"></span></li>
+                                <li><span class="w-50">distrito_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.distrito_nacimiento"></span></li>
+                                <li><span class="w-50">lugar_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.lugar_nacimiento"></span></li>
+                                <li><span class="w-50">ubigeo_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.ubigeo_domicilio"></span></li>
+
+                                <li><span class="w-50">departamento_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.departamento_domicilio"></span></li>
+                                <li><span class="w-50">provincia_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.provincia_domicilio"></span></li>
+                                <li><span class="w-50">distrito_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.distrito_domicilio"></span></li>
+                                <li><span class="w-50">lugar_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.lugar_domicilio"></span></li>
+                               
+
+                            </ul>
+                            <ul class="pricing-features" v-if="dfnva_vehiculo.id">
+                                <li><span class="w-50">placa</span> : <span class="ml-auto" v-text="dfnva_vehiculo.placa"></span></li>
+                                <li><span class="w-50">color</span> : <span class="ml-auto" v-text="dfnva_vehiculo.color"></span></li>
+                                <li><span class="w-50">marca</span> : <span class="ml-auto" v-text="dfnva_vehiculo.marca"></span></li>
+                                <li><span class="w-50">modelo </span> : <span class="ml-auto" v-text="dfnva_vehiculo.modelo"></span></li>
+                                <li><span class="w-50">serie</span> : <span class="ml-auto" v-text="dfnva_vehiculo.serie"></span></li>
+                                <li><span class="w-50">numero_motor</span> : <span class="ml-auto" v-text="dfnva_vehiculo.numero_motor"></span></li>
+                                <li><span class="w-50">año</span> : <span class="ml-auto" v-text="dfnva_vehiculo.ano"></span></li>
+                                <li><span class="w-50">tipo_carroceria </span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_carroceria"></span></li>
+                                <li><span class="w-50">vin</span> : <span class="ml-auto" v-text="dfnva_vehiculo.vin"></span></li>
+                                <li><span class="w-50">tipo_motor</span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_motor"></span></li>
+                                <li><span class="w-50">cilindrada_motor</span> : <span class="ml-auto" v-text="dfnva_vehiculo.cilindrada_motor"></span></li>
+                                <li><span class="w-50">tipo_combustible </span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_combustible"></span></li>
+                                <li><span class="w-50">tipo_transmision</span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_transmision"></span></li>
+                                <li><span class="w-50">tipo_traccion</span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_traccion"></span></li>
+                                <li><span class="w-50">kilometraje</span> : <span class="ml-auto" v-text="dfnva_vehiculo.kilometraje"></span></li>
+                                <li><span class="w-50">estado_vehiculo </span> : <span class="ml-auto" v-text="dfnva_vehiculo.estado_vehiculo"></span></li>
+                            </ul>
+                            <ul class="pricing-features" v-if="dfnva_inmueble.id">
+                                <li v-if="dfnva_inmueble.get_tipo_inmueble"><span class="w-50">Tipo</span> : <span class="ml-auto" v-text="dfnva_inmueble.get_tipo_inmueble.descripcion"></span></li>
+                                <li><span class="w-50">direccion</span> : <span class="ml-auto" v-text="dfnva_inmueble.direccion"></span></li>
+                                <li><span class="w-50">departamento</span> : <span class="ml-auto" v-text="dfnva_inmueble.departamento"></span></li>
+                                <li><span class="w-50">provincia</span> : <span class="ml-auto" v-text="dfnva_inmueble.provincia"></span></li>
+                                <li><span class="w-50">distrito </span> : <span class="ml-auto" v-text="dfnva_inmueble.distrito"></span></li>
+
+                                <li><span class="w-50">referencia</span> : <span class="ml-auto" v-text="dfnva_inmueble.referencia"></span></li>
+                                <li><span class="w-50">color_exterior</span> : <span class="ml-auto" v-text="dfnva_inmueble.color_exterior"></span></li>
+                                <li><span class="w-50">caracteristicas_especiales </span> : <span class="ml-auto" v-text="dfnva_inmueble.caracteristicas_especiales"></span></li>
+                                <li><span class="w-50">estado_conservacion</span> : <span class="ml-auto" v-text="dfnva_inmueble.estado_conservacion"></span></li>
+                                <li><span class="w-50">latitud</span> : <span class="ml-auto" v-text="dfnva_inmueble.latitud"></span></li>
+                                <li><span class="w-50">longitud</span> : <span class="ml-auto" v-text="dfnva_inmueble.longitud"></span></li>
+                                <li><span class="w-50">observaciones </span> : <span class="ml-auto" v-text="dfnva_inmueble.observaciones"></span></li>
+
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+               
+               
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
     const URL_REGISTRAR = "{{route('ExpedienteWS')}}";
     const URL_EXPEDIENTE = "{{route('expediente_reporte')}}";
 
-    // const script = document.createElement('script');
-    // script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDYU0WytTK6kCsmp2NFdOWAMQ8yE7tacQg&libraries=places`;
-    // script.async = true;
-    // script.defer = true;
-    // script.onload = function() {
-    //     initVueSIVIPOL();
-    // };
-    // document.head.appendChild(script);
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDYU0WytTK6kCsmp2NFdOWAMQ8yE7tacQg&libraries=places`;
+    script.async = true;
+    script.defer = true;
+    script.onload = function() {
+        initVueSIVIPOL();
+    };
+    document.head.appendChild(script);
 
-    initVueSIVIPOL();
+    // initVueSIVIPOL();
 
     function initVueSIVIPOL() {
         document.addEventListener('DOMContentLoaded', async function() {
@@ -1827,6 +1958,7 @@
                     dfnva_persona: {},
                     dfnva_inmueble: {},
                     dfnva_vehiculo: {},
+                    dfnva_files: [],
                     dataExpe: {
                         fecha_disposicion: "",
                         fiscal_responsable_id: 0,
@@ -2019,16 +2151,16 @@
                 mounted() {
                     this.Get();
                     this.initMap();
-                    setTimeout(() => {
-                        console.log(this.data.tableData)
-                        setTimeout(() => {
-                            this.dataEdit = this.data.tableData[1];
-                            // console.log(this.data.tableData)
-                            console.log(this.dataEdit);
-                            this.ocultar = true;
+                    // setTimeout(() => {
+                    //     console.log(this.data.tableData)
+                    //     setTimeout(() => {
+                    //         this.dataEdit = this.data.tableData[1];
+                    //         // console.log(this.data.tableData)
+                    //         console.log(this.dataEdit);
+                    //         this.ocultar = true;
 
-                        }, 1500);
-                    }, 1500);
+                    //     }, 1500);
+                    // }, 1500);
                 },
                 methods: {
                     calcularFechaFinal() {
@@ -2044,6 +2176,49 @@
                             // return fechaFinal.toISOString().split('T')[0];
                         }
                         return 'No hay suficientes datos para calcular la fecha final';
+                    },
+                    VerEntidadActividad(isDATA){
+                        this.dfnva_persona = {};
+                        this.dfnva_inmueble = {};
+                        this.dfnva_vehiculo = {};
+                        this.loadingModalNuevoFiscal = true;
+                        const formData = new FormData();
+                        formData.append('type', "_VerEntidadArchivos");
+                        formData.append('ID_CODIGO_RELACION', isDATA.codigo_relacion);
+                        formData.append('ID_ENTIDAD', isDATA.entidads_id);
+                        axios.post(URL_REGISTRAR, formData)
+                            .then(response => {
+                                if (response.data.error) {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: `${JSON.stringify(response.data.error)}`,
+                                        icon: 'info',
+                                        confirmButtonText: '¡Entendido!',
+                                    });
+                                } else {
+                                    if(isDATA.entidads_id == 1 || isDATA.entidads_id == 2 ){
+                                        this.dfnva_persona = response.data.data;
+                                    }else if(isDATA.entidads_id == 3){
+                                        this.dfnva_vehiculo = response.data.data;
+                                    }else if(isDATA.entidads_id == 4){
+                                        this.dfnva_inmueble = response.data.data;
+
+                                    }
+                                    this.dfnva_files = response.data.files;
+                                }
+                            })
+                            .catch(error => {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: `Error al realizar la solicitud: ${JSON.stringify(error)}`,
+                                    icon: 'error',
+                                    confirmButtonText: '¡Entendido!',
+                                });
+                            }).finally(() => {
+                                this.loadingModalNuevoFiscal = false;
+                                $('#modalVerEntidadActividad').modal('show');
+                            });
+                        
                     },
                     GrabarActividad(TYPE) {
                         this.loadingPersonas = true;
@@ -2065,20 +2240,48 @@
                             const index1 = this.disposicion_fiscal_nueva_vigilancia_actividads.index1;
                             const index2 = this.disposicion_fiscal_nueva_vigilancia_actividads.index2;
                             formData.append('dfnva_id', this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].id);
-                            if (this.dfnva_persona.nacionalidad_id == 1) {
-                                formData.append('entidads_id', 1);
-                            } else {
-                                formData.append('entidads_id', 2);
-                            }
-                            formData.append('codigo_relacion', this.dfnva_persona.id);
-                            formData.append('detalle', this.dfnva_persona.detalle);
 
-                            for (let i = 0; i < this.dfnva_persona.get_nueva_vigilancia_archivo.length; i++) {
-                                if (this.dfnva_persona.get_nueva_vigilancia_archivo[i]) {
-                                    formData.append(`get_nueva_vigilancia_archivo_ta_id[${i}]`, this.dfnva_persona.get_nueva_vigilancia_archivo[i].ta_id);
-                                    formData.append(`get_nueva_vigilancia_archivo_file[${i}]`, this.dfnva_persona.get_nueva_vigilancia_archivo[i].pdf);
+
+                            if (this.dfnva_persona.id) {
+                                if (this.dfnva_persona.nacionalidad_id == 1) {
+                                    formData.append('entidads_id', 1);
+                                } else {
+                                    formData.append('entidads_id', 2);
+                                }
+                                formData.append('codigo_relacion', this.dfnva_persona.id);
+                                formData.append('detalle', this.dfnva_persona.detalle);
+                                for (let i = 0; i < this.dfnva_persona.get_nueva_vigilancia_archivo.length; i++) {
+                                    if (this.dfnva_persona.get_nueva_vigilancia_archivo[i]) {
+                                        formData.append(`get_nueva_vigilancia_archivo_ta_id[${i}]`, this.dfnva_persona.get_nueva_vigilancia_archivo[i].ta_id);
+                                        formData.append(`get_nueva_vigilancia_archivo_file[${i}]`, this.dfnva_persona.get_nueva_vigilancia_archivo[i].pdf);
+                                    }
                                 }
                             }
+
+                            if (this.dfnva_inmueble.id) {
+                                formData.append('entidads_id', 4);
+                                formData.append('codigo_relacion', this.dfnva_inmueble.id);
+                                formData.append('detalle', this.dfnva_inmueble.detalle);
+                                for (let i = 0; i < this.dfnva_inmueble.get_nueva_vigilancia_archivo.length; i++) {
+                                    if (this.dfnva_inmueble.get_nueva_vigilancia_archivo[i]) {
+                                        formData.append(`get_nueva_vigilancia_archivo_ta_id[${i}]`, this.dfnva_inmueble.get_nueva_vigilancia_archivo[i].ta_id);
+                                        formData.append(`get_nueva_vigilancia_archivo_file[${i}]`, this.dfnva_inmueble.get_nueva_vigilancia_archivo[i].pdf);
+                                    }
+                                }
+                            }
+
+                            if (this.dfnva_vehiculo.id) {
+                                formData.append('entidads_id', 4);
+                                formData.append('codigo_relacion', this.dfnva_vehiculo.id);
+                                formData.append('detalle', this.dfnva_vehiculo.detalle);
+                                for (let i = 0; i < this.dfnva_vehiculo.get_nueva_vigilancia_archivo.length; i++) {
+                                    if (this.dfnva_vehiculo.get_nueva_vigilancia_archivo[i]) {
+                                        formData.append(`get_nueva_vigilancia_archivo_ta_id[${i}]`, this.dfnva_vehiculo.get_nueva_vigilancia_archivo[i].ta_id);
+                                        formData.append(`get_nueva_vigilancia_archivo_file[${i}]`, this.dfnva_vehiculo.get_nueva_vigilancia_archivo[i].pdf);
+                                    }
+                                }
+                            }
+
 
 
                         }
@@ -2101,8 +2304,14 @@
                                         this.dataEdit.get_nueva_vigilancia[this.nuevafechadocumentovideovigilancia.IndexActividadAdd].get_nueva_vigilancia_actividad.push(response.data.data);
                                     }
                                     if (TYPE == "_DisposicionFiscalNuevaVigilanciaEntidad") {
-                                        // const index1 = this.disposicion_fiscal_nueva_vigilancia_actividads.index1;
-                                        // const index2 = this.disposicion_fiscal_nueva_vigilancia_actividads.index2;
+                                        const index1 = this.disposicion_fiscal_nueva_vigilancia_actividads.index1;
+                                        const index2 = this.disposicion_fiscal_nueva_vigilancia_actividads.index2;
+
+                                        this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].get_nueva_vigilancia_entidad.push(response.data.data)
+                                        
+
+
+                                     
                                         // formData.append('dfnva_id', this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].);
                                         // if(this.dfnva_persona.nacionalidad_id == 1){
                                         //     formData.append('entidads_id', 1);
@@ -2451,7 +2660,11 @@
                                     });
                                 } else {
                                     if (this.cambiarModoActividades) {
-                                        this.dfnva_inmueble = response.data.data;
+                                        this.dfnva_inmueble = {
+                                            ...response.data.data,
+                                            detalle: "",
+                                            get_nueva_vigilancia_archivo: []
+                                        };
                                         $('#modalInmueble').modal('hide');
                                         $('#modalEntidadActividadAdd').modal('show');
                                         this.loadingSarchInmueble = false;
@@ -2506,7 +2719,11 @@
                                     });
                                 } else {
                                     if (this.cambiarModoActividades) {
-                                        this.dfnva_vehiculo = response.data.data;
+                                        this.dfnva_inmueble = {
+                                            ...response.data.data,
+                                            detalle: "",
+                                            get_nueva_vigilancia_archivo: []
+                                        };
                                         $('#modalVehiculo').modal('hide');
                                         $('#modalEntidadActividadAdd').modal('show');
                                         this.loadingSarchInmueble = false;
@@ -2971,6 +3188,7 @@
                                 });
                             }
                         } else if (TIPO == "ARCHIVOS_DIGITALES_ENTIDADES_inmueble") {
+                            console.log(this.dfnva_inmueble);
                             console.log("muebleeee")
                             console.log(this.dfnva_inmueble.get_nueva_vigilancia_archivo)
                             if (this.dfnva_inmueble.get_nueva_vigilancia_archivo) {
@@ -3112,45 +3330,45 @@
                         if (typeof google !== 'undefined' && google.maps) {
                             console.log("si existe");
 
-                            // const map = new google.maps.Map(document.getElementById('mapDiv'), {
-                            //     center: {
-                            //         lat: -12.100499,
-                            //         lng: -77.0272729
-                            //     },
-                            //     zoom: 13,
-                            // });
+                            const map = new google.maps.Map(document.getElementById('mapDiv'), {
+                                center: {
+                                    lat: -12.100499,
+                                    lng: -77.0272729
+                                },
+                                zoom: 13,
+                            });
 
                             // Agrega un marcador al centro del mapa
-                            // const initialMarker = new google.maps.Marker({
-                            //     position: {
-                            //         lat: -12.100499,
-                            //         lng: -77.0272729
-                            //     },
-                            //     map: map,
-                            //     title: 'Marcador Inicial',
-                            //     draggable: true, // Permite mover el marcador
-                            // });
+                            const initialMarker = new google.maps.Marker({
+                                position: {
+                                    lat: -12.100499,
+                                    lng: -77.0272729
+                                },
+                                map: map,
+                                title: 'Marcador Inicial',
+                                draggable: true, // Permite mover el marcador
+                            });
 
-                            // // Agrega evento de arrastre al marcador
-                            // initialMarker.addListener('dragend', () => {
-                            //     const markerPosition = initialMarker.getPosition();
-                            //     this.dataInmuebleAdd.latitud = markerPosition.lat();
-                            //     this.dataInmuebleAdd.longitud = markerPosition.lng();
+                            // Agrega evento de arrastre al marcador
+                            initialMarker.addListener('dragend', () => {
+                                const markerPosition = initialMarker.getPosition();
+                                this.dataInmuebleAdd.latitud = markerPosition.lat();
+                                this.dataInmuebleAdd.longitud = markerPosition.lng();
 
-                            //     // Utiliza la API de Geocodificación para obtener la dirección
-                            //     const geocoder = new google.maps.Geocoder();
-                            //     geocoder.geocode({
-                            //         location: markerPosition
-                            //     }, (results, status) => {
-                            //         if (status === 'OK' && results[0]) {
-                            //             const address = results[0].formatted_address;
-                            //             this.dataInmuebleAdd.direccion = address;
-                            //             // console.log('Nueva Dirección:', address);
-                            //         } else {
-                            //             // console.error('No se pudo obtener la dirección.');
-                            //         }
-                            //     });
-                            // });
+                                // Utiliza la API de Geocodificación para obtener la dirección
+                                const geocoder = new google.maps.Geocoder();
+                                geocoder.geocode({
+                                    location: markerPosition
+                                }, (results, status) => {
+                                    if (status === 'OK' && results[0]) {
+                                        const address = results[0].formatted_address;
+                                        this.dataInmuebleAdd.direccion = address;
+                                        // console.log('Nueva Dirección:', address);
+                                    } else {
+                                        // console.error('No se pudo obtener la dirección.');
+                                    }
+                                });
+                            });
                         }
                     },
                 },

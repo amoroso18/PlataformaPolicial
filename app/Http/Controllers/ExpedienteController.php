@@ -216,7 +216,7 @@ class ExpedienteController extends Controller
             } elseif ($request->type && $request->type == "_EXPEDIENTES") {
                 return response()->json([
                     'data' => DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado','getNuevaVigilancia',
-                    'getNuevaVigilancia.getNuevaVigilanciaActividad','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad.getNuevaVigilanciaArchivo'])->orderBy('id', 'desc')->get(),
+                    'getNuevaVigilancia.getNuevaVigilanciaActividad','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad.getNuevaVigilanciaArchivo','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad.getTipoEntidad'])->orderBy('id', 'desc')->get(),
                     'data_fiscal' => EntidadFiscal::get(),
                     'data_tipo_documentos' => TipoDocumentosReferencia::get(),
                     'data_tipo_videovigilancia' => TipoVideoVigilancia::get(),
@@ -400,11 +400,11 @@ class ExpedienteController extends Controller
                 $new->conclusiones = $request->conclusiones ?? null; // Asigna el valor adecuado para conclusiones
                 $new->estado = 1;
                 if ($new->save()) {
-                    if ($request->archivo) {
-                        $obtenernombre = time()-Auth::user()->id. '.' . $request->archivo->getClientOriginalExtension();
-                        $request->archivo->move($this->upload_files, $obtenernombre);
+                    if ($request->pdf) {
+                        $obtenernombre = time().Auth::user()->id. '.' . $request->pdf->getClientOriginalExtension();
+                        $request->pdf->move($this->upload_files, $obtenernombre);
                         $objeto = DisposicionFiscalNuevaVigilancia::find($new->id);
-                        $objeto->archivo = $obtenernombre ?? null;
+                        $objeto->archivo = $obtenernombre ?? null;  
                         $objeto->save();
                     }
                 }
@@ -453,26 +453,19 @@ class ExpedienteController extends Controller
                         }
                     }
                 }
-                $data = DisposicionFiscalNuevaVigilanciaEntidad::with(['getNuevaVigilanciaArchivo'])->where('id', $objeto->id)->first();
-                return response()->json(['message' => 'Registrado correctamente', 'data' => $data, 'request' => $request->all()]);
-            } elseif ($request->type && $request->type == "_DisposicionFiscalNuevaVigilanciaArchivo") {
-                $objeto = new DisposicionFiscalNuevaVigilanciaArchivo;
-                $objeto->dfnve_id =  $request->dfnve_id;
-                $objeto->users_id = Auth::user()->id;
-                $objeto->ta_id =  $request->ta_id;
-                $objeto->estado = 1;
-                $objeto->save();
-                if ($objeto->save()) {
-                    if ($request->archivo) {
-                        $obtenernombre = time()-Auth::user()->id. '.' . $request->archivo->getClientOriginalExtension();
-                        $request->archivo->move($this->upload_files, $obtenernombre);
-                        $objeto = DisposicionFiscalNuevaVigilanciaArchivo::find($objeto->id);
-                        $objeto->archivo = $obtenernombre ?? null;
-                        $objeto->save();
-                    }
+                $data = DisposicionFiscalNuevaVigilanciaEntidad::with(['getNuevaVigilanciaArchivo','getTipoEntidad'])->where('id', $objeto->id)->first();
+                return response()->json(['message' => 'Registrado correctamente', 'data' => $data, 'request' => $request->all(), 'files' => []]);
+            } elseif ($request->type && $request->type == "_VerEntidadArchivos") {
+                // $objeto = DisposicionFiscalNuevaVigilanciaEntidad::find($request->ID_ENTIDAD);
+                if($request->ID_ENTIDAD == 1 || $request->ID_ENTIDAD == 2){
+                    $objeto = EntidadPersona::find($request->ID_CODIGO_RELACION)->with(['getTipoNacionalidad', 'getTipoDocumentoIdentidad'])->first();
+                }else if($request->ID_ENTIDAD == 3){
+                    $objeto = EntidadVehiculos::find($request->ID_CODIGO_RELACION);
+                }else if($request->ID_ENTIDAD == 4){
+                    $objeto = EntidadInmueble::find($request->ID_CODIGO_RELACION)->with(['getTipoInmueble'])->first();
                 }
-                $data = DisposicionFiscalNuevaVigilanciaArchivo::with(['getTipoArchivo'])->where('id', $objeto->id)->first();
-                return response()->json(['message' => 'Registrado correctamente', 'data' => $data, 'request' => $request->all()]);
+                // $data = DisposicionFiscalNuevaVigilanciaArchivo::with(['getTipoArchivo'])->where('id', $objeto->id)->first();
+                return response()->json(['message' => 'Registrado correctamente', 'data' => $objeto, 'files' => []]);
             } elseif ($request->type && $request->type == "_DisposicionFiscalDocResultado") {
             } elseif ($request->type && $request->type == "_DisposicionFiscalDocResultadoAnexo") {
             } elseif ($request->type && $request->type == "_XD5") {
