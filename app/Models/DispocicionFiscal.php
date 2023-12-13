@@ -33,6 +33,10 @@ class DispocicionFiscal extends Model
     {
         return $this->hasMany(DisposicionFiscalNuevaVigilancia::class, 'df_id', 'id');
     }
+    public function getResultado()
+    {
+        return $this->hasMany(DisposicionFiscalDocResultado::class, 'df_id', 'id');
+    }
 }
 
 

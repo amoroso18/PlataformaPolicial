@@ -215,7 +215,7 @@ class ExpedienteController extends Controller
                 }
             } elseif ($request->type && $request->type == "_EXPEDIENTES") {
                 return response()->json([
-                    'data' => DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado','getNuevaVigilancia',
+                    'data' => DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado','getNuevaVigilancia','getResultado',
                     'getNuevaVigilancia.getNuevaVigilanciaActividad','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad.getNuevaVigilanciaArchivo','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad.getTipoEntidad'])->orderBy('id', 'desc')->get(),
                     'data_fiscal' => EntidadFiscal::get(),
                     'data_tipo_documentos' => TipoDocumentosReferencia::get(),
@@ -234,7 +234,7 @@ class ExpedienteController extends Controller
                 ]);
             } elseif ($request->type && $request->type == "_EXPEDIENTE") {
                 return response()->json([
-                    'data' => DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado','getNuevaVigilancia'])->where('id', $request->id)->first(),
+                    'data' => DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado','getNuevaVigilancia','getResultado'])->where('id', $request->id)->first(),
                 ]);
             } elseif ($request->type && $request->type == "_GETFISCAL") {
                 return response()->json([
@@ -469,8 +469,51 @@ class ExpedienteController extends Controller
                 // $data = DisposicionFiscalNuevaVigilanciaArchivo::with(['getTipoArchivo'])->where('id', $objeto->id)->first();
                 return response()->json(['message' => 'Registrado correctamente', 'data' => $objeto, 'files' =>   $data]);
             } elseif ($request->type && $request->type == "_DisposicionFiscalFINISH") {
+              
+                if ($request->archivo) {
+                    $obtenernombre = time() . Auth::user()->id . '.' . $request->archivo->getClientOriginalExtension();
+                    $request->archivo->move($this->upload_files, $obtenernombre);
+                } else {
+                    $obtenernombre = null;
+                }
 
-                return response()->json(['message' => 'Registrado correctamente', 'data' => [], 'files' =>   $request->all()]);
+                $new = new DisposicionFiscalDocResultado;
+                $new->df_id = $request->df_id;
+                $new->documentos_id = $request->documentos_id;
+                $new->fecha_documento = $request->fecha_documento;
+                $new->asunto = $request->asunto;
+                $new->resultadoFinal = $request->resultadoFinal;
+                $new->destino = $request->destino;
+                $new->archivo = $obtenernombre;
+                $new->users_id = Auth::user()->id;
+                $new->estado = 1;
+                $new->save();
+
+                $new = DispocicionFiscal::find($request->df_id);
+                $new->estado_id = 2;
+                $new->save();
+                
+                
+                if ($request->dataFinish_archivo_) {
+                    for ($i = 0; $i < count($request->dataFinish_archivo_); $i++) {
+                            if ($request->dataFinish_archivo_[$i]) {
+                                $obtenernombreYO = time() . Auth::user()->id . $i . '.' . $request->dataFinish_archivo_[$i]->getClientOriginalExtension();
+                                $request->dataFinish_archivo_[$i]->move($this->upload_files, $obtenernombreYO);
+                            } else {
+                                $obtenernombreYO = null;
+                            }
+
+                            $objeto = new DisposicionFiscalDocResultadoAnexo;
+                            $objeto->dfdr_id =  $new->id;
+                            $objeto->users_id = Auth::user()->id;
+                            $objeto->contenidos_id = $request->dataFinish_tipo_contenido_[$i];
+                            $objeto->archivo = $obtenernombreYO;
+                            $objeto->estado = 1;
+                            $objeto->save();
+                    }
+                }
+              
+                return response()->json(['message' => 'Registrado correctamente', 'data' => $new]);
 
             } elseif ($request->type && $request->type == "_DisposicionFiscalDocResultadoAnexo") {
             } elseif ($request->type && $request->type == "_XD5") {

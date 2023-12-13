@@ -567,7 +567,7 @@
                     <div class="form-group">
                         <label class="form-label" for="default-01">Fecha documento</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" v-model="dataFinish.fecha_documento">
+                            <input type="date" class="form-control" v-model="dataFinish.fecha_documento">
                         </div>
                     </div>
                     <div class="form-group">
@@ -608,8 +608,8 @@
                                         <div class="row">
                                             <div class="form-group">
                                                 <div class="form-control-wrap">
-                                                    <select class="form-control" data-ui="xl" id="outlined-select2" v-model="item.ta_id">
-                                                        <option v-for="item2 in data_tipo_contenido" :key="item2.id" :value="item2.id" v-text="item2.descripcion"></option>
+                                                     <select class="form-control" data-ui="xl" id="outlined-select2" v-model="item.ta_id">
+                                                        <option v-for="item in dataTipoDocumentos" :key="item.id" :value="item.id" v-text="item.descripcion"></option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -2516,12 +2516,14 @@
 
                                         this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].get_nueva_vigilancia_entidad.push(response.data.data);
                                     }
-                                    if (TYPE == "_DFFinalizar") {
-                                        this.expe_culminados = this.filtrarPorEstado(2);
-                                        this.expe_pendientes = this.filtrarPorEstado(1);
-                                    }
                                     if (TYPE == "_DisposicionFiscalFINISH") {
-                           
+                                        var ISindex = this.BuscarIndice(this.dataEdit.id);
+                                        this.data.tableData[ISindex].get_resultado.push(response.data.data);
+                                        this.data.tableData[ISindex].estado_id = 2;
+                                        setTimeout(() => {
+                                            this.expe_culminados = this.filtrarPorEstado(2);
+                                            this.expe_pendientes = this.filtrarPorEstado(1);
+                                        }, 1000);
                                     }
                                 }
                             })
@@ -2534,7 +2536,7 @@
                                 });
                             }).finally(() => {
                                 this.loadingPersonas = false;
-                                $('#modalFechaContenidoAdd').modal('hide');
+                                $('#modalEdit').modal('hide');
                                 $('#modalFechaContenidoAdd').modal('hide');
                                 $('#modalFechaActividadAdd').modal('hide');
                                 $('#modalEntidadActividadAdd').modal('hide');
@@ -3202,13 +3204,13 @@
                         return nuevaData.length;
                     },
                     BuscarIndice(objetoABuscar_id) {
-                        // const objetoABuscar = this.data.tableData;
-                        // const indice = objetoABuscar.findIndex(objeto => objeto.id === objetoABuscar_id);
-                        // if (indice !== -1) {
-                        //     return indice;
-                        // } else {
-                        //     return false;
-                        // }
+                        const objetoABuscar = this.data.tableData;
+                        const indice = objetoABuscar.findIndex(objeto => objeto.id === objetoABuscar_id);
+                        if (indice !== -1) {
+                            return indice;
+                        } else {
+                            return false;
+                        }
                     },
                     EliminarIndice(objetoABuscar_indice) {
                         // if (indice !== -1) {
