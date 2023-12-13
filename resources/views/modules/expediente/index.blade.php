@@ -265,40 +265,52 @@
                 <div class="modal-body">
                     <h5>Expediente</h5>
                     <section>
-                        <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-Casoxd" v-model="dataExpe.caso"><label class="form-label-outlined" for="outlined-Casoxd">Caso</label></div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-nroxd" v-model="dataExpe.nro"><label class="form-label-outlined" for="outlined-nroxd">Número</label></div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Caso</label>
                             <div class="form-control-wrap">
-                                <input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-picker33" v-model="dataExpe.fecha_disposicion">
-                                <label class="form-label-outlined" for="outlined-date-picker33">Fecha de disposición </label>
+                                <input type="text" class="form-control" v-model="dataExpe.caso">
                             </div>
                         </div>
-                        <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-resumen" v-model="dataExpe.resumen"><label class="form-label-outlined" for="outlined-resumen">Resumen</label></div>
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Número</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" v-model="dataFinish.nro">
+                            </div>
                         </div>
-
-
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Fecha de disposición</label>
+                            <div class="form-control-wrap">
+                                <input type="date" class="form-control" v-model="dataExpe.fecha_disposicion">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Resumen</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" v-model="dataExpe.resumen">
+                            </div>
+                        </div>
                     </section>
                     <h5 class="mt-5">Calendario de inicio y termino</h5>
                     <section>
-                        <div class="col-sm-12 mt-3">
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Fecha de inicio</label>
                             <div class="form-control-wrap">
-                                <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div><input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-picker" v-model="dataExpe.fecha_inicio"><label class="form-label-outlined" for="outlined-date-picker">Fecha de inicio</label>
+                                <input type="date" class="form-control" v-model="dataExpe.fecha_inicio">
                             </div>
                         </div>
-                        <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-plazo" v-model="dataExpe.plazo"><label class="form-label-outlined" for="outlined-plazo">Días de Plazo</label></div>
-                        </div>
-                        <div class="col-sm-12 mt-3">
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Días de Plazo</label>
                             <div class="form-control-wrap">
-                                <div class="form-icon form-icon-right"><em class="icon ni ni-calendar-alt"></em></div>
-                                <input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-picker2" v-model="dataExpe.fecha_termino"><label class="form-label-outlined" for="outlined-date-picker2">Fecha de termino</label>
+                                <input type="text" class="form-control" v-model="dataExpe.plazo">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Fecha de término</label>
+                            <div class="form-control-wrap">
+                                <input type="date" class="form-control" v-model="dataExpe.fecha_termino">
+                            </div>
+                        </div>
+
                     </section>
                     <h5 class="mt-5">Delitos</h5>
                     <section>
@@ -480,19 +492,21 @@
                     <h5 class="mt-5">Fiscales</h5>
                     <section>
                         <div class="col-sm-12 mt-3">
+                            <label class="form-label" for="outlined-select">Fiscal Responsable</label>
+
                             <div class="form-control-wrap">
-                                <select class="form-control form-control-xl form-control-outlined" id="outlined-select" v-model="dataExpe.fiscal_responsable_id">
+                                <select class="form-control form-control-xl" id="outlined-select" v-model="dataExpe.fiscal_responsable_id">
                                     <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
                                 </select>
-                                <label class="form-label-outlined" for="outlined-select">Fiscal Responsable</label>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
+                            <label class="form-label" for="outlined-select2">Fiscal Asistente</label>
                             <div class="form-control-wrap">
-                                <select class="form-control form-control-xl form-control-outlined" data-ui="xl" id="outlined-select2" v-model="dataExpe.fiscal_asistente_id">
+                                <select class="form-control form-control-xl" data-ui="xl" id="outlined-select2" v-model="dataExpe.fiscal_asistente_id">
                                     <option v-for="item in dataFiscales" :key="item.id" :value="item.id" v-text="item.carnet + ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno + ' ' + item.ficalia"></option>
                                 </select>
-                                <label class="form-label-outlined" for="outlined-select2">Fiscal Asistente</label>
+
                             </div>
                         </div>
                         <div class="mt-2 mb-2 ml-2"><a class="form-note pointer" v-on:click="modalOpen('FiscalEdit')"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más fiscales a la base de datos.</a></div>
@@ -501,18 +515,19 @@
                     <section>
                         <div class="col-sm-12 mt-3">
                             <div class="form-control-wrap">
-                                <select class="form-control form-control-xl form-control-outlined" id="outlined-select" v-model="dataExpe.oficial_acargo_id">
+                                <select class="form-control form-control-xl" id="outlined-select" v-model="dataExpe.oficial_acargo_id">
                                     <option v-for="item in data_policia" :key="item.id" :value="item.id" v-text="item.carnet  + ' ' + item.get_grado.descripcion+ ' ' +item.nombres + ' ' + item.paterno + ' ' + item.materno"></option>
                                 </select>
-                                <label class="form-label-outlined" for="outlined-select">Oficial a cargo</label>
                             </div>
                         </div>
                         <div class="mt-2 mb-2 ml-2"><a class="form-note pointer" v-on:click="modalOpen('OficialAdd')"> <em class="icon ni ni-plus"></em> Presiona aquí para agregar más oficiales a la base de datos.</a></div>
                     </section>
                     <h5 class="mt-5">Observaciones</h5>
                     <section>
-                        <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-observaciones" v-model="dataExpe.observaciones"><label class="form-label-outlined" for="outlined-observaciones">Observaciones</label></div>
+                        <div class="form-group">
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" v-model="dataExpe.observaciones">
+                            </div>
                         </div>
                     </section>
                     <div class="col-sm-12 mt-3">
@@ -536,79 +551,89 @@
                     <h5 class="modal-title">Expediente</h5>
                 </div>
                 <div class="modal-body">
-                    <div id="accordion" class="accordion">
-                        <!-- <div class="accordion-item">
-                            <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-100">
-                                <h6 class="title">Editar expediente</h6>
-                                <span class="accordion-icon"></span>
-                            </a>
-                            <div class="accordion-body collapse" id="accordion-item-100" data-parent="#accordion">
-                                <div class="accordion-inner">
+                    <ul class="pricing-features" v-if="dataEdit.id">
+                        <li><span class="w-50">Caso</span> : <span class="ml-auto" v-text="dataEdit.caso"></span></li>
+                        <li><span class="w-50">Nro</span> : <span class="ml-auto" v-text="dataEdit.nro"></span></li>
+                        <li><span class="w-50">Resumen</span> : <span class="ml-auto" v-text="dataEdit.resumen"></span></li>
+                        <li><span class="w-50">Observaciones </span> : <span class="ml-auto" v-text="dataEdit.observaciones"></span></li>
+                        <li><span class="w-50">Días plazo </span> : <span class="ml-auto" v-text="dataEdit.plazo"></span></li>
+                    </ul>
+                    <div class="form-group mt-2">
+                        <label class="form-label" for="default-01">Asunto</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control" v-model="dataFinish.asunto">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="default-01">Fecha documento</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control" v-model="dataFinish.fecha_documento">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="default-01">Resultado Final</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control" v-model="dataFinish.resultadoFinal">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="default-01">Destino</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control" v-model="dataFinish.destino">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="default-01">Tipo de archivo digital</label>
+                        <div class="form-control-wrap">
+                            <select class="form-control" data-ui="xl" id="outlined-select2" v-model="dataFinish.documentos_id">
+                                <option v-for="item in dataTipoDocumentos" :key="item.id" :value="item.id" v-text="item.descripcion"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="default-01">Archivo principal</label>
+                        <div class="form-control-wrap">
+                            <input type="file" accept="application/pdf" class="form-control"  @change="handleFileChange('',$event,'_FINISH_EXPEDIENTE')">
+                            <p v-if="dataFinish.archivo"  v-text="dataFinish.archivo_NAME"></p>
+                        </div>
+                    </div>
 
+                    <div class="col-sm-12 mt-3">
+                            <div v-for="(item, index) in dataFinish.files" :key="index">
+                                <div class="card card-preview ">
+                                    <div class="input-group-append pointer d-flex justify-content-end">
+                                        <em class="icon ni ni-trash-alt" @click="removeInput('ARCHIVOS_FINISH',index)"></em>
+                                    </div>
+                                    <div class="card-inner">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="form-control-wrap">
+                                                    <select class="form-control" data-ui="xl" id="outlined-select2" v-model="item.ta_id">
+                                                        <option v-for="item2 in data_tipo_contenido" :key="item2.id" :value="item2.id" v-text="item2.descripcion"></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="form-group">
+                                                <div class="form-control-wrap" v-if="!item.pdf">
+                                                    <input type="file" class="form-control" @change="handleFileChange(index,$event,'_NEWFILE_ENTIDAD')">
+                                                </div> 
+                                                <p v-if="item.pdf" v-text="item.pdfName"></p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div> -->
-                        <div class="accordion-item">
-                            <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-200">
-                                <h6 class="title">Editar Situación</h6>
-                                <span class="accordion-icon"></span>
-                            </a>
-                            <div class="accordion-body collapse" id="accordion-item-200" data-parent="#accordion">
-                                <div class="accordion-inner">
-                                <ul class="pricing-features" v-if="dataEdit.id">
-                                    <li><span class="w-50">Caso</span> : <span class="ml-auto" v-text="dataEdit.caso"></span></li>
-                                    <li><span class="w-50">Nro</span> : <span class="ml-auto" v-text="dataEdit.nro"></span></li>
-                                    <li><span class="w-50">Resumen</span> : <span class="ml-auto" v-text="dataEdit.resumen"></span></li>
-                                    <li><span class="w-50">Observaciones </span> : <span class="ml-auto" v-text="dataEdit.observaciones"></span></li>
-                                    <li><span class="w-50">Días plazo </span> : <span class="ml-auto" v-text="dataEdit.plazo"></span></li>
-                                </ul>
-
-                                </div>
-                                <div class="col-sm-12 mt-3">
-                                    <div class="form-group">
-                                        <label class="form-label" for="default-01">asunto</label>
-                                        <div class="form-control-wrap">
-                                            <input type="text" class="form-control" v-model="dataFinish.asunto">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="default-01">fecha_documento</label>
-                                        <div class="form-control-wrap">
-                                            <input type="text" class="form-control" v-model="dataFinish.fecha_documento">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="default-01">resultadoFinal</label>
-                                        <div class="form-control-wrap">
-                                            <input type="text" class="form-control" v-model="dataFinish.resultadoFinal">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="default-01">destino</label>
-                                        <div class="form-control-wrap">
-                                            <input type="text" class="form-control" v-model="dataFinish.destino">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                    <label class="form-label" for="default-01">tipo de archivo digital</label>
-                                        <div class="form-control-wrap">
-                                            <select class="form-control" data-ui="xl" id="outlined-select2" v-model="dataFinish.documentos_id">
-                                                <option v-for="item in dataTipoDocumentos" :key="item.id" :value="item.id" v-text="item.descripcion"></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="default-01">archivo</label>
-                                        <div class="form-control-wrap">
-                                            <input type="text" class="form-control" v-model="dataFinish.archivo">
-                                        </div>
-                                    </div>
-                                </div>
+                            <button class="btn btn-dark mt-2" @click="addInput('ARCHIVOS_FINISH')">Agregar Archivos</button>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <div class="form-group">
+                                <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="GrabarActividad('_DisposicionFiscalFINISH')">Registrar</button>
+                                <p v-if="loadingPersonas">Cargando....</p>
                             </div>
-
                         </div>
 
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -626,40 +651,40 @@
                     <h5 class="modal-title">Agregar Fiscales</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-carnet" v-model="dataFiscalAdd.carnet"><label class="form-label-outlined" for="outlined-carnet">Carnet</label></div>
                     </div>
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-dni" v-model="dataFiscalAdd.dni"><label class="form-label-outlined" for="outlined-dni">DNI</label></div>
                     </div>
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-nombres" v-model="dataFiscalAdd.nombres"><label class="form-label-outlined" for="outlined-nombres">Nombres</label></div>
                     </div>
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-paterno" v-model="dataFiscalAdd.paterno"><label class="form-label-outlined" for="outlined-paterno">Paterno</label></div>
                     </div>
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-materno" v-model="dataFiscalAdd.materno"><label class="form-label-outlined" for="outlined-materno">Materno</label></div>
                     </div>
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-celular" v-model="dataFiscalAdd.celular"><label class="form-label-outlined" for="outlined-celular">Celular</label></div>
                     </div>
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-correo" v-model="dataFiscalAdd.correo"><label class="form-label-outlined" for="outlined-correo">Correo</label></div>
                     </div>
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-procedencia" v-model="dataFiscalAdd.procedencia"><label class="form-label-outlined" for="outlined-procedencia">Procedencia</label></div>
                     </div>
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-ficalia" v-model="dataFiscalAdd.ficalia"><label class="form-label-outlined" for="outlined-ficalia">Ficalia</label></div>
                     </div>
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-despacho" v-model="dataFiscalAdd.despacho"><label class="form-label-outlined" for="outlined-despacho">Despacho</label></div>
                     </div>
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-ubigeo" v-model="dataFiscalAdd.ubigeo"><label class="form-label-outlined" for="outlined-ubigeo">Ubigeo</label></div>
                     </div>
-                    <div class="col-sm-12 mt-3">
+                    <div class="form-group">
                         <button class="btn btn-primary" v-if="!loadingModalNuevoFiscal" v-on:click="GrabarNuevoFiscal">Registrar</button>
                         <p v-if="loadingModalNuevoFiscal"><em class="icon ni ni-loader"></em> Cargando....</p>
                     </div>
@@ -695,7 +720,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalPersonas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel5" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog " role="document">
             <div class="modal-content">
                 <a href="#" class="close" data-dismiss="modal" aria-label="Close"> <em class="icon ni ni-cross"></em> </a>
                 <div class="modal-body">
@@ -1485,11 +1510,10 @@
         </div>
     </div>
     <div class="modal fade" id="modalOficialAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel8" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog " role="document">
             <div class="modal-content">
                 <a href="#" class="close" data-dismiss="modal" aria-label="Close"> <em class="icon ni ni-cross"></em> </a>
                 <div class="modal-body">
-                    <!-- Carnet -->
                     <div class="form-label-group mt-2">
                         <label class="form-label">Carnet</label>
                     </div>
@@ -1497,7 +1521,6 @@
                         <input type="text" class="form-control form-control-lg" placeholder="Ingresa el Carnet" v-model="dataPoliciaAdd.carnet" />
                     </div>
 
-                    <!-- DNI -->
                     <div class="form-label-group mt-2">
                         <label class="form-label">DNI</label>
                     </div>
@@ -1505,7 +1528,6 @@
                         <input type="text" class="form-control form-control-lg" placeholder="Ingresa el DNI" v-model="dataPoliciaAdd.dni" />
                     </div>
 
-                    <!-- Nombres -->
                     <div class="form-label-group mt-2">
                         <label class="form-label">Nombres</label>
                     </div>
@@ -1513,7 +1535,6 @@
                         <input type="text" class="form-control form-control-lg" placeholder="Ingresa los Nombres" v-model="dataPoliciaAdd.nombres" />
                     </div>
 
-                    <!-- Apellido Paterno -->
                     <div class="form-label-group mt-2">
                         <label class="form-label">Apellido Paterno</label>
                     </div>
@@ -1521,7 +1542,6 @@
                         <input type="text" class="form-control form-control-lg" placeholder="Ingresa el Apellido Paterno" v-model="dataPoliciaAdd.paterno" />
                     </div>
 
-                    <!-- Apellido Materno -->
                     <div class="form-label-group mt-2">
                         <label class="form-label">Apellido Materno</label>
                     </div>
@@ -1562,14 +1582,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
     <div class="modal fade" id="modalFechaContenidoAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel9" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Documento de Actividad</h5>
@@ -1662,7 +1682,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalFechaActividadAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel10" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Fecha y hora de actividades</h5>
@@ -1691,7 +1711,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalEntidadActividadAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel11" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog " role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Entidad de actividad de videovigilancia</h5>
@@ -1867,7 +1887,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalVerEntidadActividad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel11" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog " role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Entidad de actividad de videovigilancia</h5>
@@ -1946,117 +1966,118 @@
 
                             </ul>
                             <div class="nk-fmg-body-content">
-                                            <div class="nk-block-head nk-block-head-sm">
-                                                <div class="nk-block-between position-relative">
-                                                    <div class="nk-block-head-content">
-                                                        <h3 class="nk-block-title page-title">Archivos digitales</h3>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="nk-fmg-quick-list nk-block">
-                                                <div class="toggle-expand-content expanded" data-content="quick-access">
-                                                    <div class="nk-files nk-files-view-grid">
-                                                        <div class="nk-files-list">
-                                                            <div class="nk-file-item nk-file" v-for="(item,index) in dfnva_files.get_nueva_vigilancia_archivo" :key="index">
-                                                                <div class="nk-file-info">
-                                                                    <a target="_blank" :href="URLASSET+'files/'+item.archivo" class="nk-file-link">
-                                                                        <div class="nk-file-title">
-                                                                            <div class="nk-file-icon">
-                                                                                <span class="nk-file-icon-type" v-if="item.ta_id ==1">
-                                                                                    <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
-                                                                                    <g transform="translate(0 -1028.4)">
-                                                                                    <path d="m23 1048.4c0 1.1-0.895 2-2 2h-8-4-6c-1.1046 0-2-0.9-2-2v-14c0-1.1 0.8954-2 2-2h6 4 4 4c1.105 0 2 0.9 2 2v4 10z" fill="#95a5a6"/>
-                                                                                    <path d="m1 1047.4c0 1.1 0.8954 2 2 2h8 4 6c1.105 0 2-0.9 2-2v-14c0-1.1-0.895-2-2-2h-6-4-4-4c-1.1046 0-2 0.9-2 2v4 10z" fill="#bdc3c7"/>
-                                                                                    <rect transform="translate(0 1028.4)" height="14" width="18" y="5" x="3" fill="#f39c12"/>
-                                                                                    <path d="m16.625 8.625-10.344 10.375h14.719v-6l-4.375-4.375z" transform="translate(0 1028.4)" fill="#e67e22"/>
-                                                                                    <path d="m8 8a2 2 0 1 1 -4 0 2 2 0 1 1 4 0z" transform="matrix(1.75 0 0 1.75 -3 1024.4)" fill="#f1c40f"/>
-                                                                                    <path d="m8.0938 11.094-5.0938 5.094v2.812h13l-7.9062-7.906z" transform="translate(0 1028.4)" fill="#d35400"/>
-                                                                                    </g>
-                                                                                    </svg>
-                                                                                </span>
-                                                                                <span class="nk-file-icon-type" v-if="item.ta_id ==2">
-                                                                                    <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
-                                                                                    <g transform="translate(0 -1028.4)">
-                                                                                    <path d="m4 1c-1.1046 0-2 0.8954-2 2v3 11 3 1c0 1.105 0.8954 2 2 2h2 12 2c1.105 0 2-0.895 2-2v-1-3-11-3c0-1.1046-0.895-2-2-2h-2-12-2zm-0.5 2h1c0.2761 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.2238 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.2762 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2238 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.2762 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.224 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.224 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.224 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.224 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.224 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.224 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.224-0.5 0.5-0.5z" transform="translate(0 1028.4)" fill="#e74c3c"/>
-                                                                                    <path d="m2 1040.4v5 3 1c0 1.1 0.8954 2 2 2h2 12 2c1.105 0 2-0.9 2-2v-1-3-5h-1.5c0.276 0 0.5 0.2 0.5 0.5v1c0 0.2-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.224-0.5 0.5-0.5h-15c0.2761 0 0.5 0.2 0.5 0.5v1c0 0.2-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.2239-0.5 0.5-0.5h-1.5zm1.5 3h1c0.2761 0 0.5 0.2 0.5 0.5v1c0 0.2-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2 0.5 0.5v1c0 0.2-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.2 0.5 0.5v1c0 0.2-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2 0.5 0.5v1c0 0.2-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.224-0.5 0.5-0.5z" fill="#c0392b"/>
-                                                                                    <path d="m5 22v-20.196l17.66 10.098z" transform="matrix(.28312 0 0 .29709 8.5844 1036.8)" fill="#ecf0f1"/>
-                                                                                    </g>
-                                                                                    </svg>
-                                                                                </span>
-                                                                                <span class="nk-file-icon-type" v-if="item.ta_id ==3">
-                                                                                    <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
-                                                                                        <g transform="translate(0 -1028.4)">
-                                                                                        <path d="m5 1030.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#95a5a6"/>
-                                                                                        <path d="m5 1029.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#bdc3c7"/>
-                                                                                        <g fill="#3498db">
-                                                                                        <path fill="#3498db" d="m16.996 1035.1v8.8c0 0.2-0.088 0.5-0.266 0.7-0.177 0.2-0.401 0.3-0.671 0.4-0.271 0.1-0.542 0.2-0.813 0.3-0.266 0-0.516 0.1-0.75 0.1s-0.487-0.1-0.758-0.1c-0.265-0.1-0.534-0.2-0.804-0.3-0.271-0.1-0.495-0.2-0.672-0.4s-0.266-0.5-0.266-0.7c0-0.3 0.089-0.5 0.266-0.7s0.401-0.4 0.672-0.5c0.27-0.1 0.539-0.2 0.804-0.3h0.758c0.547 0 1.047 0.1 1.5 0.3v-4.2l-5.9999 1.8v5.6c0 0.2-0.0886 0.5-0.2656 0.7-0.1771 0.2-0.4011 0.3-0.6719 0.4s-0.5417 0.2-0.8125 0.3c-0.2656 0-0.5156 0.1-0.75 0.1s-0.487-0.1-0.7578-0.1c-0.2656-0.1-0.5339-0.2-0.8047-0.3s-0.4948-0.2-0.6719-0.4-0.2656-0.5-0.2656-0.7c0-0.3 0.0885-0.5 0.2656-0.7s0.4011-0.4 0.6719-0.5 0.5391-0.2 0.8047-0.3h0.7578c0.5469 0 1.0469 0.1 1.5 0.3v-7.6c0-0.1 0.0495-0.3 0.1484-0.4 0.099-0.2 0.2266-0.3 0.3828-0.3l6.4997-2h0.219c0.208 0 0.385 0 0.531 0.2 0.146 0.1 0.219 0.3 0.219 0.5"/>
-                                                                                        </g>
-                                                                                        <path d="m21 1035.4-6-6v4c0 1.1 0.895 2 2 2h4z" fill="#95a5a6"/>
-                                                                                        </g>
-                                                                                    </svg>
-                                                                                </span>
-                                                                                <span class="nk-file-icon-type" v-if="item.ta_id ==4">
-                                                                                    <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
-                                                                                        <g transform="translate(0 -1028.4)">
-                                                                                        <g>
-                                                                                        <path d="m5 1030.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#c0392b"/>
-                                                                                        <path d="m5 1029.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#e74c3c"/>
-                                                                                        <path d="m21 1035.4-6-6v4c0 1.1 0.895 2 2 2h4z" fill="#c0392b"/>
-                                                                                        </g>
-                                                                                        <path fill="#ecf0f1" d="m19.112 1039.4h-0.29c-0.09 0.1-0.601 0.8-0.822 1-0.06 0.1-0.15 0.2-0.201 0.2-0.743 0.9-2.323 2.4-3.271 3.2-0.124 0.1-0.244 0.2-0.266 0.2-0.066 0.1-0.698 0.5-0.982 0.7-0.905 0.6-1.967 1.1-2.792 1.3-1.6281 0.4-2.8984 0.3-4.5476-0.5-0.4984-0.2-1.2085-0.6-1.5978-0.9-0.382-0.3-0.3417-0.3-0.3411 0.2v0.5l0.2578 0.1c0.3307 0.2 1.0445 0.6 1.5099 0.8 0.3546 0.2 0.4651 0.3 0.2667 0.3-0.1828-0.1-1.2202-0.1-1.6188 0h-0.4c-0.0092 0-0.0167 0.2-0.0167 0.4v0.4h0.1333c0.5736-0.2 1.8047-0.2 2.3778-0.1 0.6748 0.1 1.1496 0.2 1.7199 0.5 1.0881 0.5 1.9906 1.5 2.3836 2.5l0.08 0.2h0.44 0.44l-0.024-0.1c-0.141-0.6-0.537-1.3-1.027-1.8-0.322-0.4-0.8907-0.8-1.1148-1h-0.0756c-0.0364-0.1-0.4165-0.3-0.5789-0.3-0.0924-0.1-0.1677-0.1-0.1677-0.1 0-0.1 0.07-0.1 0.1555 0 0.2135 0 1.0733-0.1 1.4625-0.2 1.078-0.2 2.098-0.6 3.129-1.2 0.37-0.2 1.21-0.9 1.546-1.1 0.25-0.3 0.33-0.3 0.228-0.2-0.036 0.1-0.105 0.2-0.155 0.3-0.049 0.1-0.135 0.2-0.19 0.3-0.778 1.2-1.277 2.7-1.412 4.4-0.019 0.3-0.035 0.6-0.035 0.7v0.3h2.332 2.332l-0.076-0.1c-0.42-0.6-0.941-1.9-1.116-2.8-0.144-0.7-0.187-1.8-0.097-2.4 0.262-1.6 1.155-3 2.689-3.9 0.158-0.1 0.362-0.2 0.453-0.3l0.167-0.1v-0.3c0-0.2-0.012-0.4-0.027-0.4-0.364 0.2-1.174 0.7-1.546 0.9-0.199 0.2-0.211 0.2-0.024 0 0.268-0.3 0.73-0.8 1.221-1.4l0.229-0.2h-0.501-0.24z"/>
-                                                                                        </g>
-                                                                                        </svg>
-                                                                                </span>
-                                                                            </div>
-                                                                            <div class="nk-file-name">
-                                                                                <div class="nk-file-name-text">
-                                                                                    <span class="title" v-text="item.archivo"></span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </a>
+                                <div class="nk-block-head nk-block-head-sm">
+                                    <div class="nk-block-between position-relative">
+                                        <div class="nk-block-head-content">
+                                            <h3 class="nk-block-title page-title">Archivos digitales</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nk-fmg-quick-list nk-block">
+                                    <div class="toggle-expand-content expanded" data-content="quick-access">
+                                        <div class="nk-files nk-files-view-grid">
+                                            <div class="nk-files-list">
+                                                <div class="nk-file-item nk-file" v-for="(item,index) in dfnva_files.get_nueva_vigilancia_archivo" :key="index">
+                                                    <div class="nk-file-info">
+                                                        <a target="_blank" :href="URLASSET+'files/'+item.archivo" class="nk-file-link">
+                                                            <div class="nk-file-title">
+                                                                <div class="nk-file-icon">
+                                                                    <span class="nk-file-icon-type" v-if="item.ta_id ==1">
+                                                                        <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                                                            <g transform="translate(0 -1028.4)">
+                                                                                <path d="m23 1048.4c0 1.1-0.895 2-2 2h-8-4-6c-1.1046 0-2-0.9-2-2v-14c0-1.1 0.8954-2 2-2h6 4 4 4c1.105 0 2 0.9 2 2v4 10z" fill="#95a5a6" />
+                                                                                <path d="m1 1047.4c0 1.1 0.8954 2 2 2h8 4 6c1.105 0 2-0.9 2-2v-14c0-1.1-0.895-2-2-2h-6-4-4-4c-1.1046 0-2 0.9-2 2v4 10z" fill="#bdc3c7" />
+                                                                                <rect transform="translate(0 1028.4)" height="14" width="18" y="5" x="3" fill="#f39c12" />
+                                                                                <path d="m16.625 8.625-10.344 10.375h14.719v-6l-4.375-4.375z" transform="translate(0 1028.4)" fill="#e67e22" />
+                                                                                <path d="m8 8a2 2 0 1 1 -4 0 2 2 0 1 1 4 0z" transform="matrix(1.75 0 0 1.75 -3 1024.4)" fill="#f1c40f" />
+                                                                                <path d="m8.0938 11.094-5.0938 5.094v2.812h13l-7.9062-7.906z" transform="translate(0 1028.4)" fill="#d35400" />
+                                                                            </g>
+                                                                        </svg>
+                                                                    </span>
+                                                                    <span class="nk-file-icon-type" v-if="item.ta_id ==2">
+                                                                        <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                                                            <g transform="translate(0 -1028.4)">
+                                                                                <path d="m4 1c-1.1046 0-2 0.8954-2 2v3 11 3 1c0 1.105 0.8954 2 2 2h2 12 2c1.105 0 2-0.895 2-2v-1-3-11-3c0-1.1046-0.895-2-2-2h-2-12-2zm-0.5 2h1c0.2761 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.2238 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.2762 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2238 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.2762 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.224 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.224 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.224 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.224 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.224 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.224 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.224-0.5 0.5-0.5z" transform="translate(0 1028.4)" fill="#e74c3c" />
+                                                                                <path d="m2 1040.4v5 3 1c0 1.1 0.8954 2 2 2h2 12 2c1.105 0 2-0.9 2-2v-1-3-5h-1.5c0.276 0 0.5 0.2 0.5 0.5v1c0 0.2-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.224-0.5 0.5-0.5h-15c0.2761 0 0.5 0.2 0.5 0.5v1c0 0.2-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.2239-0.5 0.5-0.5h-1.5zm1.5 3h1c0.2761 0 0.5 0.2 0.5 0.5v1c0 0.2-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2 0.5 0.5v1c0 0.2-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.2 0.5 0.5v1c0 0.2-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2 0.5 0.5v1c0 0.2-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.224-0.5 0.5-0.5z" fill="#c0392b" />
+                                                                                <path d="m5 22v-20.196l17.66 10.098z" transform="matrix(.28312 0 0 .29709 8.5844 1036.8)" fill="#ecf0f1" />
+                                                                            </g>
+                                                                        </svg>
+                                                                    </span>
+                                                                    <span class="nk-file-icon-type" v-if="item.ta_id ==3">
+                                                                        <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                                                            <g transform="translate(0 -1028.4)">
+                                                                                <path d="m5 1030.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#95a5a6" />
+                                                                                <path d="m5 1029.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#bdc3c7" />
+                                                                                <g fill="#3498db">
+                                                                                    <path fill="#3498db" d="m16.996 1035.1v8.8c0 0.2-0.088 0.5-0.266 0.7-0.177 0.2-0.401 0.3-0.671 0.4-0.271 0.1-0.542 0.2-0.813 0.3-0.266 0-0.516 0.1-0.75 0.1s-0.487-0.1-0.758-0.1c-0.265-0.1-0.534-0.2-0.804-0.3-0.271-0.1-0.495-0.2-0.672-0.4s-0.266-0.5-0.266-0.7c0-0.3 0.089-0.5 0.266-0.7s0.401-0.4 0.672-0.5c0.27-0.1 0.539-0.2 0.804-0.3h0.758c0.547 0 1.047 0.1 1.5 0.3v-4.2l-5.9999 1.8v5.6c0 0.2-0.0886 0.5-0.2656 0.7-0.1771 0.2-0.4011 0.3-0.6719 0.4s-0.5417 0.2-0.8125 0.3c-0.2656 0-0.5156 0.1-0.75 0.1s-0.487-0.1-0.7578-0.1c-0.2656-0.1-0.5339-0.2-0.8047-0.3s-0.4948-0.2-0.6719-0.4-0.2656-0.5-0.2656-0.7c0-0.3 0.0885-0.5 0.2656-0.7s0.4011-0.4 0.6719-0.5 0.5391-0.2 0.8047-0.3h0.7578c0.5469 0 1.0469 0.1 1.5 0.3v-7.6c0-0.1 0.0495-0.3 0.1484-0.4 0.099-0.2 0.2266-0.3 0.3828-0.3l6.4997-2h0.219c0.208 0 0.385 0 0.531 0.2 0.146 0.1 0.219 0.3 0.219 0.5" />
+                                                                                </g>
+                                                                                <path d="m21 1035.4-6-6v4c0 1.1 0.895 2 2 2h4z" fill="#95a5a6" />
+                                                                            </g>
+                                                                        </svg>
+                                                                    </span>
+                                                                    <span class="nk-file-icon-type" v-if="item.ta_id ==4">
+                                                                        <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                                                            <g transform="translate(0 -1028.4)">
+                                                                                <g>
+                                                                                    <path d="m5 1030.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#c0392b" />
+                                                                                    <path d="m5 1029.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#e74c3c" />
+                                                                                    <path d="m21 1035.4-6-6v4c0 1.1 0.895 2 2 2h4z" fill="#c0392b" />
+                                                                                </g>
+                                                                                <path fill="#ecf0f1" d="m19.112 1039.4h-0.29c-0.09 0.1-0.601 0.8-0.822 1-0.06 0.1-0.15 0.2-0.201 0.2-0.743 0.9-2.323 2.4-3.271 3.2-0.124 0.1-0.244 0.2-0.266 0.2-0.066 0.1-0.698 0.5-0.982 0.7-0.905 0.6-1.967 1.1-2.792 1.3-1.6281 0.4-2.8984 0.3-4.5476-0.5-0.4984-0.2-1.2085-0.6-1.5978-0.9-0.382-0.3-0.3417-0.3-0.3411 0.2v0.5l0.2578 0.1c0.3307 0.2 1.0445 0.6 1.5099 0.8 0.3546 0.2 0.4651 0.3 0.2667 0.3-0.1828-0.1-1.2202-0.1-1.6188 0h-0.4c-0.0092 0-0.0167 0.2-0.0167 0.4v0.4h0.1333c0.5736-0.2 1.8047-0.2 2.3778-0.1 0.6748 0.1 1.1496 0.2 1.7199 0.5 1.0881 0.5 1.9906 1.5 2.3836 2.5l0.08 0.2h0.44 0.44l-0.024-0.1c-0.141-0.6-0.537-1.3-1.027-1.8-0.322-0.4-0.8907-0.8-1.1148-1h-0.0756c-0.0364-0.1-0.4165-0.3-0.5789-0.3-0.0924-0.1-0.1677-0.1-0.1677-0.1 0-0.1 0.07-0.1 0.1555 0 0.2135 0 1.0733-0.1 1.4625-0.2 1.078-0.2 2.098-0.6 3.129-1.2 0.37-0.2 1.21-0.9 1.546-1.1 0.25-0.3 0.33-0.3 0.228-0.2-0.036 0.1-0.105 0.2-0.155 0.3-0.049 0.1-0.135 0.2-0.19 0.3-0.778 1.2-1.277 2.7-1.412 4.4-0.019 0.3-0.035 0.6-0.035 0.7v0.3h2.332 2.332l-0.076-0.1c-0.42-0.6-0.941-1.9-1.116-2.8-0.144-0.7-0.187-1.8-0.097-2.4 0.262-1.6 1.155-3 2.689-3.9 0.158-0.1 0.362-0.2 0.453-0.3l0.167-0.1v-0.3c0-0.2-0.012-0.4-0.027-0.4-0.364 0.2-1.174 0.7-1.546 0.9-0.199 0.2-0.211 0.2-0.024 0 0.268-0.3 0.73-0.8 1.221-1.4l0.229-0.2h-0.501-0.24z" />
+                                                                            </g>
+                                                                        </svg>
+                                                                    </span>
                                                                 </div>
-                                                                <div class="nk-file-actions hideable">
-                                                                    <a href="#" class="btn btn-sm btn-icon btn-trigger"><em class="icon ni ni-cross"></em></a>
+                                                                <div class="nk-file-name">
+                                                                    <div class="nk-file-name-text">
+                                                                        <span class="title" v-text="item.archivo"></span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                          
-                                                    </div><!-- .nk-files -->
+                                                        </a>
+                                                    </div>
+                                                    <div class="nk-file-actions hideable">
+                                                        <a href="#" class="btn btn-sm btn-icon btn-trigger"><em class="icon ni ni-cross"></em></a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                           
+
+                                            </div><!-- .nk-files -->
                                         </div>
-                            
+                                    </div>
+
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                </div>
 
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    const URLASSET = "{{asset('')}}";
-    const URL_REGISTRAR = "{{route('ExpedienteWS')}}";
-    const URL_EXPEDIENTE = "{{route('expediente_reporte')}}";
-    document.addEventListener('DOMContentLoaded', async function() {
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDYU0WytTK6kCsmp2NFdOWAMQ8yE7tacQg&libraries=places`;
-        script.async = true;
-        script.defer = true;
-        script.onload = function() {
-            initVueSIVIPOL();
-        };
-        document.head.appendChild(script);
+    <script>
+        const URLASSET = "{{asset('')}}";
+        const URL_REGISTRAR = "{{route('ExpedienteWS')}}";
+        const URL_EXPEDIENTE = "{{route('expediente_reporte')}}";
+        document.addEventListener('DOMContentLoaded', async function() {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDYU0WytTK6kCsmp2NFdOWAMQ8yE7tacQg&libraries=places`;
+            script.async = true;
+            script.defer = true;
+            script.onload = function() {
+                initVueSIVIPOL();
+            };
+            document.head.appendChild(script);
 
-        
-    }, true);
-    function initVueSIVIPOL() {
+
+        }, true);
+
+        function initVueSIVIPOL() {
             Vue.use(VueTables.ClientTable);
             const app = new Vue({
                 el: '#miapp',
@@ -2077,13 +2098,15 @@
                     loadingModalTipoVideoVigilancia: false,
                     cambiarModoActividades: false,
                     dataEdit: {},
-                    dataFinish:{
-                        documentos_id : 1,
-                        fecha_documento : "",
+                    dataFinish: {
+                        documentos_id: 1,
+                        fecha_documento: "",
                         asunto: "",
-                        resultadoFinal: "", 
+                        resultadoFinal: "",
                         destino: "",
-                         archivo: "",
+                        archivo: "",
+                        archivo_NAME: "",
+                        files:[]
                     },
                     disposicion_fiscal_nueva_vigilancia_actividads: {
                         index1: null,
@@ -2454,6 +2477,21 @@
 
 
                         }
+                        if (TYPE == "_DisposicionFiscalFINISH") {
+                            formData.append('df_id', this.dataEdit.id);
+                            for (let i = 0; i < this.dataFinish.files.length; i++) {
+                                if (this.dataFinish.files[i]) {
+                                    formData.append(`dataFinish_archivo_[${i}]`, this.dataFinish.files[i].archivo);
+                                    formData.append(`dataFinish_tipo_contenido_[${i}]`, this.dataFinish.files[i].contenidos_id);
+                                }
+                            }
+                            formData.append('documentos_id', this.dataFinish.documentos_id);
+                            formData.append('fecha_documento', this.dataFinish.fecha_documento);
+                            formData.append('asunto', this.dataFinish.asunto);
+                            formData.append('resultadoFinal', this.dataFinish.resultadoFinal);
+                            formData.append('destino', this.dataFinish.destino);
+                            formData.append('archivo', this.dataFinish.archivo);
+                        }
                         axios.post(URL_REGISTRAR, formData)
                             .then(response => {
                                 console.log(response.data);
@@ -2478,11 +2516,13 @@
 
                                         this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].get_nueva_vigilancia_entidad.push(response.data.data);
                                     }
-                                    if(TYPE == "_DFFinalizar"){
+                                    if (TYPE == "_DFFinalizar") {
                                         this.expe_culminados = this.filtrarPorEstado(2);
                                         this.expe_pendientes = this.filtrarPorEstado(1);
                                     }
-
+                                    if (TYPE == "_DisposicionFiscalFINISH") {
+                           
+                                    }
                                 }
                             })
                             .catch(error => {
@@ -2494,6 +2534,7 @@
                                 });
                             }).finally(() => {
                                 this.loadingPersonas = false;
+                                $('#modalFechaContenidoAdd').modal('hide');
                                 $('#modalFechaContenidoAdd').modal('hide');
                                 $('#modalFechaActividadAdd').modal('hide');
                                 $('#modalEntidadActividadAdd').modal('hide');
@@ -3263,35 +3304,47 @@
                         //     });
                     },
                     OpenEdit(data, _TIPO) {
-                        if(_TIPO == "VER_HISTORIAL"){
+                        if (_TIPO == "VER_HISTORIAL") {
                             this.dataEdit = data;
                             this.ocultar = true;
-                        }else if(_TIPO == "EDITAR"){
+                        } else if (_TIPO == "EDITAR") {
                             this.dataEdit = data;
                         }
                     },
                     modalOpen(TIPO, INDEX1 = null, INDEX2 = null) {
                         if (TIPO == "TipoVideoVigilanciaEdit") {
                             $('#modalADD').modal('hide');
-                            $('#modalADDTipoVideoVigilancia').modal('show');
+                            setTimeout(() => {
+                                $('#modalADDTipoVideoVigilancia').modal('show');
+                            }, 1000);
                         } else if (TIPO == "FiscalEdit") {
                             $('#modalADD').modal('hide');
-                            $('#modalADDFiscal').modal('show');
+                            setTimeout(() => {
+                                $('#modalADDFiscal').modal('show');
+                            }, 1000);
                         } else if (TIPO == "PersonasEdit") {
                             this.cambiarModoActividades = false;
                             $('#modalADD').modal('hide');
-                            $('#modalPersonas').modal('show');
+                            setTimeout(() => {
+                                $('#modalPersonas').modal('show');
+                            }, 1000);
                         } else if (TIPO == "InmuebleEdit") {
                             this.cambiarModoActividades = false;
                             $('#modalADD').modal('hide');
-                            $('#modalInmueble').modal('show');
+                            setTimeout(() => {
+                                $('#modalInmueble').modal('show');
+                            }, 1000);
                         } else if (TIPO == "VehiculoEdit") {
                             this.cambiarModoActividades = false;
                             $('#modalADD').modal('hide');
-                            $('#modalVehiculo').modal('show');
+                            setTimeout(() => {
+                                $('#modalVehiculo').modal('show');
+                            }, 1000);
                         } else if (TIPO == "OficialAdd") {
                             $('#modalADD').modal('hide');
-                            $('#modalOficialAdd').modal('show');
+                            setTimeout(() => {
+                                $('#modalOficialAdd').modal('show');
+                            }, 1000);
                         } else if (TIPO == "FechaContenidoAdd") {
                             $('#modalFechaContenidoAdd').modal('show');
                         } else if (TIPO == "PersonasEdit_actividad") {
@@ -3370,6 +3423,11 @@
 
                             }
 
+                        } else if (TIPO == "ARCHIVOS_FINISH") {
+                            this.dataFinish.files.push({
+                                contenidos_id: 0,
+                                archivo: ""
+                            });
                         }
                     },
                     removeInput(TIPO, index) {
@@ -3377,6 +3435,8 @@
                             this.dataExpe.selectdataObjetoVideovigilancia.splice(index, 1); // Elimina el input en el índice especificado
                         } else if (TIPO == "REFERENCIA") {
                             this.dataExpe.selectdataReferenciaVideovigilancia.splice(index, 1);
+                        } else if (TIPO == "ARCHIVOS_FINISH") {
+                            this.dataFinish.files.splice(index, 1);
                         }
                     },
                     handleFileChange(index, e, ISTO = null) {
@@ -3396,6 +3456,9 @@
                         } else if (ISTO == "_NEWFILE_ENTIDA_VEHICULO") {
                             this.dfnva_vehiculo.get_nueva_vigilancia_archivo[index].pdfName = file.name;
                             this.dfnva_vehiculo.get_nueva_vigilancia_archivo[index].pdf = file;
+                        }else if (ISTO == "_FINISH_EXPEDIENTE") {
+                            this.dataFinish.archivo = file;
+                            this.dataFinish.archivo_NAME = file.name;
                         } else {
                             // Verifica si el archivo es un PDF
                             if (file && file.type === "application/pdf") {
@@ -3542,5 +3605,5 @@
                 },
             });
         }
-</script>
-@endsection
+    </script>
+    @endsection

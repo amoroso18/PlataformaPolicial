@@ -468,7 +468,10 @@ class ExpedienteController extends Controller
                 $data = DisposicionFiscalNuevaVigilanciaEntidad::with(['getNuevaVigilanciaArchivo','getNuevaVigilanciaArchivo.getTipoArchivo'])->where('id', $request->ID_CONTEXTO)->first();
                 // $data = DisposicionFiscalNuevaVigilanciaArchivo::with(['getTipoArchivo'])->where('id', $objeto->id)->first();
                 return response()->json(['message' => 'Registrado correctamente', 'data' => $objeto, 'files' =>   $data]);
-            } elseif ($request->type && $request->type == "_DisposicionFiscalDocResultado") {
+            } elseif ($request->type && $request->type == "_DisposicionFiscalFINISH") {
+
+                return response()->json(['message' => 'Registrado correctamente', 'data' => [], 'files' =>   $request->all()]);
+
             } elseif ($request->type && $request->type == "_DisposicionFiscalDocResultadoAnexo") {
             } elseif ($request->type && $request->type == "_XD5") {
             } elseif ($request->type && $request->type == "_XD6") {
