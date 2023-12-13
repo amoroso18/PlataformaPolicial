@@ -19,7 +19,9 @@ Route::GET('/usuario/salir', [App\Http\Controllers\UserController::class, 'logou
 
 Route::GET('/usuario/perfil', [App\Http\Controllers\PlataformaController::class, 'perfil'])->name('perfil');
 Route::GET('/usuario/actividad/conexion', [App\Http\Controllers\PlataformaController::class, 'conexion'])->name('conexion');
-Route::GET('/usuario/actividad/actualizacion', [App\Http\Controllers\PlataformaController::class, 'actualizacion'])->name('actualizacion');
+Route::GET('/usuario/actividad/notificaciones', [App\Http\Controllers\PlataformaController::class, 'actualizacion'])->name('actualizacion');
+Route::GET('/usuario/cambioPassword', [App\Http\Controllers\PlataformaController::class, 'cambioPassword'])->name('cambioPassword');
+Route::post('/usuario/cambioPassword/credenciales', [App\Http\Controllers\PlataformaController::class, 'perfil_cambiarpassword_save'])->name('perfil_cambiarpassword_save');
 
 
 Route::GET('/administrador/usuarios/registro', [App\Http\Controllers\PlataformaController::class, 'administrador_usuarios_registro'])->name('administrador_usuarios_registro');

@@ -464,8 +464,10 @@ class ExpedienteController extends Controller
                 }else if($request->ID_ENTIDAD == 4){
                     $objeto = EntidadInmueble::find($request->ID_CODIGO_RELACION)->with(['getTipoInmueble'])->first();
                 }
+
+                $data = DisposicionFiscalNuevaVigilanciaEntidad::with(['getNuevaVigilanciaArchivo','getNuevaVigilanciaArchivo.getTipoArchivo'])->where('id', $request->ID_CONTEXTO)->first();
                 // $data = DisposicionFiscalNuevaVigilanciaArchivo::with(['getTipoArchivo'])->where('id', $objeto->id)->first();
-                return response()->json(['message' => 'Registrado correctamente', 'data' => $objeto, 'files' => []]);
+                return response()->json(['message' => 'Registrado correctamente', 'data' => $objeto, 'files' =>   $data]);
             } elseif ($request->type && $request->type == "_DisposicionFiscalDocResultado") {
             } elseif ($request->type && $request->type == "_DisposicionFiscalDocResultadoAnexo") {
             } elseif ($request->type && $request->type == "_XD5") {

@@ -4,6 +4,7 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-tables-2@2.3.5/dist/vue-tables-2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYU0WytTK6kCsmp2NFdOWAMQ8yE7tacQg&libraries=places"></script> -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/googlemaps-js-api-loader/1.16.2/index.min.js"></script> -->
 <script>
@@ -103,18 +104,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card card-bordered ">
-                    <div class="card-inner">
-                        <div class="card-title-group align-start mb-0">
-                            <div class="card-title">
-                                <h6 class="subtitle">Caducados</h6>
-                            </div>
-                        </div>
-                        <div class="card-amount"><span class="amount" v-text="expe_caducados"></span></div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <div class="nk-block" v-show="!ocultar">
@@ -123,9 +112,11 @@
         <div class="card card-bordered card-preview">
             <p v-if="loadingTable"><em class="icon ni ni-loader"></em> Cargando....</p>
             <v-client-table :data="data.tableData" :columns="data.columns" :options="data.options" v-if="data.tableData.length > 0">
-                <div slot="estado" slot-scope="props">
-                    <div class="text-success" v-if="props.row.estado_id == 1"> ACTIVO</div>
-                    <div class="text-danger" v-if="props.row.estado_id != 1"> INACTIVO</div>
+                <div slot="get_estado" slot-scope="props">
+                    <div class="d-flex justify-content-center">
+                        <span class="badge badge-dim badge-pill badge-secondary badge-md" v-text="props.row.get_estado.descripcion">-</span>
+                    </div>
+                    <span v-if="props.row.estado_id == 1 || props.row.estado_id == 0" v-text="compareFechas(props.row.fecha_termino, calculateFechaHoy(props.row)) "></span>
                 </div>
                 <div slot="get_fiscal" slot-scope="props" v-if="props.row.get_fiscal.id != 1">
                     <span v-text="props.row.get_fiscal.carnet + ' ' +props.row.get_fiscal.nombres + ' ' + props.row.get_fiscal.paterno + ' ' + props.row.get_fiscal.materno + ' ' + props.row.get_fiscal.ficalia"> </span>
@@ -134,23 +125,28 @@
                     <span v-text="props.row.get_fiscal_adjunto.carnet + ' ' +props.row.get_fiscal_adjunto.nombres + ' ' + props.row.get_fiscal_adjunto.paterno + ' ' + props.row.get_fiscal_adjunto.materno + ' ' + props.row.get_fiscal_adjunto.ficalia"> </span>
                 </div>
                 <div slot="progreso" slot-scope="props">
-                    <div class="project-progress">
-                        <div class="project-progress-details">
-                            <div class="project-progress-task"><em class="icon ni ni-check-round-cut"></em><span>44 Tasks</span></div>
-                            <div class="project-progress-percent">65.5%</div>
-                        </div>
+                    <ul class="list">
+                        <li>fecha_inicio: <span v-text="props.row.fecha_inicio"></span> </li>
+                        <li>fecha_termino: <span v-text="props.row.fecha_termino"></span></li>
+                    </ul>
+                    <div class="project-progress" v-if="props.row.estado_id == 1 || props.row.estado_id == 0">
                         <div class="progress progress-pill progress-md bg-light">
-                            <div class="progress-bar" data-progress="65.5" style="width: 65.5%;"></div>
+                            <div class="progress-bar" :data-progress="calculateProgressBarWidth(props.row)" :style="{ width: calculateProgressBarWidth(props.row) }"></div>
+                        </div>
+                    </div>
+                    <div class="project-progress" v-if="props.row.estado_id == 2">
+                        <div class="progress progress-pill progress-md bg-light">
+                            <div class="progress-bar" data-progress="100%" style="width: 100%"></div>
                         </div>
                     </div>
                 </div>
                 <div slot="opciones" slot-scope="props">
                     <div class="btn-group dropup">
                         <a target="_blank" :href="uriExpe+'?contexto='+props.row.id" class="m-1" style="font-size: 22px;"><em class="icon ni ni-reports"></em></a>
-                        <a v-on:click="OpenEdit(props.row)" class="m-1 pointer" style="font-size: 22px;">
+                        <a v-on:click="OpenEdit(props.row, 'VER_HISTORIAL')" class="m-1 pointer" style="font-size: 22px;">
                             <em class="icon ni ni-camera-fill"></em>
                         </a>
-                        <a v-on:click="OpenEdit(props.row)" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
+                        <a v-on:click="OpenEdit(props.row, 'EDITAR')" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
                     </div>
                 </div>
             </v-client-table>
@@ -198,11 +194,11 @@
 
                                             <div v-for="(item2,index2) in item.get_nueva_vigilancia_actividad" :key="index2">
                                                 <section class="mb-2 mt-3">
-                                                    
-                                                    <h6 class="title" ><span class="badge badge-pill badge-outline-light text-dark" v-text="index2+1"></span> <span v-text="item2.fechahora"></span>  
+
+                                                    <h6 class="title"><span class="badge badge-pill badge-outline-light text-dark" v-text="index2+1"></span> <span v-text="item2.fechahora"></span>
                                                         <button class="btn btn-dark btn-sm mt-2 ml-2" v-on:click="modalOpen('PersonasEdit_actividad',index,index2)">+ Personas</button>
                                                         <button class="btn btn-dark btn-sm mt-2 ml-2" v-on:click="modalOpen('InmuebleEdit_actividad',index,index2)">+ Inmueble</button>
-                                                        <button class="btn btn-dark btn-sm mt-2 ml-2" v-on:click="modalOpen('VehiculoEdit_actividad',index,index2)">+ Vehiculo</button>  
+                                                        <button class="btn btn-dark btn-sm mt-2 ml-2" v-on:click="modalOpen('VehiculoEdit_actividad',index,index2)">+ Vehiculo</button>
                                                     </h6>
                                                 </section>
                                                 <section class="mt-3 mb-3 ml-5" v-if="item2.get_nueva_vigilancia_entidad.length > 0">
@@ -210,21 +206,21 @@
                                                     <table class="table preview-reference">
                                                         <thead class="thead-light">
                                                             <tr>
-                                                                <th ></th>
+                                                                <th></th>
                                                                 <th class="overline-title w-300px">Entidad</th>
                                                                 <th class="overline-title">Detalle</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr  class="table" v-for="(item3,index3) in item2.get_nueva_vigilancia_entidad" :key="index3">
+                                                            <tr class="table" v-for="(item3,index3) in item2.get_nueva_vigilancia_entidad" :key="index3">
                                                                 <td scope="row" v-text="index3+1"></td>
                                                                 <td v-on:click="VerEntidadActividad(item3)">
                                                                     <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" v-if="item3.entidads_id == 1 || item3.entidads_id == 2">
-                                                                        <em  class="icon ni ni-user-fill"></em> <span class="mr-2" v-if="item3.get_tipo_entidad" v-text="item3.get_tipo_entidad.descripcion"></span>
+                                                                        <em class="icon ni ni-user-fill"></em> <span class="mr-2" v-if="item3.get_tipo_entidad" v-text="item3.get_tipo_entidad.descripcion"></span>
                                                                     </a>
 
                                                                     <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" v-if="item3.entidads_id == 3">
-                                                                        <em  class="icon ni ni-truck"></em> <span class="mr-2" v-if="item3.get_tipo_entidad" v-text="item3.get_tipo_entidad.descripcion"></span>
+                                                                        <em class="icon ni ni-truck"></em> <span class="mr-2" v-if="item3.get_tipo_entidad" v-text="item3.get_tipo_entidad.descripcion"></span>
                                                                     </a>
 
                                                                     <a class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary" v-if="item3.entidads_id == 4">
@@ -270,15 +266,15 @@
                     <h5>Expediente</h5>
                     <section>
                         <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-Caso" v-model="dataExpe.caso"><label class="form-label-outlined" for="outlined-Caso">Caso</label></div>
+                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-Casoxd" v-model="dataExpe.caso"><label class="form-label-outlined" for="outlined-Casoxd">Caso</label></div>
                         </div>
                         <div class="col-sm-12 mt-3">
-                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-nro" v-model="dataExpe.nro"><label class="form-label-outlined" for="outlined-nro">Número</label></div>
+                            <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-nroxd" v-model="dataExpe.nro"><label class="form-label-outlined" for="outlined-nroxd">Número</label></div>
                         </div>
                         <div class="col-sm-12 mt-3">
                             <div class="form-control-wrap">
-                                <input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-picker3" v-model="dataExpe.fecha_disposicion">
-                                <label class="form-label-outlined" for="outlined-date-picker3">Fecha de disposición </label>
+                                <input type="date" class="form-control form-control-xl form-control-outlined" id="outlined-date-picker33" v-model="dataExpe.fecha_disposicion">
+                                <label class="form-label-outlined" for="outlined-date-picker33">Fecha de disposición </label>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-3">
@@ -541,27 +537,75 @@
                 </div>
                 <div class="modal-body">
                     <div id="accordion" class="accordion">
-                        <div class="accordion-item">
-                            <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1">
+                        <!-- <div class="accordion-item">
+                            <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-100">
                                 <h6 class="title">Editar expediente</h6>
                                 <span class="accordion-icon"></span>
                             </a>
-                            <div class="accordion-body collapse" id="accordion-item-1" data-parent="#accordion">
+                            <div class="accordion-body collapse" id="accordion-item-100" data-parent="#accordion">
                                 <div class="accordion-inner">
 
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="accordion-item">
-                            <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-2">
+                            <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-200">
                                 <h6 class="title">Editar Situación</h6>
                                 <span class="accordion-icon"></span>
                             </a>
-                            <div class="accordion-body collapse" id="accordion-item-2" data-parent="#accordion">
+                            <div class="accordion-body collapse" id="accordion-item-200" data-parent="#accordion">
                                 <div class="accordion-inner">
+                                <ul class="pricing-features" v-if="dataEdit.id">
+                                    <li><span class="w-50">Caso</span> : <span class="ml-auto" v-text="dataEdit.caso"></span></li>
+                                    <li><span class="w-50">Nro</span> : <span class="ml-auto" v-text="dataEdit.nro"></span></li>
+                                    <li><span class="w-50">Resumen</span> : <span class="ml-auto" v-text="dataEdit.resumen"></span></li>
+                                    <li><span class="w-50">Observaciones </span> : <span class="ml-auto" v-text="dataEdit.observaciones"></span></li>
+                                    <li><span class="w-50">Días plazo </span> : <span class="ml-auto" v-text="dataEdit.plazo"></span></li>
+                                </ul>
 
                                 </div>
+                                <div class="col-sm-12 mt-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="default-01">asunto</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" v-model="dataFinish.asunto">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="default-01">fecha_documento</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" v-model="dataFinish.fecha_documento">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="default-01">resultadoFinal</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" v-model="dataFinish.resultadoFinal">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="default-01">destino</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" v-model="dataFinish.destino">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="form-label" for="default-01">tipo de archivo digital</label>
+                                        <div class="form-control-wrap">
+                                            <select class="form-control" data-ui="xl" id="outlined-select2" v-model="dataFinish.documentos_id">
+                                                <option v-for="item in dataTipoDocumentos" :key="item.id" :value="item.id" v-text="item.descripcion"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="default-01">archivo</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" v-model="dataFinish.archivo">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
 
                     </div>
@@ -1828,17 +1872,17 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Entidad de actividad de videovigilancia</h5>
                 </div>
-                <div class="modal-body" >
+                <div class="modal-body">
                     <div class="card-inner">
                         <div class="pricing-body">
                             <ul class="pricing-features" v-if="dfnva_persona.id">
                                 <li>
-                                <div class="row g-gs">
+                                    <div class="row g-gs">
                                         <div class="col-lg-6">
-                                        <img :style="{ width: '100%' }" v-bind:src="'data:image/jpeg;base64,' + dfnva_persona.foto" alt="Imagen">
+                                            <img :style="{ width: '100%' }" v-bind:src="'data:image/jpeg;base64,' + dfnva_persona.foto" alt="Imagen">
                                         </div>
                                         <div class="col-lg-6">
-                                        <img :style="{ width: '100%' }" v-bind:src="'data:image/jpeg;base64,' + dfnva_persona.firma" alt="Imagen">  
+                                            <img :style="{ width: '100%' }" v-bind:src="'data:image/jpeg;base64,' + dfnva_persona.firma" alt="Imagen">
                                         </div>
                                     </div>
                                 </li>
@@ -1863,7 +1907,7 @@
                                 <li><span class="w-50">provincia_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.provincia_domicilio"></span></li>
                                 <li><span class="w-50">distrito_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.distrito_domicilio"></span></li>
                                 <li><span class="w-50">lugar_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.lugar_domicilio"></span></li>
-                               
+
 
                             </ul>
                             <ul class="pricing-features" v-if="dfnva_vehiculo.id">
@@ -1901,11 +1945,93 @@
 
 
                             </ul>
+                            <div class="nk-fmg-body-content">
+                                            <div class="nk-block-head nk-block-head-sm">
+                                                <div class="nk-block-between position-relative">
+                                                    <div class="nk-block-head-content">
+                                                        <h3 class="nk-block-title page-title">Archivos digitales</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="nk-fmg-quick-list nk-block">
+                                                <div class="toggle-expand-content expanded" data-content="quick-access">
+                                                    <div class="nk-files nk-files-view-grid">
+                                                        <div class="nk-files-list">
+                                                            <div class="nk-file-item nk-file" v-for="(item,index) in dfnva_files.get_nueva_vigilancia_archivo" :key="index">
+                                                                <div class="nk-file-info">
+                                                                    <a target="_blank" :href="URLASSET+'files/'+item.archivo" class="nk-file-link">
+                                                                        <div class="nk-file-title">
+                                                                            <div class="nk-file-icon">
+                                                                                <span class="nk-file-icon-type" v-if="item.ta_id ==1">
+                                                                                    <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                                                                    <g transform="translate(0 -1028.4)">
+                                                                                    <path d="m23 1048.4c0 1.1-0.895 2-2 2h-8-4-6c-1.1046 0-2-0.9-2-2v-14c0-1.1 0.8954-2 2-2h6 4 4 4c1.105 0 2 0.9 2 2v4 10z" fill="#95a5a6"/>
+                                                                                    <path d="m1 1047.4c0 1.1 0.8954 2 2 2h8 4 6c1.105 0 2-0.9 2-2v-14c0-1.1-0.895-2-2-2h-6-4-4-4c-1.1046 0-2 0.9-2 2v4 10z" fill="#bdc3c7"/>
+                                                                                    <rect transform="translate(0 1028.4)" height="14" width="18" y="5" x="3" fill="#f39c12"/>
+                                                                                    <path d="m16.625 8.625-10.344 10.375h14.719v-6l-4.375-4.375z" transform="translate(0 1028.4)" fill="#e67e22"/>
+                                                                                    <path d="m8 8a2 2 0 1 1 -4 0 2 2 0 1 1 4 0z" transform="matrix(1.75 0 0 1.75 -3 1024.4)" fill="#f1c40f"/>
+                                                                                    <path d="m8.0938 11.094-5.0938 5.094v2.812h13l-7.9062-7.906z" transform="translate(0 1028.4)" fill="#d35400"/>
+                                                                                    </g>
+                                                                                    </svg>
+                                                                                </span>
+                                                                                <span class="nk-file-icon-type" v-if="item.ta_id ==2">
+                                                                                    <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                                                                    <g transform="translate(0 -1028.4)">
+                                                                                    <path d="m4 1c-1.1046 0-2 0.8954-2 2v3 11 3 1c0 1.105 0.8954 2 2 2h2 12 2c1.105 0 2-0.895 2-2v-1-3-11-3c0-1.1046-0.895-2-2-2h-2-12-2zm-0.5 2h1c0.2761 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2238 0.5 0.5v1c0 0.2762-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.2238-0.5-0.5v-1c0-0.2762 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.2238 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.2762 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2238 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.2762 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.224 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.224 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.224 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.224 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.224 0.5 0.5v1c0 0.276-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.224 0.5 0.5v1c0 0.276-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.224-0.5-0.5v-1c0-0.276 0.224-0.5 0.5-0.5z" transform="translate(0 1028.4)" fill="#e74c3c"/>
+                                                                                    <path d="m2 1040.4v5 3 1c0 1.1 0.8954 2 2 2h2 12 2c1.105 0 2-0.9 2-2v-1-3-5h-1.5c0.276 0 0.5 0.2 0.5 0.5v1c0 0.2-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.224-0.5 0.5-0.5h-15c0.2761 0 0.5 0.2 0.5 0.5v1c0 0.2-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.2239-0.5 0.5-0.5h-1.5zm1.5 3h1c0.2761 0 0.5 0.2 0.5 0.5v1c0 0.2-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2 0.5 0.5v1c0 0.2-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.224-0.5 0.5-0.5zm-16 3h1c0.2761 0 0.5 0.2 0.5 0.5v1c0 0.2-0.2239 0.5-0.5 0.5h-1c-0.2761 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.2239-0.5 0.5-0.5zm16 0h1c0.276 0 0.5 0.2 0.5 0.5v1c0 0.2-0.224 0.5-0.5 0.5h-1c-0.276 0-0.5-0.3-0.5-0.5v-1c0-0.3 0.224-0.5 0.5-0.5z" fill="#c0392b"/>
+                                                                                    <path d="m5 22v-20.196l17.66 10.098z" transform="matrix(.28312 0 0 .29709 8.5844 1036.8)" fill="#ecf0f1"/>
+                                                                                    </g>
+                                                                                    </svg>
+                                                                                </span>
+                                                                                <span class="nk-file-icon-type" v-if="item.ta_id ==3">
+                                                                                    <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                                                                        <g transform="translate(0 -1028.4)">
+                                                                                        <path d="m5 1030.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#95a5a6"/>
+                                                                                        <path d="m5 1029.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#bdc3c7"/>
+                                                                                        <g fill="#3498db">
+                                                                                        <path fill="#3498db" d="m16.996 1035.1v8.8c0 0.2-0.088 0.5-0.266 0.7-0.177 0.2-0.401 0.3-0.671 0.4-0.271 0.1-0.542 0.2-0.813 0.3-0.266 0-0.516 0.1-0.75 0.1s-0.487-0.1-0.758-0.1c-0.265-0.1-0.534-0.2-0.804-0.3-0.271-0.1-0.495-0.2-0.672-0.4s-0.266-0.5-0.266-0.7c0-0.3 0.089-0.5 0.266-0.7s0.401-0.4 0.672-0.5c0.27-0.1 0.539-0.2 0.804-0.3h0.758c0.547 0 1.047 0.1 1.5 0.3v-4.2l-5.9999 1.8v5.6c0 0.2-0.0886 0.5-0.2656 0.7-0.1771 0.2-0.4011 0.3-0.6719 0.4s-0.5417 0.2-0.8125 0.3c-0.2656 0-0.5156 0.1-0.75 0.1s-0.487-0.1-0.7578-0.1c-0.2656-0.1-0.5339-0.2-0.8047-0.3s-0.4948-0.2-0.6719-0.4-0.2656-0.5-0.2656-0.7c0-0.3 0.0885-0.5 0.2656-0.7s0.4011-0.4 0.6719-0.5 0.5391-0.2 0.8047-0.3h0.7578c0.5469 0 1.0469 0.1 1.5 0.3v-7.6c0-0.1 0.0495-0.3 0.1484-0.4 0.099-0.2 0.2266-0.3 0.3828-0.3l6.4997-2h0.219c0.208 0 0.385 0 0.531 0.2 0.146 0.1 0.219 0.3 0.219 0.5"/>
+                                                                                        </g>
+                                                                                        <path d="m21 1035.4-6-6v4c0 1.1 0.895 2 2 2h4z" fill="#95a5a6"/>
+                                                                                        </g>
+                                                                                    </svg>
+                                                                                </span>
+                                                                                <span class="nk-file-icon-type" v-if="item.ta_id ==4">
+                                                                                    <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                                                                                        <g transform="translate(0 -1028.4)">
+                                                                                        <g>
+                                                                                        <path d="m5 1030.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#c0392b"/>
+                                                                                        <path d="m5 1029.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4l-6-6h-10z" fill="#e74c3c"/>
+                                                                                        <path d="m21 1035.4-6-6v4c0 1.1 0.895 2 2 2h4z" fill="#c0392b"/>
+                                                                                        </g>
+                                                                                        <path fill="#ecf0f1" d="m19.112 1039.4h-0.29c-0.09 0.1-0.601 0.8-0.822 1-0.06 0.1-0.15 0.2-0.201 0.2-0.743 0.9-2.323 2.4-3.271 3.2-0.124 0.1-0.244 0.2-0.266 0.2-0.066 0.1-0.698 0.5-0.982 0.7-0.905 0.6-1.967 1.1-2.792 1.3-1.6281 0.4-2.8984 0.3-4.5476-0.5-0.4984-0.2-1.2085-0.6-1.5978-0.9-0.382-0.3-0.3417-0.3-0.3411 0.2v0.5l0.2578 0.1c0.3307 0.2 1.0445 0.6 1.5099 0.8 0.3546 0.2 0.4651 0.3 0.2667 0.3-0.1828-0.1-1.2202-0.1-1.6188 0h-0.4c-0.0092 0-0.0167 0.2-0.0167 0.4v0.4h0.1333c0.5736-0.2 1.8047-0.2 2.3778-0.1 0.6748 0.1 1.1496 0.2 1.7199 0.5 1.0881 0.5 1.9906 1.5 2.3836 2.5l0.08 0.2h0.44 0.44l-0.024-0.1c-0.141-0.6-0.537-1.3-1.027-1.8-0.322-0.4-0.8907-0.8-1.1148-1h-0.0756c-0.0364-0.1-0.4165-0.3-0.5789-0.3-0.0924-0.1-0.1677-0.1-0.1677-0.1 0-0.1 0.07-0.1 0.1555 0 0.2135 0 1.0733-0.1 1.4625-0.2 1.078-0.2 2.098-0.6 3.129-1.2 0.37-0.2 1.21-0.9 1.546-1.1 0.25-0.3 0.33-0.3 0.228-0.2-0.036 0.1-0.105 0.2-0.155 0.3-0.049 0.1-0.135 0.2-0.19 0.3-0.778 1.2-1.277 2.7-1.412 4.4-0.019 0.3-0.035 0.6-0.035 0.7v0.3h2.332 2.332l-0.076-0.1c-0.42-0.6-0.941-1.9-1.116-2.8-0.144-0.7-0.187-1.8-0.097-2.4 0.262-1.6 1.155-3 2.689-3.9 0.158-0.1 0.362-0.2 0.453-0.3l0.167-0.1v-0.3c0-0.2-0.012-0.4-0.027-0.4-0.364 0.2-1.174 0.7-1.546 0.9-0.199 0.2-0.211 0.2-0.024 0 0.268-0.3 0.73-0.8 1.221-1.4l0.229-0.2h-0.501-0.24z"/>
+                                                                                        </g>
+                                                                                        </svg>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="nk-file-name">
+                                                                                <div class="nk-file-name-text">
+                                                                                    <span class="title" v-text="item.archivo"></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="nk-file-actions hideable">
+                                                                    <a href="#" class="btn btn-sm btn-icon btn-trigger"><em class="icon ni ni-cross"></em></a>
+                                                                </div>
+                                                            </div>
+                                                          
+                                                    </div><!-- .nk-files -->
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+                            
                         </div>
                     </div>
                 </div>
-               
-               
+
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
@@ -1915,22 +2041,22 @@
 </div>
 
 <script>
+    const URLASSET = "{{asset('')}}";
     const URL_REGISTRAR = "{{route('ExpedienteWS')}}";
     const URL_EXPEDIENTE = "{{route('expediente_reporte')}}";
+    document.addEventListener('DOMContentLoaded', async function() {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDYU0WytTK6kCsmp2NFdOWAMQ8yE7tacQg&libraries=places`;
+        script.async = true;
+        script.defer = true;
+        script.onload = function() {
+            initVueSIVIPOL();
+        };
+        document.head.appendChild(script);
 
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDYU0WytTK6kCsmp2NFdOWAMQ8yE7tacQg&libraries=places`;
-    script.async = true;
-    script.defer = true;
-    script.onload = function() {
-        initVueSIVIPOL();
-    };
-    document.head.appendChild(script);
-
-    // initVueSIVIPOL();
-
+        
+    }, true);
     function initVueSIVIPOL() {
-        document.addEventListener('DOMContentLoaded', async function() {
             Vue.use(VueTables.ClientTable);
             const app = new Vue({
                 el: '#miapp',
@@ -1951,6 +2077,14 @@
                     loadingModalTipoVideoVigilancia: false,
                     cambiarModoActividades: false,
                     dataEdit: {},
+                    dataFinish:{
+                        documentos_id : 1,
+                        fecha_documento : "",
+                        asunto: "",
+                        resultadoFinal: "", 
+                        destino: "",
+                         archivo: "",
+                    },
                     disposicion_fiscal_nueva_vigilancia_actividads: {
                         index1: null,
                         index2: null,
@@ -2093,7 +2227,7 @@
                     dataInmuebleSearch: [],
                     data_nacionalidad: [],
                     data: {
-                        columns: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', 'estado', 'progreso', 'opciones'],
+                        columns: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', 'get_estado', 'progreso', 'opciones'],
                         tableData: [],
                         options: {
                             toMomentFormat: true,
@@ -2111,11 +2245,11 @@
                                 plazo: 'DÍAS DE PLAZO',
                                 get_fiscal: 'FISCAL',
                                 get_fiscal_adjunto: 'FISCAL ADJUNTO',
-                                estado: 'SITUACION',
+                                get_estado: 'SITUACION',
                                 progreso: 'PROGRESO',
                                 opciones: 'OPCIONES',
                             },
-                            filterable: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto'],
+                            filterable: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', 'get_estado'],
                             texts: {
                                 limit: 'Mostrar:',
                                 count: 'Total de {count} registros encontrados',
@@ -2163,6 +2297,39 @@
                     // }, 1500);
                 },
                 methods: {
+                    calculateFechaHoy() {
+                        // Calcula la fecha_hoy utilizando moment
+                        const momentFechaHoy = moment();
+                        return momentFechaHoy.format('YYYY-MM-DD');
+                    },
+                    compareFechas(fechaFin, fechaHoy) {
+                        const momentFechaFin = moment(fechaFin);
+                        const momentFechaHoy = moment(fechaHoy);
+
+                        if (momentFechaFin.isSame(momentFechaHoy, 'day')) {
+                            return 'Hoy es la Fecha Fin';
+                        } else if (momentFechaHoy.isAfter(momentFechaFin, 'day')) {
+                            const diasPasados = momentFechaHoy.diff(momentFechaFin, 'days');
+                            return `Pasaron ${diasPasados} días desde la Fecha Fin`;
+                        } else {
+                            const diasFaltantes = momentFechaFin.diff(momentFechaHoy, 'days');
+                            return `Faltan ${diasFaltantes} días para la Fecha Fin`;
+                        }
+                    },
+                    calculateProgressBarWidth(row) {
+                        // Lógica para calcular el ancho de la barra de progreso según las condiciones
+                        // Puedes devolver un porcentaje calculado dinámicamente.
+                        // Ejemplo simple:
+                        if (row?.get_nueva_vigilancia?.[0]?.get_nueva_vigilancia_actividad?.[0]?.get_nueva_vigilancia_entidad) {
+                            return '75%';
+                        } else if (row?.get_nueva_vigilancia?.[0]?.get_nueva_vigilancia_actividad) {
+                            return '50%';
+                        } else if (row?.get_nueva_vigilancia?.[0]) {
+                            return '30%';
+                        } else {
+                            return '10%';
+                        }
+                    },
                     calcularFechaFinal() {
                         if (this.dataExpe.fecha_inicio && this.dataExpe.plazo) {
                             const fechaInicio = new Date(this.dataExpe.fecha_inicio);
@@ -2177,7 +2344,8 @@
                         }
                         return 'No hay suficientes datos para calcular la fecha final';
                     },
-                    VerEntidadActividad(isDATA){
+                    VerEntidadActividad(isDATA) {
+                        console.log(isDATA);
                         this.dfnva_persona = {};
                         this.dfnva_inmueble = {};
                         this.dfnva_vehiculo = {};
@@ -2186,6 +2354,7 @@
                         formData.append('type', "_VerEntidadArchivos");
                         formData.append('ID_CODIGO_RELACION', isDATA.codigo_relacion);
                         formData.append('ID_ENTIDAD', isDATA.entidads_id);
+                        formData.append('ID_CONTEXTO', isDATA.id);
                         axios.post(URL_REGISTRAR, formData)
                             .then(response => {
                                 if (response.data.error) {
@@ -2196,11 +2365,11 @@
                                         confirmButtonText: '¡Entendido!',
                                     });
                                 } else {
-                                    if(isDATA.entidads_id == 1 || isDATA.entidads_id == 2 ){
+                                    if (isDATA.entidads_id == 1 || isDATA.entidads_id == 2) {
                                         this.dfnva_persona = response.data.data;
-                                    }else if(isDATA.entidads_id == 3){
+                                    } else if (isDATA.entidads_id == 3) {
                                         this.dfnva_vehiculo = response.data.data;
-                                    }else if(isDATA.entidads_id == 4){
+                                    } else if (isDATA.entidads_id == 4) {
                                         this.dfnva_inmueble = response.data.data;
 
                                     }
@@ -2218,7 +2387,7 @@
                                 this.loadingModalNuevoFiscal = false;
                                 $('#modalVerEntidadActividad').modal('show');
                             });
-                        
+
                     },
                     GrabarActividad(TYPE) {
                         this.loadingPersonas = true;
@@ -2307,19 +2476,11 @@
                                         const index1 = this.disposicion_fiscal_nueva_vigilancia_actividads.index1;
                                         const index2 = this.disposicion_fiscal_nueva_vigilancia_actividads.index2;
 
-                                        this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].get_nueva_vigilancia_entidad.push(response.data.data)
-                                        
-
-
-                                     
-                                        // formData.append('dfnva_id', this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].);
-                                        // if(this.dfnva_persona.nacionalidad_id == 1){
-                                        //     formData.append('entidads_id', 1);
-                                        // }else{
-                                        //     formData.append('entidads_id', 2);
-                                        // }
-                                        // formData.append('codigo_relacion', this.dfnva_persona.documento_id);
-                                        // formData.append('detalle', this.dfnva_persona.detalle);
+                                        this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].get_nueva_vigilancia_entidad.push(response.data.data);
+                                    }
+                                    if(TYPE == "_DFFinalizar"){
+                                        this.expe_culminados = this.filtrarPorEstado(2);
+                                        this.expe_pendientes = this.filtrarPorEstado(1);
                                     }
 
                                 }
@@ -3101,10 +3262,13 @@
                         //         $('#modalDefault').modal('hide');
                         //     });
                     },
-                    OpenEdit(data) {
-                        // console.log(data);
-                        this.dataEdit = data;
-                        this.ocultar = true;
+                    OpenEdit(data, _TIPO) {
+                        if(_TIPO == "VER_HISTORIAL"){
+                            this.dataEdit = data;
+                            this.ocultar = true;
+                        }else if(_TIPO == "EDITAR"){
+                            this.dataEdit = data;
+                        }
                     },
                     modalOpen(TIPO, INDEX1 = null, INDEX2 = null) {
                         if (TIPO == "TipoVideoVigilanciaEdit") {
@@ -3377,7 +3541,6 @@
                     'dataExpe.plazo': 'calcularFechaFinal',
                 },
             });
-        }, true);
-    }
+        }
 </script>
 @endsection

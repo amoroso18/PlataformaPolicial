@@ -143,6 +143,10 @@ class UserController extends Controller
         //     return back()->with('error', 'Los datos ingresados no son válidos!');
         //  }
     }
+
+   
+
+
     public function recuperar_save(Request $request)
     {
         $usuario = User::where('email', $request->email)->first();
@@ -176,7 +180,6 @@ class UserController extends Controller
             return back()->with('error', 'Los datos ingresados no son válidos o la plataforma esta fallando, contactanos si crees que cometimos un error!');
         }
     }
-
     public static function importfotos()
     {
 

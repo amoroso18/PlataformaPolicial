@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\TipoGrado;
 use App\Models\TipoPerfil;
 use App\Models\TipoUnidad;
@@ -236,5 +236,35 @@ class PlataformaController extends Controller
                     break;
             }
         }
+    }
+    public function perfil()
+    {
+        return view('modules.perfil.index');
+    }
+    public function conexion()
+    {
+        return view('modules.perfil.actividad');
+    }
+    public function cambioPassword()
+    {
+        return view('modules.perfil.cambioContrasena');
+    }
+    public function perfil_cambiarpassword_save(Request $request)
+    {
+        if(Hash::check($request->passanter, Auth::user()->password)){
+                $users = User::find(Auth::user()->id);
+                $users->password = Hash::make($request->newpass);
+                if($users->save()){
+                    return response()->json(['message' => 'Procesado correctamente', 'data' => "SALIR"]);
+                }else{
+                    return response()->json(['error' => 'No se pudo actualizar la contraseña!', 'data' => ""]);
+                }
+        }else{
+            return response()->json(['error' => 'La contraseña actual es incorrecta!', 'data' => ""]);
+        }
+    }
+    public function actualizacion()
+    {
+        return view('modules.perfil.notificaciones');
     }
 }
