@@ -2467,7 +2467,7 @@
                             }
 
                             if (this.dfnva_vehiculo.id) {
-                                formData.append('entidads_id', 4);
+                                formData.append('entidads_id', 3);
                                 formData.append('codigo_relacion', this.dfnva_vehiculo.id);
                                 formData.append('detalle', this.dfnva_vehiculo.detalle);
                                 for (let i = 0; i < this.dfnva_vehiculo.get_nueva_vigilancia_archivo.length; i++) {
@@ -2948,7 +2948,7 @@
                                     });
                                 } else {
                                     if (this.cambiarModoActividades) {
-                                        this.dfnva_inmueble = {
+                                        this.dfnva_vehiculo = {
                                             ...response.data.data,
                                             detalle: "",
                                             get_nueva_vigilancia_archivo: []

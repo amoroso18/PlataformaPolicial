@@ -242,7 +242,7 @@ class ReportesController extends Controller
             $expeDelitos =  DisposicionFiscalDelitos::where("df_id",$expe->id)->get();
             $MYPDF->Ln(4);
 
-            $MYPDF->multicell(192, 5, "DETALLE", 0, 'L');
+            $MYPDF->multicell(192, 5, "1) DETALLE", 0, 'L');
             $MYPDF->Ln(2);
             self::generateLineTextSpace($MYPDF,  "CASO", strtoupper($expe->caso));$MYPDF->Ln(1);
             self::generateLineTextSpace($MYPDF,  "NRO", strtoupper($expe->nro));$MYPDF->Ln(1);
@@ -268,19 +268,16 @@ class ReportesController extends Controller
             
             $MYPDF->Ln(5);
             $MYPDF->SetFont('Arial', 'B', 11);
-            $MYPDF->multicell(192, 5, "DELITOS", 0, 'L');
+            $MYPDF->multicell(192, 5, "2) DELITOS", 0, 'L');
             $MYPDF->Ln(2);
             foreach ($expeDelitos  as $key => $value) {
-                $MYPDF->Cell(5, 6, " ", 0, 0, 'L');
-                $MYPDF->SetTextColor(89, 90, 90);
-                $MYPDF->SetFont('Helvetica', '', 10);
-                $MYPDF->multicell(180, 3, strtoupper(utf8_decode(trim($value->geTipoDelitos->tipo." - ".$value->geTipoDelitos->subtipo." - ".$value->geTipoDelitos->modalidad))), 0, 'j');
-                $MYPDF->Ln(3);
+                $SR = $key+1;
+                self::generateLineTextSpace($MYPDF,  "2.".$SR.".- ".$value->geTipoDelitos->tipo." - ".$value->geTipoDelitos->subtipo." - ".$value->geTipoDelitos->modalidad, "");$MYPDF->Ln(1);
             }
 
             $MYPDF->Ln(5);
             $MYPDF->SetFont('Arial', 'B', 11);
-            $MYPDF->multicell(192, 5, "REFERENCIA", 0, 'L');
+            $MYPDF->multicell(192, 5, "3) DOCUMENTOS DIGITALES", 0, 'L');
             $MYPDF->Ln(2);
             foreach ($expeREFERENCIA  as $key => $value) {
                 self::generateLineTextSpace($MYPDF,  "TIPO DOC REFERENCIA", $value->geTipoDocumentosReferencia->descripcion);$MYPDF->Ln(1);
@@ -291,24 +288,25 @@ class ReportesController extends Controller
             }
             $MYPDF->Ln(5);
             $MYPDF->SetFont('Arial', 'B', 11);
-            $MYPDF->multicell(192, 5, "TIPO DE VIDEOVIGILANCIA", 0, 'L');
+            $MYPDF->multicell(192, 5, "4) TIPO DE VIDEOVIGILANCIA", 0, 'L');
             $MYPDF->Ln(2);
             foreach ($expeTIPOVV  as $key => $value) {
-                self::generateLineTextSpace($MYPDF,  $value->geTipoVideovigilancia->descripcion, "");$MYPDF->Ln(1);
+                $SR = $key+1;
+                self::generateLineTextSpace($MYPDF,  "4.".$SR.".- ".$value->geTipoVideovigilancia->descripcion, "");$MYPDF->Ln(1);
             }
 
             $MYPDF->Ln(5);
             $MYPDF->SetFont('Arial', 'B', 11);
-            $MYPDF->multicell(192, 5, "OBJECTO DE VIDEOVIGILANCIA", 0, 'L');
+            $MYPDF->multicell(192, 5, "5) OBJECTO DE VIDEOVIGILANCIA", 0, 'L');
             $MYPDF->Ln(2);
             foreach ($expeOBJETOVV  as $key => $value) {
                 if($value->entidads_id == 1 || $value->entidads_id == 2){
                     $EntidadPersona = EntidadPersona::with(['getTipoNacionalidad', 'getTipoDocumentoIdentidad'])->where('id',$value->codigo_relacion)->first();
 
-                    $img = explode(',',$EntidadPersona->foto,2);
-                    $pic = 'data://text/plain;base64,'. $img;
-
                     if ($EntidadPersona->foto) {
+                        $MYPDF->Ln(1);
+                        $x = $MYPDF->GetX()+6;
+                        $y = $MYPDF->GetY();
                         $base64Image = $EntidadPersona->foto; // Tus datos BLOB
                         // Decodifica el BLOB y guarda la imagen en un archivo temporal
                         $imageData = base64_decode($base64Image);
@@ -316,12 +314,12 @@ class ReportesController extends Controller
                         file_put_contents($routeImagesPathTemp . $tempImageFile, $imageData);
                         chmod($routeImagesPathTemp . $tempImageFile, 0755);
                         // Inserta la imagen en el PDF
-                        $MYPDF->image($routeImagesPathTemp . $tempImageFile, 9, 72, 45);
+                        $MYPDF->image($routeImagesPathTemp . $tempImageFile, $x, $y, 25, 30);
+                        $MYPDF->SetXY($x + 15, $y + 15);
+                        $MYPDF->Ln(15);
                         // Elimina el archivo temporal
                         unlink($routeImagesPathTemp . $tempImageFile);
                     }
-                    // $MYPDF->image('data:image/' . $imageType . ';base64,' . $EntidadPersona->foto, 10, 10, 150, 150);
-                    $MYPDF->Image($pic,10,30,0,0,'png');
                     self::generateLineTextForDetailSpace($MYPDF, 'NACIONALIDAD', $EntidadPersona->getTipoNacionalidad->descripcion);
                     self::generateLineTextForDetailSpace($MYPDF, 'TIPO DOCUMENTO', $EntidadPersona->getTipoDocumentoIdentidad->descripcion);
                     $MYPDF->Ln(4);
@@ -357,7 +355,7 @@ class ReportesController extends Controller
                     self::generateLineTextSpace($MYPDF, strtoupper('lugar domicilio'), $EntidadPersona->lugar_domicilio);
                     // self::generateLineTextForDetailSpace($MYPDF, 'foto', $EntidadPersona->foto);
                     // self::generateLineTextForDetailSpace($MYPDF, 'firma', $EntidadPersona->firma);
-                    $MYPDF->Ln(5);
+                    $MYPDF->Ln(3);
                 }elseif($value->entidads_id == 3){
                     $EntidadVehiculos = EntidadVehiculos::where('id',$value->codigo_relacion)->first();
                     self::generateLineTextForDetailSpace($MYPDF, strtoupper('placa'), $EntidadVehiculos->placa);
@@ -385,7 +383,7 @@ class ReportesController extends Controller
                     self::generateLineTextForDetailSpace($MYPDF, strtoupper('placa anterior'), $EntidadVehiculos->placaanterior);
                     $MYPDF->Ln(5);
                     self::generateLineTextSpace($MYPDF, strtoupper('estado vehiculo'), $EntidadVehiculos->estado_vehiculo);
-                    $MYPDF->Ln(5);
+                    $MYPDF->Ln(3);
                 }elseif($value->entidads_id == 4){
                     $EntidadInmueble = EntidadInmueble::with(['getTipoInmueble'])->where('id',$value->codigo_relacion)->first();
                   
@@ -405,31 +403,162 @@ class ReportesController extends Controller
                         self::generateLineTextSpace($MYPDF, ('mapa'), "https://maps.google.com/?q=".$EntidadInmueble->latitud.",".$EntidadInmueble->longitud.""); $MYPDF->Ln(1);
                     }
                     self::generateLineTextSpace($MYPDF, ('observaciones'), $EntidadInmueble->observaciones ?? "SIN OBSERVACIONES");
-                    $MYPDF->Ln(5);
+                    $MYPDF->Ln(3);
                     
                 }
-                // self::generateLineText($MYPDF,  $value->entidads_id, $value->codigo_relacion);
+                $MYPDF->Cell(5, 6, " ", 0, 0, 'L');
+                $MYPDF->multicell(189, 4,  str_repeat("-", 153), 0, 'j');
+                $MYPDF->Ln(1);
             }
           
             $MYPDF->Ln(5);
             $MYPDF->SetFont('Arial', 'B', 11);
-            $MYPDF->multicell(192, 5, "ACTIVIDADES", 0, 'L');
+            $MYPDF->multicell(192, 5, "6) HISTORIAL DE ACTIVIDADES", 0, 'L');
             $MYPDF->Ln(2);
             foreach ($expe->getNuevaVigilancia as $key => $value) {
 
-                self::generateLineTextForDetailSpace($MYPDF, 'Documento', $value->geTipoDocumentosReferencia->descripcion);
+                $SR = $key+1;
+                self::generateLineTextSpace($MYPDF,  "6.".$SR.".- ".$value->fechaDocumento, "",3);
+                self::generateLineTextForDetailSpace($MYPDF, 'Documento', $value->geTipoDocumentosReferencia->descripcion,10);
                 self::generateLineTextForDetailSpace($MYPDF, 'nro Documento', $value->numeroDocumento);
-                $MYPDF->Ln(4);
-                self::generateLineTextForDetailSpace($MYPDF, 'fecha Documento', $value->fechaDocumento);
-                self::generateLineTextForDetailSpace($MYPDF, 'NOMBRES', $EntidadPersona->nombres);
                 $MYPDF->Ln(5);
-                self::generateLineTextSpace($MYPDF,  "siglas Documento", $value->siglasDocumento);$MYPDF->Ln(1);
-                self::generateLineTextSpace($MYPDF,  "asunto", $value->asunto);$MYPDF->Ln(1);
-                self::generateLineTextSpace($MYPDF,  "responde a", $value->respondea);$MYPDF->Ln(1);
-                self::generateLineTextSpace($MYPDF,  "evaluacion", $value->evaluacion);$MYPDF->Ln(1);
-                self::generateLineTextSpace($MYPDF,  "conclusiones", $value->conclusiones);$MYPDF->Ln(1);
-                self::generateLineTextSpace($MYPDF,  "archivo", $value->archivo);$MYPDF->Ln(1);
-                $MYPDF->Ln(5);
+                self::generateLineTextSpace($MYPDF,  "siglas Documento", $value->siglasDocumento,10);
+                self::generateLineTextSpace($MYPDF,  "asunto", $value->asunto,10);
+                self::generateLineTextSpace($MYPDF,  "responde a", $value->respondea,10);
+                self::generateLineTextSpace($MYPDF,  "evaluacion", $value->evaluacion,10);
+                self::generateLineTextSpace($MYPDF,  "conclusiones", $value->conclusiones,10);
+                self::generateLineTextSpace($MYPDF,  "archivo", $value->archivo,10);
+                foreach ($value->getNuevaVigilanciaActividad as $key2 => $value2) {
+                    $SR2 = $key2+1;
+                    $MYPDF->Ln(1);
+                    // self::generateLineTextSpace($MYPDF,  "6.".$SR.".".$SR2.".- "."Fecha/hora", $value2->fechahora,15);
+                    self::generateLineTextSpace($MYPDF,  "6.".$SR.".".$SR2." ".$value2->fechahora,"",10);
+                    $MYPDF->Ln(1);
+                    foreach ($value2->getNuevaVigilanciaEntidad as $key3 => $value3) {
+                        $SR3 = $key3+1;
+                        $MYPDF->Ln(1);
+                        self::generateLineTextSpace($MYPDF,  "6.".$SR.".".$SR2.".".$SR3.".- ".$value3->getTipoEntidad->descripcion,"",20);
+                        $MYPDF->Ln(1);
+                        if($value3->entidads_id == 1 || $value3->entidads_id == 2){
+                            $EntidadPersona = EntidadPersona::with(['getTipoNacionalidad', 'getTipoDocumentoIdentidad'])->where('id',$value3->codigo_relacion)->first();
+        
+                            if ($EntidadPersona->foto) {
+                                $MYPDF->Ln(1);
+                                $x = $MYPDF->GetX()+34;
+                                $y = $MYPDF->GetY();
+                                $base64Image = $EntidadPersona->foto; // Tus datos BLOB
+                                // Decodifica el BLOB y guarda la imagen en un archivo temporal
+                                $imageData = base64_decode($base64Image);
+                                $tempImageFile = $EntidadPersona->documento . '_temp_image.jpg'; // Nombre del archivo temporal
+                                file_put_contents($routeImagesPathTemp . $tempImageFile, $imageData);
+                                chmod($routeImagesPathTemp . $tempImageFile, 0755);
+                                // Inserta la imagen en el PDF
+                                $MYPDF->image($routeImagesPathTemp . $tempImageFile, $x, $y, 25, 30);
+                                $MYPDF->SetXY($x + 15, $y + 15);
+                                $MYPDF->Ln(15);
+                                // Elimina el archivo temporal
+                                unlink($routeImagesPathTemp . $tempImageFile);
+                            }
+                            self::generateLineTextForDetailSpace($MYPDF, 'NACIONALIDAD', $EntidadPersona->getTipoNacionalidad->descripcion,33);
+                            self::generateLineTextForDetailSpace($MYPDF, 'TIPO DOCUMENTO', $EntidadPersona->getTipoDocumentoIdentidad->descripcion);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, 'DOCUMENTO', strtoupper($EntidadPersona->documento),33);
+                            self::generateLineTextForDetailSpace($MYPDF, 'NOMBRES', $EntidadPersona->nombres);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, 'APELLIDO PATERNO', strtoupper($EntidadPersona->paterno),33);
+                            self::generateLineTextForDetailSpace($MYPDF, 'APELLIDO MATERNO', $EntidadPersona->materno);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, 'ESTADO CIVIL', $EntidadPersona->estado_civil,33);
+                            self::generateLineTextForDetailSpace($MYPDF, 'SEXO', $EntidadPersona->sexo);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, 'FECHA NAC.', $EntidadPersona->fecha_nacimiento,33);
+                            if($value3->entidads_id == 1){
+                                self::generateLineTextForDetailSpace($MYPDF, strtoupper('ubigeo nacimiento'), $EntidadPersona->ubigeo_nacimiento);
+                                $MYPDF->Ln(4);
+                                self::generateLineTextForDetailSpace($MYPDF, strtoupper('depart. nacimiento'), $EntidadPersona->departamento_nacimiento,33);
+                                self::generateLineTextForDetailSpace($MYPDF, strtoupper('provincia nacimiento'), $EntidadPersona->provincia_nacimiento);
+                                $MYPDF->Ln(4);
+                                self::generateLineTextForDetailSpace($MYPDF, strtoupper('distrito nacimiento'), $EntidadPersona->distrito_nacimiento,33);
+                                $MYPDF->Ln(5);
+                            }else{
+                                $MYPDF->Ln(5);
+                            }
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, strtoupper('lugar nacimiento'), $EntidadPersona->lugar_nacimiento,33);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('ubigeo domicilio'), $EntidadPersona->ubigeo_domicilio,33);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('depart. domicilio'), $EntidadPersona->departamento_domicilio,33);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('provincia domicilio'), $EntidadPersona->provincia_domicilio);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('distrito domicilio'), $EntidadPersona->distrito_domicilio,33);
+                            $MYPDF->Ln(5);
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, strtoupper('lugar domicilio'), $EntidadPersona->lugar_domicilio,33);
+                            // self::generateLineTextForDetailSpace($MYPDF, 'foto', $EntidadPersona->foto);
+                            // self::generateLineTextForDetailSpace($MYPDF, 'firma', $EntidadPersona->firma);
+                            $MYPDF->Ln(3);
+                        }elseif($value3->entidads_id == 3){
+                            $EntidadVehiculos = EntidadVehiculos::where('id',$value3->codigo_relacion)->first();
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('placa'), $EntidadVehiculos->placa,33);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('serie'), $EntidadVehiculos->serie);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('Nro. de motor'), strtoupper($EntidadVehiculos->numero_motor),33);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('color'), $EntidadVehiculos->color);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('marca'), strtoupper($EntidadVehiculos->marca),33);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('modelo'), $EntidadVehiculos->modelo);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('AÑO FABRICACIÓN'), $EntidadVehiculos->ano,33);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('tipo de carrocerÍa'), $EntidadVehiculos->tipo_carroceria);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('vin'), $EntidadVehiculos->vin,33);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('tipo motor'), $EntidadVehiculos->tipo_motor);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('cilindrada motor'), $EntidadVehiculos->cilindrada_motor,33);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('tipo combustible'), $EntidadVehiculos->tipo_combustible);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('tipo transmisiÓn'), $EntidadVehiculos->tipo_transmision,33);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('tipo tracciÓn'), $EntidadVehiculos->tipo_traccion);
+                            $MYPDF->Ln(4);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('kilometraje'), $EntidadVehiculos->kilometraje,33);
+                            self::generateLineTextForDetailSpace($MYPDF, strtoupper('placa anterior'), $EntidadVehiculos->placaanterior);
+                            $MYPDF->Ln(5);
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, strtoupper('estado vehiculo'), $EntidadVehiculos->estado_vehiculo,33);
+                            $MYPDF->Ln(3);
+                        }elseif($value3->entidads_id == 4){
+                            $EntidadInmueble = EntidadInmueble::with(['getTipoInmueble'])->where('id',$value3->codigo_relacion)->first();
+                          
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, ('tipo'), $EntidadInmueble->getTipoInmueble->descripcion,33); $MYPDF->Ln(1);
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, ('direccion'), $EntidadInmueble->direccion,33); $MYPDF->Ln(1);
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, ('departamento'), $EntidadInmueble->departamento,33); $MYPDF->Ln(1);
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, ('provincia'), $EntidadInmueble->provincia,33); $MYPDF->Ln(1);
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, ('distrito'), $EntidadInmueble->distrito,33); $MYPDF->Ln(1);
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, ('referencia'), $EntidadInmueble->referencia,33); $MYPDF->Ln(1);
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, ('color'), $EntidadInmueble->color_exterior,33); $MYPDF->Ln(1);
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, ('caract. especiales'), $EntidadInmueble->caracteristicas_especiales,33); $MYPDF->Ln(1);
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, ('estado conservacion'), $EntidadInmueble->estado_conservacion ?? "SIN ESTADO",33); $MYPDF->Ln(1);
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, ('ubigeo'), $EntidadInmueble->ubigeo,33); $MYPDF->Ln(1);
+                            if($EntidadInmueble->latitud){
+                                self::generateLineTextSpaceAcitividadSub4($MYPDF, ('latitud'), $EntidadInmueble->latitud,33); $MYPDF->Ln(1);
+                                self::generateLineTextSpaceAcitividadSub4($MYPDF, ('longitud'), $EntidadInmueble->longitud,33); $MYPDF->Ln(1);
+                                self::generateLineTextSpaceAcitividadSub4($MYPDF, ('mapa'), "https://maps.google.com/?q=".$EntidadInmueble->latitud.",".$EntidadInmueble->longitud."",33); $MYPDF->Ln(1);
+                            }
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, ('observaciones'), $EntidadInmueble->observaciones ?? "SIN OBSERVACIONES",33);
+                            $MYPDF->Ln(3);
+                            
+                        }
+                        self::generateLineTextSpaceAcitividadSub4($MYPDF, 'DETALLE', $value3->detalle,33);
+                        $MYPDF->Ln(1);
+                        foreach ($value3->getNuevaVigilanciaArchivo as $key4 => $value4) {
+                            $SR4 = $key4+1;
+                            self::generateLineTextSpaceAcitividadSub4($MYPDF, 'ARCHIVO ANEXO '.$SR4, $value4->archivo,33);
+                        }
+                        $MYPDF->Ln(3);
+                    }
+
+                }
+                $MYPDF->Ln(1);
+                $MYPDF->Cell(5, 6, " ", 0, 0, 'L');
+                $MYPDF->multicell(189, 4,  str_repeat("-", 153), 0, 'j');
+                $MYPDF->Ln(1);
             }
 
 
@@ -578,10 +707,14 @@ class ReportesController extends Controller
         // $pdf->MultiCell(90, 7, utf8_decode(trim($contenido)), 0, 'C', true);
         // }
     }
-    private static function generateLineTextForDetailSpace($pdf, $tipo, $contenido)
+    private static function generateLineTextForDetailSpace($pdf, $tipo, $contenido,$ml = null)
     {
         // if (isset($contenido) && !empty($contenido)) {
-        $pdf->Cell(5, 6, " ", 0, 0, 'L');
+        if($ml){
+            $pdf->Cell($ml, 6, " ", 0, 0, 'L');
+        }else{
+            $pdf->Cell(5, 6, " ", 0, 0, 'L');
+        }
         $pdf->SetTextColor(71, 67, 141);
         $pdf->SetFont('Helvetica', '', 9);
         $pdf->Cell(40, 6, strtoupper(utf8_decode(trim($tipo))), 0, 0, 'L');
@@ -604,17 +737,38 @@ class ReportesController extends Controller
         $pdf->multicell(140, 4, utf8_decode(trim($contenido)), 0, 'j');
         // }
     }
-    private static function generateLineTextSpace($pdf, $tipo, $contenido)
+    private static function generateLineTextSpace($pdf, $tipo, $contenido,$ml = null)
     {
         // if (isset($contenido) && !empty($contenido)) {
-        $pdf->Cell(5, 6, " ", 0, 0, 'L');
+        if($ml){
+            $pdf->Cell($ml, 6, " ", 0, 0, 'L');
+        }else{
+            $pdf->Cell(5, 6, " ", 0, 0, 'L');
+        }
         $pdf->SetTextColor(71, 67, 141);
         $pdf->SetFont('Helvetica', '', 9);
         $pdf->Cell(40, 4, strtoupper(utf8_decode(trim($tipo))), 0, 0, 'L');
         $pdf->Cell(2, 4, ":", 0, 0, 'L');
         $pdf->SetTextColor(89, 90, 90);
         $pdf->SetFont('Helvetica', '', 10);
-        $pdf->multicell(140, 3, strtoupper(utf8_decode(trim($contenido))), 0, 'j');
+        $pdf->multicell(140, 4, strtoupper(utf8_decode(trim($contenido))), 0, 'J');
+        // }
+    }
+    private static function generateLineTextSpaceAcitividadSub4($pdf, $tipo, $contenido,$ml = null)
+    {
+        // if (isset($contenido) && !empty($contenido)) {
+        if($ml){
+            $pdf->Cell($ml, 6, " ", 0, 0, 'L');
+        }else{
+            $pdf->Cell(5, 6, " ", 0, 0, 'L');
+        }
+        $pdf->SetTextColor(71, 67, 141);
+        $pdf->SetFont('Helvetica', '', 9);
+        $pdf->Cell(40, 4, strtoupper(utf8_decode(trim($tipo))), 0, 0, 'L');
+        $pdf->Cell(2, 4, ":", 0, 0, 'L');
+        $pdf->SetTextColor(89, 90, 90);
+        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->MultiCell(115, 4, strtoupper(utf8_decode(trim($contenido))), 0, 'J');
         // }
     }
     public static function importfotos()
