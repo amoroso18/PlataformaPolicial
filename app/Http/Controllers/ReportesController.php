@@ -389,10 +389,14 @@ class ReportesController extends Controller
             $MYPDF->multicell(192, 5, "ACTIVIDADES", 0, 'L');
             $MYPDF->Ln(2);
             foreach ($expe->getNuevaVigilancia as $key => $value) {
-                self::generateLineTextSpace($MYPDF,  "Documento", $value->geTipoDocumentosReferencia->descripcion);$MYPDF->Ln(1);
-                self::generateLineTextSpace($MYPDF,  "nro Documento", $value->numeroDocumento);$MYPDF->Ln(1);
+
+                self::generateLineTextForDetailSpace($MYPDF, 'Documento', $value->geTipoDocumentosReferencia->descripcion);
+                self::generateLineTextForDetailSpace($MYPDF, 'nro Documento', $value->numeroDocumento);
+                $MYPDF->Ln(4);
+                self::generateLineTextForDetailSpace($MYPDF, 'fecha Documento', $value->fechaDocumento);
+                self::generateLineTextForDetailSpace($MYPDF, 'NOMBRES', $EntidadPersona->nombres);
+                $MYPDF->Ln(4);
                 self::generateLineTextSpace($MYPDF,  "siglas Documento", $value->siglasDocumento);$MYPDF->Ln(1);
-                self::generateLineTextSpace($MYPDF,  "fecha Documento", $value->fechaDocumento);$MYPDF->Ln(1);
                 self::generateLineTextSpace($MYPDF,  "asunto", $value->asunto);$MYPDF->Ln(1);
                 self::generateLineTextSpace($MYPDF,  "responde a", $value->respondea);$MYPDF->Ln(1);
                 self::generateLineTextSpace($MYPDF,  "evaluacion", $value->evaluacion);$MYPDF->Ln(1);
@@ -585,5 +589,31 @@ class ReportesController extends Controller
         $pdf->SetFont('Helvetica', '', 10);
         $pdf->multicell(140, 3, strtoupper(utf8_decode(trim($contenido))), 0, 'j');
         // }
+    }
+    public static function importfotos()
+    {
+
+        $filePath = public_path('assets/personas.csv'); // Ajusta el nombre del archivo según tu estructura
+
+        if (file_exists($filePath)) {
+            $csvFile = fopen($filePath, 'r');
+
+            // Lee la primera fila como encabezado
+            $header = fgetcsv($csvFile);
+
+            while (($row = fgetcsv($csvFile)) !== false) {
+                // Combina el encabezado con los datos de la fila
+                $data = array_combine($header, $row);
+
+                // Inserta los datos en la base de datos
+                EntidadPersona::where('documento', $data['dni'])->update([
+                    'foto' => $data['foto'],
+                    'firma' => $data['firma'],
+                    // Agrega otros campos según sea necesario
+                ]);
+            }
+            fclose($csvFile);
+        } else {
+        }
     }
 }

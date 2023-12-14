@@ -15,6 +15,9 @@
             if (error.response && error.response.status == 401 || error.response.status == 419) {
                 window.location.href = URL_LOGIN;
             }
+            if (error.response && error.response.status == 413) {
+                alert("Los archivos tienen un gran tamaño, debe configurar tu servidor para que acepte archivos de gran tamaño, considere usar archivos de prueba.")
+            }
             return Promise.reject(error);
         }
     );
@@ -1832,10 +1835,10 @@
                         <div class="pricing-body">
                             <ul class="pricing-features">
                                 <li v-if="dfnva_inmueble.get_tipo_inmueble"><span class="w-50">Tipo</span> : <span class="ml-auto" v-text="dfnva_inmueble.get_tipo_inmueble.descripcion"></span></li>
-                                <li><span class="w-50">direccion</span> : <span class="ml-auto" v-text="dfnva_inmueble.direccion"></span></li>
-                                <li><span class="w-50">departamento</span> : <span class="ml-auto" v-text="dfnva_inmueble.departamento"></span></li>
-                                <li><span class="w-50">provincia</span> : <span class="ml-auto" v-text="dfnva_inmueble.provincia"></span></li>
-                                <li><span class="w-50">distrito </span> : <span class="ml-auto" v-text="dfnva_inmueble.distrito"></span></li>
+                                <li><span class="w-50">Dirección</span> : <span class="ml-auto" v-text="dfnva_inmueble.direccion"></span></li>
+                                <li><span class="w-50">Departamento</span> : <span class="ml-auto" v-text="dfnva_inmueble.departamento"></span></li>
+                                <li><span class="w-50">Provincia</span> : <span class="ml-auto" v-text="dfnva_inmueble.provincia"></span></li>
+                                <li><span class="w-50">Distrito </span> : <span class="ml-auto" v-text="dfnva_inmueble.distrito"></span></li>
                             </ul>
                         </div>
                         <div class="col-sm-12 mt-3">
@@ -2594,7 +2597,8 @@
                             }
                         }
                         // console.log(this.dataExpe);
-                        for (let i = 0; i < this.dataExpe.selectdataReferenciaVideovigilancia.length; i++) {
+                        if(this.dataExpe.selectdataReferenciaVideovigilancia){
+                            for (let i = 0; i < this.dataExpe.selectdataReferenciaVideovigilancia.length; i++) {
                             if (this.dataExpe.selectdataReferenciaVideovigilancia[i]) {
                                 formData.append(`selectdataReferenciaVideovigilancia_documentos_id_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].documentos_id);
                                 formData.append(`selectdataReferenciaVideovigilancia_fecha_documento_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].fecha_documento);
@@ -2603,11 +2607,16 @@
                                 formData.append(`selectdataReferenciaVideovigilancia_siglas_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].siglas);
                             }
                         }
-                        for (let i = 0; i < this.dataExpe.selectdataTipoVideovigilancia.length; i++) {
-                            if (this.dataExpe.selectdataTipoVideovigilancia[i].id) {
-                                formData.append(`selectdataTipoVideovigilancia_[${i}]`, this.dataExpe.selectdataTipoVideovigilancia[i].id);
+                        }
+                        if(this.dataExpe.selectdataTipoVideovigilancia){
+                            for (let i = 0; i < this.dataExpe.selectdataTipoVideovigilancia.length; i++) {
+                                if (this.dataExpe.selectdataTipoVideovigilancia[i].id) {
+                                    formData.append(`selectdataTipoVideovigilancia_[${i}]`, this.dataExpe.selectdataTipoVideovigilancia[i].id);
+                                }
                             }
                         }
+                        
+                       
                         for (let i = 0; i < this.dataVehiculo.length; i++) {
                             if (this.dataVehiculo[i].id) {
                                 formData.append(`dataVehiculo_[${i}]`, this.dataVehiculo[i].id);
@@ -3065,17 +3074,6 @@
                                                 setTimeout(() => {
                                                     $('#modalEntidadActividadAdd').modal('show');
                                                 }, 1000);
-                                            
-
-                                                // const index1 = this.disposicion_fiscal_nueva_vigilancia_actividads.index1;
-                                                // const index2 = this.disposicion_fiscal_nueva_vigilancia_actividads.index2;
-                                                // if(this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].dataPersonas){
-                                                //     this.dataEdit.get_nueva_vigilancia[index1].get_nueva_vigilancia_actividad[index2].dataPersonas.push({
-                                                //         ...response.data.data,
-                                                //         get_nueva_vigilancia_archivo: []
-                                                //     });
-                                                // }else{
-
                                             } else if (TIPO == "_get_domicilio") {
                                                 this.dataInmuebleSearch = response.data.data;
                                             }

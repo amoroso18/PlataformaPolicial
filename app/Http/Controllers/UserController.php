@@ -180,30 +180,5 @@ class UserController extends Controller
             return back()->with('error', 'Los datos ingresados no son válidos o la plataforma esta fallando, contactanos si crees que cometimos un error!');
         }
     }
-    public static function importfotos()
-    {
-
-        $filePath = public_path('assets/personas.csv'); // Ajusta el nombre del archivo según tu estructura
-
-        if (file_exists($filePath)) {
-            $csvFile = fopen($filePath, 'r');
-
-            // Lee la primera fila como encabezado
-            $header = fgetcsv($csvFile);
-
-            while (($row = fgetcsv($csvFile)) !== false) {
-                // Combina el encabezado con los datos de la fila
-                $data = array_combine($header, $row);
-
-                // Inserta los datos en la base de datos
-                EntidadPersona::where('documento', $data['dni'])->update([
-                    'foto' => $data['foto'],
-                    'firma' => $data['firma'],
-                    // Agrega otros campos según sea necesario
-                ]);
-            }
-            fclose($csvFile);
-        } else {
-        }
-    }
+    
 }
