@@ -258,7 +258,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalADD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <a href="#" class="close" data-dismiss="modal" aria-label="Close">
                     <em class="icon ni ni-cross"></em>
@@ -546,7 +546,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <a href="#" class="close" data-dismiss="modal" aria-label="Close">
                     <em class="icon ni ni-cross"></em>
@@ -646,7 +646,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalADDFiscal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <a href="#" class="close" data-dismiss="modal" aria-label="Close">
                     <em class="icon ni ni-cross"></em>
@@ -700,7 +700,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalADDTipoVideoVigilancia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <a href="#" class="close" data-dismiss="modal" aria-label="Close">
                     <em class="icon ni ni-cross"></em>
@@ -1129,7 +1129,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalInmueble" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel6" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <a href="#" class="close" data-dismiss="modal" aria-label="Close">
                     <em class="icon ni ni-cross"></em>
@@ -1328,7 +1328,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalVehiculo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel7" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <a href="#" class="close" data-dismiss="modal" aria-label="Close">
                     <em class="icon ni ni-cross"></em>
@@ -1593,7 +1593,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalFechaContenidoAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel9" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Documento de Actividad</h5>
@@ -1686,7 +1686,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalFechaActividadAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel10" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Fecha y hora de actividades</h5>
@@ -1715,7 +1715,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalEntidadActividadAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel11" aria-hidden="true">
-        <div class="modal-dialog " role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Entidad de actividad de videovigilancia</h5>
@@ -1891,7 +1891,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalVerEntidadActividad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel11" aria-hidden="true">
-        <div class="modal-dialog " role="document">
+        <div class="modal-dialog modal-lg " role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Entidad de actividad de videovigilancia</h5>

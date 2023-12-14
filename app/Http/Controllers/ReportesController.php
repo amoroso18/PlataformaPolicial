@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
 
 use App\Models\TipoGrado;
 use App\Models\TipoPerfil;
@@ -212,6 +213,12 @@ class ReportesController extends Controller
     public static function expediente_reporte($idexpe){
           // Texto o datos que deseas codificar en el QR Code
           try {
+            $imageType = 'jpeg';
+            if (App::environment('local')) {
+                $routeImagesPathTemp = public_path('temp/');
+            } else {
+                $routeImagesPathTemp = '/var/www/html/sivipol/temp/';
+            }
             $INFO = AuditoriaController::audita_usuario(Auth::user()->id, "DESCARGA REPORTE", "EXPEDIENTE", $idexpe);
             $ContenidoTitulo = utf8_decode('CÓDIGO DE SEGURIDAD NRO.' . $INFO->id . ' | CÓDIGO USUARIO NRO.' . Auth::user()->id . ' | FECHA DESCARGA ' . $INFO->created_at);
             $MYPDF = new PDFF($ContenidoTitulo);
@@ -297,6 +304,24 @@ class ReportesController extends Controller
             foreach ($expeOBJETOVV  as $key => $value) {
                 if($value->entidads_id == 1 || $value->entidads_id == 2){
                     $EntidadPersona = EntidadPersona::with(['getTipoNacionalidad', 'getTipoDocumentoIdentidad'])->where('id',$value->codigo_relacion)->first();
+
+                    $img = explode(',',$EntidadPersona->foto,2);
+                    $pic = 'data://text/plain;base64,'. $img;
+
+                    if ($EntidadPersona->foto) {
+                        $base64Image = $EntidadPersona->foto; // Tus datos BLOB
+                        // Decodifica el BLOB y guarda la imagen en un archivo temporal
+                        $imageData = base64_decode($base64Image);
+                        $tempImageFile = $EntidadPersona->documento . '_temp_image.jpg'; // Nombre del archivo temporal
+                        file_put_contents($routeImagesPathTemp . $tempImageFile, $imageData);
+                        chmod($routeImagesPathTemp . $tempImageFile, 0755);
+                        // Inserta la imagen en el PDF
+                        $MYPDF->image($routeImagesPathTemp . $tempImageFile, 9, 72, 45);
+                        // Elimina el archivo temporal
+                        unlink($routeImagesPathTemp . $tempImageFile);
+                    }
+                    // $MYPDF->image('data:image/' . $imageType . ';base64,' . $EntidadPersona->foto, 10, 10, 150, 150);
+                    $MYPDF->Image($pic,10,30,0,0,'png');
                     self::generateLineTextForDetailSpace($MYPDF, 'NACIONALIDAD', $EntidadPersona->getTipoNacionalidad->descripcion);
                     self::generateLineTextForDetailSpace($MYPDF, 'TIPO DOCUMENTO', $EntidadPersona->getTipoDocumentoIdentidad->descripcion);
                     $MYPDF->Ln(4);
@@ -372,12 +397,14 @@ class ReportesController extends Controller
                     self::generateLineTextSpace($MYPDF, ('referencia'), $EntidadInmueble->referencia); $MYPDF->Ln(1);
                     self::generateLineTextSpace($MYPDF, ('color_exterior'), $EntidadInmueble->color_exterior); $MYPDF->Ln(1);
                     self::generateLineTextSpace($MYPDF, ('caract. especiales'), $EntidadInmueble->caracteristicas_especiales); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, ('estado conservacion'), $EntidadInmueble->estado_conservacion); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('estado conservacion'), $EntidadInmueble->estado_conservacion ?? "SIN ESTADO"); $MYPDF->Ln(1);
                     self::generateLineTextSpace($MYPDF, ('ubigeo'), $EntidadInmueble->ubigeo); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, ('latitud'), $EntidadInmueble->latitud); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, ('longitud'), $EntidadInmueble->longitud); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, ('mapa'), "https://maps.google.com/?q=".$EntidadInmueble->latitud.",".$EntidadInmueble->longitud.""); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, ('observaciones'), $EntidadInmueble->observaciones);
+                    if($EntidadInmueble->latitud){
+                        self::generateLineTextSpace($MYPDF, ('latitud'), $EntidadInmueble->latitud); $MYPDF->Ln(1);
+                        self::generateLineTextSpace($MYPDF, ('longitud'), $EntidadInmueble->longitud); $MYPDF->Ln(1);
+                        self::generateLineTextSpace($MYPDF, ('mapa'), "https://maps.google.com/?q=".$EntidadInmueble->latitud.",".$EntidadInmueble->longitud.""); $MYPDF->Ln(1);
+                    }
+                    self::generateLineTextSpace($MYPDF, ('observaciones'), $EntidadInmueble->observaciones ?? "SIN OBSERVACIONES");
                     $MYPDF->Ln(5);
                     
                 }
@@ -395,7 +422,7 @@ class ReportesController extends Controller
                 $MYPDF->Ln(4);
                 self::generateLineTextForDetailSpace($MYPDF, 'fecha Documento', $value->fechaDocumento);
                 self::generateLineTextForDetailSpace($MYPDF, 'NOMBRES', $EntidadPersona->nombres);
-                $MYPDF->Ln(4);
+                $MYPDF->Ln(5);
                 self::generateLineTextSpace($MYPDF,  "siglas Documento", $value->siglasDocumento);$MYPDF->Ln(1);
                 self::generateLineTextSpace($MYPDF,  "asunto", $value->asunto);$MYPDF->Ln(1);
                 self::generateLineTextSpace($MYPDF,  "responde a", $value->respondea);$MYPDF->Ln(1);
