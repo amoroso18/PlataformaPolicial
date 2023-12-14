@@ -114,7 +114,8 @@
             <v-client-table :data="data.tableData" :columns="data.columns" :options="data.options" v-if="data.tableData.length > 0">
                 <div slot="get_estado" slot-scope="props">
                     <div class="d-flex justify-content-center">
-                        <span class="badge badge-dim badge-pill badge-secondary badge-md" v-text="props.row.get_estado.descripcion">-</span>
+                        <span class="badge badge-dim badge-pill badge-secondary badge-md" v-if="props.row.estado_id == 1 || props.row.estado_id == 0" v-text="props.row.get_estado.descripcion"></span>
+                        <span class="badge badge-dim badge-pill badge-success badge-md" v-if="props.row.estado_id == 2"> Culminado</span>
                     </div>
                     <span v-if="props.row.estado_id == 1 || props.row.estado_id == 0" v-text="compareFechas(props.row.fecha_termino, calculateFechaHoy(props.row)) "></span>
                 </div>
@@ -136,7 +137,7 @@
                     </div>
                     <div class="project-progress" v-if="props.row.estado_id == 2">
                         <div class="progress progress-pill progress-md bg-light">
-                            <div class="progress-bar" data-progress="100%" style="width: 100%"></div>
+                            <div class="progress-bar bg-success" data-progress="100%" style="width: 100%"></div>
                         </div>
                     </div>
                 </div>
@@ -146,7 +147,7 @@
                         <a v-on:click="OpenEdit(props.row, 'VER_HISTORIAL')" class="m-1 pointer" style="font-size: 22px;">
                             <em class="icon ni ni-camera-fill"></em>
                         </a>
-                        <a v-on:click="OpenEdit(props.row, 'EDITAR')" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
+                        <a v-if="props.row.estado_id != 2 && props.row.estado_id != 3" v-on:click="OpenEdit(props.row, 'EDITAR')" data-toggle="modal" data-target="#modalEdit" class="m-1" style="font-size: 22px;"><em class="icon ni ni-setting"></em></a>
                     </div>
                 </div>
             </v-client-table>
@@ -2730,7 +2731,9 @@
                             }).finally(() => {
                                 this.loadingModalNuevoFiscal = false;
                                 $('#modalADDFiscal').modal('hide');
-                                $('#modalADD').modal('show');
+                                setTimeout(() => {
+                                    $('#modalADD').modal('show');
+                                }, 1000);
                             });
 
                     },
@@ -2765,7 +2768,10 @@
                             }).finally(() => {
                                 this.loadingModalTipoVideoVigilancia = false;
                                 $('#modalADDTipoVideoVigilancia').modal('hide');
-                                $('#modalADD').modal('show');
+                                setTimeout(() => {
+                                    $('#modalADD').modal('show');
+                                }, 1000);
+                               
                             });
                     },
                     GrabarPersonas(TIPO) {
@@ -2813,12 +2819,16 @@
                                             get_nueva_vigilancia_archivo: []
                                         };
                                         $('#modalPersonas').modal('hide');
-                                        $('#modalEntidadActividadAdd').modal('show');
+                                        setTimeout(() => {
+                                            $('#modalEntidadActividadAdd').modal('show');
+                                        }, 1000);
                                     } else {
                                         this.dataPersonas.push(response.data.data);
                                         console.log(this.dataPersonas)
                                         $('#modalPersonas').modal('hide');
-                                        $('#modalADD').modal('show');
+                                        setTimeout(() => {
+                                            $('#modalADD').modal('show');
+                                        }, 1000);
                                     }
 
                                 }
@@ -2870,7 +2880,10 @@
                                             get_nueva_vigilancia_archivo: []
                                         };
                                         $('#modalInmueble').modal('hide');
-                                        $('#modalEntidadActividadAdd').modal('show');
+                                     
+                                        setTimeout(() => {
+                                            $('#modalEntidadActividadAdd').modal('show');
+                            }, 1000);
                                         this.loadingSarchInmueble = false;
                                         return true;
                                     } else {
@@ -2891,7 +2904,10 @@
                                 this.loadingSarchInmueble = false;
                                 if (!this.cambiarModoActividades) {
                                     $('#modalInmueble').modal('hide');
-                                    $('#modalADD').modal('show');
+                                    setTimeout(() => {
+                                        $('#modalADD').modal('show');
+                                    }, 1000);
+                                        
                                 }
                             });
                     },
@@ -2929,7 +2945,9 @@
                                             get_nueva_vigilancia_archivo: []
                                         };
                                         $('#modalVehiculo').modal('hide');
-                                        $('#modalEntidadActividadAdd').modal('show');
+                                        setTimeout(() => {
+                                            $('#modalEntidadActividadAdd').modal('show');
+                                        }, 1000);
                                         this.loadingSarchInmueble = false;
                                         return true;
                                     } else {
@@ -2949,7 +2967,9 @@
                                 this.loadingSarchInmueble = false;
                                 if (!this.cambiarModoActividades) {
                                     $('#modalVehiculo').modal('hide');
-                                    $('#modalADD').modal('show');
+                                    setTimeout(() => {
+                                        $('#modalADD').modal('show');
+                                    }, 1000);
                                 }
                             });
 
@@ -2989,7 +3009,10 @@
                             }).finally(() => {
                                 this.loadingPersonas = false;
                                 $('#modalOficialAdd').modal('hide');
-                                $('#modalADD').modal('show');
+                                setTimeout(() => {
+                                    $('#modalADD').modal('show');
+                                }, 1000);
+                     
                             });
                     },
                     BuscarPersonas(TIPO) {
@@ -3039,7 +3062,10 @@
                                                     get_nueva_vigilancia_archivo: []
                                                 };
                                                 $('#modalPersonas').modal('hide');
-                                                $('#modalEntidadActividadAdd').modal('show');
+                                                setTimeout(() => {
+                                                    $('#modalEntidadActividadAdd').modal('show');
+                                                }, 1000);
+                                            
 
                                                 // const index1 = this.disposicion_fiscal_nueva_vigilancia_actividads.index1;
                                                 // const index2 = this.disposicion_fiscal_nueva_vigilancia_actividads.index2;
@@ -3059,7 +3085,9 @@
                                             } else if (TIPO == "_get_persona_extranjero" || TIPO == "_get_persona_peru") {
                                                 this.dataPersonas.push(response.data.data);
                                                 $('#modalPersonas').modal('hide');
-                                                $('#modalADD').modal('show');
+                                                setTimeout(() => {
+                                                    $('#modalADD').modal('show');
+                                                }, 1000);
                                             } else if (TIPO == "_get_domicilio") {
                                                 this.dataInmuebleSearch = response.data.data;
                                                 console.log(this.dataInmuebleSearch);
@@ -3097,7 +3125,9 @@
                                 get_nueva_vigilancia_archivo: []
                             };
                             $('#modalPersonas').modal('hide');
-                            $('#modalEntidadActividadAdd').modal('show');
+                            setTimeout(() => {
+                                $('#modalEntidadActividadAdd').modal('show');
+                            }, 1000);
                             return true;
                         }
                         if (TIPO == "INMUEBLE_dfnva") {
@@ -3107,7 +3137,9 @@
                                 get_nueva_vigilancia_archivo: []
                             };
                             $('#modalInmueble').modal('hide');
-                            $('#modalEntidadActividadAdd').modal('show');
+                            setTimeout(() => {
+                                $('#modalEntidadActividadAdd').modal('show');
+                            }, 1000);
                             return true;
                         }
                         if (TIPO == "VEHICULO_dfnva") {
@@ -3117,7 +3149,9 @@
                                 get_nueva_vigilancia_archivo: []
                             };
                             $('#modalVehiculo').modal('hide');
-                            $('#modalEntidadActividadAdd').modal('show');
+                            setTimeout(() => {
+                                $('#modalEntidadActividadAdd').modal('show');
+                            }, 1000);
                             return true;
                         }
 

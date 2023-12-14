@@ -18,6 +18,13 @@ use App\Models\DisposicionFiscalTipoVideoVigilancia;
 use App\Models\DisposicionFiscalReferencia;
 use App\Models\DisposicionFiscalDelitos;
 
+use App\Models\DisposicionFiscalNuevaVigilancia;
+use App\Models\DisposicionFiscalNuevaVigilanciaActividad;
+use App\Models\DisposicionFiscalNuevaVigilanciaEntidad;
+use App\Models\DisposicionFiscalNuevaVigilanciaArchivo;
+use App\Models\DisposicionFiscalDocResultado;
+use App\Models\DisposicionFiscalDocResultadoAnexo;
+
 use App\Models\DisposicionFiscalEntidadVigilancia; // reemplazo de DisposicionFiscalObjetos
 use App\Models\EntidadPersona;
 use App\Models\EntidadInmueble;
@@ -357,26 +364,44 @@ class ReportesController extends Controller
                 }elseif($value->entidads_id == 4){
                     $EntidadInmueble = EntidadInmueble::with(['getTipoInmueble'])->where('id',$value->codigo_relacion)->first();
                   
-                    self::generateLineTextSpace($MYPDF, strtoupper('tipo'), strtoupper($EntidadInmueble->getTipoInmueble->descripcion)); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('direccion'), $EntidadInmueble->direccion); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('departamento'), $EntidadInmueble->departamento); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('provincia'), $EntidadInmueble->provincia); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('distrito'), $EntidadInmueble->distrito); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('referencia'), $EntidadInmueble->referencia); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('color_exterior'), $EntidadInmueble->color_exterior); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('caracteristicas_especiales'), $EntidadInmueble->caracteristicas_especiales); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('estado_conservacion'), $EntidadInmueble->estado_conservacion); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('ubigeo'), $EntidadInmueble->ubigeo); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('latitud'), $EntidadInmueble->latitud); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('longitud'), $EntidadInmueble->longitud); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('mapa'), "https://maps.google.com/?q=".$EntidadInmueble->latitud.",".$EntidadInmueble->longitud.""); $MYPDF->Ln(1);
-                    self::generateLineTextSpace($MYPDF, strtoupper('observaciones'), $EntidadInmueble->observaciones);
+                    self::generateLineTextSpace($MYPDF, ('tipo'), $EntidadInmueble->getTipoInmueble->descripcion); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('direccion'), $EntidadInmueble->direccion); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('departamento'), $EntidadInmueble->departamento); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('provincia'), $EntidadInmueble->provincia); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('distrito'), $EntidadInmueble->distrito); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('referencia'), $EntidadInmueble->referencia); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('color_exterior'), $EntidadInmueble->color_exterior); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('caract. especiales'), $EntidadInmueble->caracteristicas_especiales); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('estado conservacion'), $EntidadInmueble->estado_conservacion); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('ubigeo'), $EntidadInmueble->ubigeo); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('latitud'), $EntidadInmueble->latitud); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('longitud'), $EntidadInmueble->longitud); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('mapa'), "https://maps.google.com/?q=".$EntidadInmueble->latitud.",".$EntidadInmueble->longitud.""); $MYPDF->Ln(1);
+                    self::generateLineTextSpace($MYPDF, ('observaciones'), $EntidadInmueble->observaciones);
                     $MYPDF->Ln(5);
                     
                 }
                 // self::generateLineText($MYPDF,  $value->entidads_id, $value->codigo_relacion);
             }
           
+            $MYPDF->Ln(5);
+            $MYPDF->SetFont('Arial', 'B', 11);
+            $MYPDF->multicell(192, 5, "ACTIVIDADES", 0, 'L');
+            $MYPDF->Ln(2);
+            foreach ($expe->getNuevaVigilancia as $key => $value) {
+                self::generateLineTextSpace($MYPDF,  "Documento", $value->geTipoDocumentosReferencia->descripcion);$MYPDF->Ln(1);
+                self::generateLineTextSpace($MYPDF,  "nro Documento", $value->numeroDocumento);$MYPDF->Ln(1);
+                self::generateLineTextSpace($MYPDF,  "siglas Documento", $value->siglasDocumento);$MYPDF->Ln(1);
+                self::generateLineTextSpace($MYPDF,  "fecha Documento", $value->fechaDocumento);$MYPDF->Ln(1);
+                self::generateLineTextSpace($MYPDF,  "asunto", $value->asunto);$MYPDF->Ln(1);
+                self::generateLineTextSpace($MYPDF,  "responde a", $value->respondea);$MYPDF->Ln(1);
+                self::generateLineTextSpace($MYPDF,  "evaluacion", $value->evaluacion);$MYPDF->Ln(1);
+                self::generateLineTextSpace($MYPDF,  "conclusiones", $value->conclusiones);$MYPDF->Ln(1);
+                self::generateLineTextSpace($MYPDF,  "archivo", $value->archivo);$MYPDF->Ln(1);
+                $MYPDF->Ln(5);
+            }
+
+
             $MYPDF->Output(('ReporteDeExpediente.pdf'), 'I');
             //$MYPDF->Output('D', "ReporteReferenciaSerpol.pdf", true);
             exit();
@@ -514,11 +539,11 @@ class ReportesController extends Controller
         // if (isset($contenido) && !empty($contenido)) {
         $pdf->SetTextColor(71, 67, 141);
         $pdf->SetFont('Helvetica', '', 9);
-        $pdf->Cell(40, 6, utf8_decode(trim($tipo)), 0, 0, 'L');
+        $pdf->Cell(40, 6, strtoupper(utf8_decode(trim($tipo))), 0, 0, 'L');
         $pdf->Cell(2, 6, ":", 0, 0, 'L');
         $pdf->SetTextColor(89, 90, 90);
         $pdf->SetFont('Helvetica', '', 10);
-        $pdf->Cell(40, 6, utf8_decode(trim($contenido)), 0, 0, 'L');
+        $pdf->Cell(40, 6, strtoupper(utf8_decode(trim($contenido))), 0, 0, 'L');
         // $pdf->MultiCell(90, 7, utf8_decode(trim($contenido)), 0, 'C', true);
         // }
     }
@@ -528,11 +553,11 @@ class ReportesController extends Controller
         $pdf->Cell(5, 6, " ", 0, 0, 'L');
         $pdf->SetTextColor(71, 67, 141);
         $pdf->SetFont('Helvetica', '', 9);
-        $pdf->Cell(40, 6, utf8_decode(trim($tipo)), 0, 0, 'L');
+        $pdf->Cell(40, 6, strtoupper(utf8_decode(trim($tipo))), 0, 0, 'L');
         $pdf->Cell(2, 6, ":", 0, 0, 'L');
         $pdf->SetTextColor(89, 90, 90);
         $pdf->SetFont('Helvetica', '', 10);
-        $pdf->Cell(40, 6, utf8_decode(trim($contenido)), 0, 0, 'L');
+        $pdf->Cell(40, 6, strtoupper(utf8_decode(trim($contenido))), 0, 0, 'L');
         // $pdf->MultiCell(90, 7, utf8_decode(trim($contenido)), 0, 'C', true);
         // }
     }
@@ -554,11 +579,11 @@ class ReportesController extends Controller
         $pdf->Cell(5, 6, " ", 0, 0, 'L');
         $pdf->SetTextColor(71, 67, 141);
         $pdf->SetFont('Helvetica', '', 9);
-        $pdf->Cell(40, 4, utf8_decode(trim($tipo)), 0, 0, 'L');
+        $pdf->Cell(40, 4, strtoupper(utf8_decode(trim($tipo))), 0, 0, 'L');
         $pdf->Cell(2, 4, ":", 0, 0, 'L');
         $pdf->SetTextColor(89, 90, 90);
         $pdf->SetFont('Helvetica', '', 10);
-        $pdf->multicell(140, 3, utf8_decode(trim($contenido)), 0, 'j');
+        $pdf->multicell(140, 3, strtoupper(utf8_decode(trim($contenido))), 0, 'j');
         // }
     }
 }
