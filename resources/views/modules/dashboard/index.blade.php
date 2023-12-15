@@ -2,9 +2,22 @@
 
 @push('scriptsFooter')
 <script src="{{asset('assets/js/charts/gd-default.js?ver=2.9.0')}}"></script>
+<style>
+    .clock {
+        /* position: absolute; */
+        /* top: 50%; */
+        left: 50%;
+        /* transform: translateX(-50%) translateY(-50%); */
+        color: #17D4FE;
+        font-size: 20px;
+        font-family: Orbitron;
+        /* letter-spacing: 7px; */
+    }
+</style>
 @endpush
 
 @section('content')
+
 
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
@@ -20,7 +33,9 @@
                 <div class="toggle-expand-content" data-content="pageMenu">
                     <ul class="nk-block-tools g-3">
                         <li>
-                            <div class="drodown">
+    <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+
+                            <!-- <div class="drodown">
                                 <a href="#" class="dropdown-toggle btn btn-white btn-dim btn-outline-light" data-toggle="dropdown"><em class="d-none d-sm-inline icon ni ni-calender-date"></em><span><span class="d-none d-md-inline">últimos</span> 30 Días</span><em class="dd-indc icon ni ni-chevron-right"></em></a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <ul class="link-list-opt no-bdr">
@@ -29,7 +44,7 @@
                                         <li><a href="#"><span>últimos 1 Año</span></a></li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div> -->
                         </li>
                         <!-- <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary"><em class="icon ni ni-reports"></em><span>Reporte</span></a></li> -->
                     </ul>
@@ -148,8 +163,8 @@
                 <div class="card-inner p-0 border-top">
                     <div class="nk-tb-list nk-tb-orders">
                         <div class="nk-tb-item nk-tb-head">
-                        <!-- id, carnet, dni, nombres, apellidos, phone, phone_verified_at, email, email_verified_at, password, unidad_id, estado_id, perfil_id, grado_id, remember_token, created_at, updated_at, reseteo_contrasena, token_seguridad -->
-                        
+                            <!-- id, carnet, dni, nombres, apellidos, phone, phone_verified_at, email, email_verified_at, password, unidad_id, estado_id, perfil_id, grado_id, remember_token, created_at, updated_at, reseteo_contrasena, token_seguridad -->
+
                             <div class="nk-tb-col"><span>Nro.</span></div>
                             <div class="nk-tb-col tb-col-sm"><span>Nombre</span></div>
                             <div class="nk-tb-col tb-col-md"><span>Correo</span></div>
@@ -168,7 +183,7 @@
                                     <div class="user-name">
                                         <span class="tb-lead"> {{$item->getGrado->descripcion}} PNP {{$item->nombres}} {{$item->apellidos}}</span>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="nk-tb-col tb-col-md">
@@ -197,7 +212,7 @@
                             </div>
                         </div>
                         @endforeach
-                       
+
                     </div>
                 </div>
                 <div class="card-inner-sm border-top text-center d-sm-none">
@@ -205,4 +220,37 @@
                 </div>
             </div><!-- .card -->
         </div><!-- .col -->
-        @endsection
+    </div>
+</div>
+<script>
+function showTime(){
+    var date = new Date();
+    var h = date.getHours(); // 0 - 23
+    var m = date.getMinutes(); // 0 - 59
+    var s = date.getSeconds(); // 0 - 59
+    var session = "AM";
+    
+    if(h == 0){
+        h = 12;
+    }
+    
+    if(h > 12){
+        h = h - 12;
+        session = "PM";
+    }
+    
+    h = (h < 10) ? "0" + h : h;
+    m = (m < 10) ? "0" + m : m;
+    s = (s < 10) ? "0" + s : s;
+    
+    var time = h + ":" + m + ":" + s + " " + session;
+    document.getElementById("MyClockDisplay").innerText = time;
+    document.getElementById("MyClockDisplay").textContent = time;
+    
+    setTimeout(showTime, 1000);
+    
+}
+
+showTime();
+</script>
+@endsection

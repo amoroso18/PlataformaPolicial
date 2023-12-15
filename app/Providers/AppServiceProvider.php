@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -10,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+      
     }
 
     /**
@@ -18,5 +21,23 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+       
+        
+            $today = now()->startOfDay();
+            $tomorrow = $today->copy()->addDay();
+    
+            $auditoria_notificaciones_day = DB::table('auditoria_notificaciones')
+                ->whereBetween('created_at', [$today, $tomorrow])
+                ->count();
+
+                $startOfMonth = now()->startOfMonth();
+        $endOfMonth = $startOfMonth->copy()->endOfMonth();
+
+        $auditoria_notificaciones_monyh = DB::table('auditoria_notificaciones')
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->count();
+
+        View::share('auditoria_notificaciones_day', $auditoria_notificaciones_day);
+        View::share('auditoria_notificaciones_monyh', $auditoria_notificaciones_monyh);
     }
 }

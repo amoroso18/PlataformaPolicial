@@ -26,11 +26,16 @@ use App\Models\DisposicionFiscalDocResultadoAnexo;
 use App\Models\TipoDocumentosReferencia;
 use App\Models\TipoVideoVigilancia;
 
-use App\Models\TipoPlazo;
+use App\Models\AuditoriaNotificaciones;
 use App\Models\EntidadPolicia;
 use App\Models\EntidadPersona;
 use App\Models\EntidadInmueble;
 use App\Models\EntidadVehiculos;
+
+use App\Models\EntidadRequisitoriaPeruano;
+use App\Models\EntidadRequisitoriaVehiculo;
+use App\Models\EntidadDenuncias;
+use App\Models\EntidadAntecedente;
 
 use App\Models\TipoDelitos;
 use App\Models\Distrito;
@@ -72,8 +77,8 @@ class ExpedienteController extends Controller
             if ($request->type && $request->type == "_SAVE") {
                 // return $request->all();
                 $new = new DispocicionFiscal;
-                $new->caso = $request->caso ? $request->caso :  "Sin caso";
-                $new->nro = $request->nro ? $request->nro : "Sin nro";
+                $new->caso = $request->caso ?? "-";
+                $new->nro = $request->nro ?? "-";
                 $new->fecha_disposicion = $request->fecha_disposicion  ? $request->fecha_disposicion : null;
                 $new->fiscal_responsable_id = $request->fiscal_responsable_id ? $request->fiscal_responsable_id : 1;
                 $new->oficial_acargo_id = $request->oficial_acargo_id ? $request->oficial_acargo_id : 1;
@@ -214,6 +219,42 @@ class ExpedienteController extends Controller
                     return response()->json(['message' => '', 'error' => 'No se encontro el expediente']);
                 }
             } elseif ($request->type && $request->type == "_EXPEDIENTES") {
+
+                if(Auth::user()->perfil_id == 1 ||  Auth::user()->perfil_id == 20){
+                    $DDFF = DispocicionFiscal::where('estado_id',1)->get();
+                    foreach ($DDFF as $key => $value) {
+                        try {
+                            $fecha_hoy = new \DateTime();
+                            $fecha_inicio = \DateTime::createFromFormat('Y-m-d', $value->fecha_inicio);
+                            $fecha_fin = \DateTime::createFromFormat('Y-m-d', $value->fecha_termino);
+                            $interval = $fecha_hoy->diff($fecha_fin);
+                            $dias_faltantes = $interval->days;
+                            $caduco = $fecha_hoy > $fecha_fin;
+        
+                            if($fecha_hoy->format('Y-m-d') === $fecha_fin->format('Y-m-d')){
+                                $titulo =  "ULTIMO DÍA";
+                                $contenido =  "HOY VENCE EL PLAZO PARA LA VIDEOVIGILANCIA";
+                            }else if($fecha_hoy > $fecha_fin){
+                                $titulo =  "VENCIMIENTO";
+                                $contenido =  "LA FECHA YA CADUCÓ PARA LA VIDEOVIGILANCIA";
+                            }else{
+                                $titulo =  "PRÓXIMO VENCIMIENTO";
+                                $contenido =  "DÍAS FALTANTES: " . $dias_faltantes;
+                            }
+                            $DDFF_new = new AuditoriaNotificaciones;
+                            $DDFF_new->df_id = $value->id;
+                            $DDFF_new->users_id = $value->getOficial->id;
+                            $DDFF_new->titulo =  $titulo;
+                            $DDFF_new->contenido =  $contenido;
+                            $DDFF_new->save();
+                        } catch (\Throwable $th) {
+                            //throw $th;
+                        }
+                    }
+                }
+                
+             
+
                 return response()->json([
                     'data' => DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado','getNuevaVigilancia','getResultado',
                     'getNuevaVigilancia.getNuevaVigilanciaActividad','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad.getNuevaVigilanciaArchivo','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad.getTipoEntidad'])->orderBy('id', 'desc')->get(),
@@ -383,6 +424,8 @@ class ExpedienteController extends Controller
                 $new->grado_id = $request->grado_id;
                 $new->unidad_id = $request->unidad_id;
                 $new->situacion = $request->situacion ?? null;
+                $new->celular = $request->celular ?? null;
+                $new->correo = $request->correo ?? null;
                 $new->save();
                 $data = EntidadPolicia::with(['getUnidad', 'getGrado'])->where('id', $new->id)->first();
                 return response()->json(['message' => 'Registrado correctamente', 'data' => $data]);

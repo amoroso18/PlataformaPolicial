@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('unidad')->nullable();
             $table->foreignId('unidad_id')->constrained('tipo_unidads')->onDelete('cascade')->default(0);
             $table->string('situacion')->nullable();
+            $table->string('correo')->nullable();
+            $table->string('celular')->nullable();
             $table->timestamps();
         });
         DB::table('entidad_policias')->insert(
@@ -39,6 +41,8 @@ return new class extends Migration
                     'unidad' => 'Sin información',
                     'unidad_id' => 1,
                     'situacion' => 'En Actividad',
+                    'correo' => 'pedro@policia.gob.pe',
+                    'celular' => '987654321',
                 ],
                 [
                     'carnet' => 223357,
@@ -51,6 +55,8 @@ return new class extends Migration
                     'unidad' => 'Sin información',
                     'unidad_id' => 1,
                     'situacion' => 'En Actividad',
+                    'correo' => 'Dina@policia.gob.pe',
+                    'celular' => '987654321',
                 ],
                 [
                     'carnet' => 366565,
@@ -63,6 +69,8 @@ return new class extends Migration
                     'unidad' => 'Sin información',
                     'unidad_id' => 1,
                     'situacion' => 'En Actividad',
+                    'correo' => 'Ollanta@policia.gob.pe',
+                    'celular' => '987654321',
                 ],
              
             )

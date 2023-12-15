@@ -1,0 +1,84 @@
+id;tipo;subtipo;modalidad
+0;Delitos;contra la vida - el cuerpo y la salud;Homicidio calificado -sicariato y la conspiración y el ofrecimiento para el delito de sicariato
+1;Delitos;contra la libertad - Violación de la libertad personal ;Secuestro
+2;Delitos;contra la libertad - Violación de la libertad personal;Trata de personas
+3;Delitos;conta la libertad;Violación del secreto de las comunicaciones
+4;Delitos;contra el patrimonio;Hurto agravado
+5;Delitos;contra el patrimonio;Robo agravado
+6;Delitos;contra el patrimonio;Receptación formas agravadas
+7;Delitos;contra el patrimonio;Estafa agravada
+8;Delitos;contra el patrimonio;Defraudación
+9;Delitos;contra la libertad - Ofensas al pudor público;Pornografía infantil
+10;Delitos;contra el patrimonio;Extorsión
+11;Delitos;contra el patrimonio - Usurpación;Usurpación
+12;Delitos;contra el patrimonio - Usurpación;Usurpación formas agravadas
+13;Delitos;informáticos;
+14;Delitos;monetarios;Fabricación y falsificación de moneda de curso legal
+15;Delitos;monetarios;Alteración de la moneda de curso legal
+16;Delitos;monetarios;Tráfico de moneda falsa
+17;Delitos;contra la seguridad pública - delitos de peligro común;Fabricación - suministro o tenencia  de materiales peligrosos  y residuos peligrosos
+18;Delitos;contra la seguridad pública - delitos de peligro común;Producción - desarrollo y comercialización ilegal de armas químicas
+19;Delitos;contra la seguridad pública - delitos de peligro común;Sustracción o arrebato de armas de fuego
+20;Delitos;contra la seguridad pública - delitos de peligro común;Tráfico de productos pirotécnicos
+21;Delitos;contra la seguridad pública - delitos de peligro común;Empleo - producción y transferencia de minas antipersonales
+22;Delitos;contra la seguridad pública - delitos contra la salud pública ;Falsificación - contaminación o adulteración de productos farmacéuticos - dispositivos médicos o productos sanitarios
+23;Delitos;contra la seguridad pública - delitos contra la salud pública ;Comercialización de productos farmacéuticos - dispositivos médicos o productos sanitarios sin garantía de buen estado
+24;Delitos;contra la seguridad pública - delitos contra la salud pública - Tráfico Ilícito de Drogas;Promoción y favorecimiento al Tráfico Ilícito de Drogas y otros
+25;Delitos;contra la seguridad pública - delitos contra la salud pública - Tráfico Ilícito de Drogas;"Comercialización y
+cultivo de amapola y marihuana y su siembra
+compulsiva"
+26;Delitos;contra la seguridad pública - delitos contra la salud pública - Tráfico Ilícito de Drogas;"Tráfico Ilícito de Insumos
+Químicos y Productos Fiscalizados."
+27;Delitos;contra la seguridad pública - delitos contra la salud pública - Tráfico Ilícito de Drogas;Penalización de la resiembra
+28;Delitos;contra la seguridad pública - delitos contra la salud pública - Tráfico Ilícito de Drogas;Formas agravadas 
+29;Delitos;contra la seguridad pública - delitos contra la salud pública - Tráfico Ilícito de Drogas;Microcomercialización o microproducción
+30;Delitos;contra la seguridad pública - delitos contra la salud pública - Tráfico Ilícito de Drogas;Posesión no punible
+31;Delitos;contra la seguridad pública - delitos contra la salud pública - Tráfico Ilícito de Drogas;Suministro indebido de droga
+32;Delitos;contra la seguridad pública - delitos contra la salud pública - Tráfico Ilícito de Drogas;Coacción al consumo de droga
+33;Delitos;contra la seguridad pública - delitos contra la salud pública - Tráfico Ilícito de Drogas;Inducción o instigación al consumo de droga
+34;Delitos;contra la seguridad pública - delitos contra la salud pública - Tráfico Ilícito de Drogas;Pena de expulsión
+35;Delitos;contra la seguridad pública - delitos contra el orden migratorio;Tráfico ilícito de migrantes
+36;Delitos;contra la seguridad pública - delitos contra el orden migratorio;Tráfico ilícito de migrantes formas agravadas
+37;Delitos;ambientales;Delito de minería ilegal
+38;Delitos;ambientales;Delito de minería ilegal formas agravadas
+39;Delitos;ambientales;Delito de financiamiento de la minería ilegal
+40;Delitos;ambientales;Delito de obstaculización de la fiscalización administrativa
+41;Delitos;ambientales;Tráfico ilícito de insumos químicos y maquinarias destinados a minería ilegal
+42;Delitos;ambientales;Tráfico ilegal de productos forestales maderables
+43;Delitos;ambientales;Tráfico ilegal de productos forestales maderables - Obstrucción de procedimiento
+44;Delitos;ambientales;Tráfico ilegal de productos forestales maderables - Formas agravadas
+45;Delitos;contra la tranquilidad pública - delitos contra la paz pública;Marcaje o reglaje
+46;Delitos;contra la humanidad;Genocidio
+47;Delitos;contra la humanidad;Desaparición forzada de personas
+48;Delitos;contra la humanidad;Tortura
+49;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Concusión
+50;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Cobro indebido
+51;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Colusión simple y agravada
+52;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Peculado doloso y culposo
+53;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Cohecho pasivo propio
+54;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Soborno internacional pasivo
+55;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Cohecho pasivo impropio
+56;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Cohecho pasivo específico
+57;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Corrupción pasiva de auxiliares jurisdiccionales
+58;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Cohecho activo genérico
+59;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Cohecho activo transnacional
+60;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Cohecho activo específico
+61;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Negociación incompatible o aprovechamiento indebido de cargo
+62;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Tráfico de influencias
+63;Delitos;contra la administración pública - delitos cometidos por funcionarios públicos;Enriquecimiento ilícito
+64;Delitos;contra la fé pública;Delito de falsificación de documentos
+65;Delitos;Lavado de activos y otros delitos relacionados a la minería ilegal y crimen organizado;Actos de conversión y transferencia
+66;Delitos;Lavado de activos y otros delitos relacionados a la minería ilegal y crimen organizado;Actos de ocultamiento y tenencia
+67;Delitos;Lavado de activos y otros delitos relacionados a la minería ilegal y crimen organizado;Transporte - traslado - ingreso o salida por territorio nacional de dinero o títulos valores de origen ilícito
+68;Delitos;Lavado de activos y otros delitos relacionados a la minería ilegal y crimen organizado;Circunstancias agravantes y atenuantes
+69;Delitos;Lavado de activos y otros delitos relacionados a la minería ilegal y crimen organizado;Omisión de comunicación de operaciones o transacciones sospechosas
+70;Delitos;Lavado de activos y otros delitos relacionados a la minería ilegal y crimen organizado;Rehusamiento - retardo y falsedad en el suministro de información
+71;Delitos;contra la libertad - Violación de la libertad personal - Trata de personas;Explotación sexual
+72;Delitos;contra la libertad - Violación de la libertad personal - Trata de personas;Promoción o favorecimiento de la explotación sexual
+73;Delitos;contra la libertad - Violación de la libertad personal - Trata de personas;Beneficio por explotación sexual
+74;Delitos;contra la libertad - Violación de la libertad personal - Trata de personas;Gestión de la explotación sexual
+75;Delitos;contra la libertad - Violación de la libertad personal - Trata de personas;Explotación sexual de niñas - niños y adolescentes
+76;Delitos;contra la libertad - Violación de la libertad personal - Trata de personas;Beneficio de la explotación sexual de niñas - niños y adolescentes
+77;Delitos;contra la libertad - Violación de la libertad personal - Trata de personas;Gestión de la explotación sexual de niñas - niños y adolescentes
+78;Delitos;contra la libertad - Proxenetismo;Rufianismo
+79;Delitos;contra la libertad - Violación de la libertad personal - Trata de personas;Promoción y favorecimiento de la explotación sexual de niñas - niños y adolescentes

@@ -10,6 +10,7 @@
                     <span class="nk-menu-text">Panel</span>
                 </a>
             </li>
+            @if(Auth::user()->perfil_id == 1 ||  Auth::user()->perfil_id == 20)
             <li class="nk-menu-heading">
                 <h6 class="overline-title text-primary-alt">Administración</h6>
             </li>
@@ -29,6 +30,7 @@
                     </li>
                 </ul>
             </li>
+            @endif
             <!-- <li class="nk-menu-item has-sub">
                 <a href="#" class="nk-menu-link nk-menu-toggle">
                     <span class="nk-menu-icon"><em class="icon ni ni-db"></em></span>

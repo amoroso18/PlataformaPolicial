@@ -13,6 +13,7 @@ use App\Models\TipoDelitos;
 use App\Models\TipoPlazo;
 use App\Models\EntidadPolicia;
 use App\Models\TipoInmueble;
+use App\Models\AuditoriaNotificaciones;
 
 use App\Http\Controllers\AuditoriaController;
 use App\Http\Controllers\ReportesController;
@@ -168,6 +169,12 @@ class PlataformaController extends Controller
     {
         return ReportesController::reporte($request->contexto);
     }
+    public function administrador_importDATASIVIPOL()
+    {
+        return ReportesController::importDATASIVIPOL();
+    }
+    
+
     public function administrador_reporte_usuarios()
     {
         return ReportesController::reporteUsuarios();
@@ -265,6 +272,9 @@ class PlataformaController extends Controller
     }
     public function actualizacion()
     {
-        return view('modules.perfil.notificaciones');
+      
+            $data = AuditoriaNotificaciones::orderBy('id', 'desc')->limit('100')
+                ->get();
+        return view('modules.perfil.notificaciones', compact('data'));
     }
 }

@@ -278,7 +278,7 @@
                         <div class="form-group">
                             <label class="form-label" for="default-01">Número</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" v-model="dataFinish.nro">
+                                <input type="text" class="form-control" v-model="dataExpe.nro">
                             </div>
                         </div>
                         <div class="form-group">
@@ -1558,6 +1558,18 @@
                     <div class="form-control-wrap">
                         <input type="text" class="form-control form-control-lg" placeholder="Ingresa la Situación" v-model="dataPoliciaAdd.situacion" />
                     </div>
+                    <div class="form-label-group mt-2">
+                        <label class="form-label">Celular</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control form-control-lg" placeholder="Ingresa el celular" v-model="dataPoliciaAdd.celular" />
+                    </div>
+                    <div class="form-label-group mt-2">
+                        <label class="form-label">Correo electrónico</label>
+                    </div>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control form-control-lg" placeholder="Ingresa el correo" v-model="dataPoliciaAdd.correo" />
+                    </div>
                     <div class="form-group mt-2">
                         <label class="form-label">Grado</label>
                         <div class="form-control-wrap ">
@@ -2125,9 +2137,9 @@
                         fiscal_responsable_id: 0,
                         fiscal_asistente_id: 0,
                         oficial_acargo_id: 1,
-                        nro: "",
-                        caso: "",
-                        resumen: "",
+                        nro: "1",
+                        caso: "CIA SAN JUAN DE MIRAFLORES",
+                        resumen: "EL DIA DE LA FECHA",
                         observaciones: "Sin observaciones",
                         plazo_id: 0,
                         plazo: 0,
@@ -2248,7 +2260,9 @@
                         materno: '',
                         grado_id: 1,
                         unidad_id: 1,
-                        situacion: ''
+                        situacion: '',
+                        celular: '',
+                        correo: ''
                     },
                     data_policia: [],
                     dataInmuebleSearch: [],
@@ -2551,12 +2565,8 @@
                         const formData = new FormData();
                         formData.append('type', "_SAVE");
                         formData.append('dd', "_SAVE");
-                        if (this.dataExpe.nro) {
-                            formData.append('nro', this.dataExpe.nro);
-                        }
-                        if (this.dataExpe.caso) {
-                            formData.append('caso', this.dataExpe.caso);
-                        }
+                        formData.append('nro', this.dataExpe.nro);
+                        formData.append('caso', this.dataExpe.caso);
                         if (this.dataExpe.fecha_disposicion) {
                             formData.append('fecha_disposicion', this.dataExpe.fecha_disposicion);
                         }
@@ -3478,17 +3488,17 @@
                         const file = e.target.files[0];
                         if (ISTO == "_NUEVAFVV") {
                             if (file && file.type === "application/pdf") {
-                                this.nuevafechadocumentovideovigilancia.pdfName = file.name;
+                                this.nuevafechadocumentovideovigilancia.pdfName = file.name  || "Archivo desconocido";
                                 this.nuevafechadocumentovideovigilancia.pdf = file;
                             }
                         } else if (ISTO == "_NEWFILE_ENTIDAD") {
-                            this.dfnva_persona.get_nueva_vigilancia_archivo[index].pdfName = file.name;
+                            this.dfnva_persona.get_nueva_vigilancia_archivo[index].pdfName = file.name || "Archivo desconocido";
                             this.dfnva_persona.get_nueva_vigilancia_archivo[index].pdf = file;
                         } else if (ISTO == "_NEWFILE_ENTIDA_INMUEBLE") {
-                            this.dfnva_inmueble.get_nueva_vigilancia_archivo[index].pdfName = file.name;
+                            this.dfnva_inmueble.get_nueva_vigilancia_archivo[index].pdfName = file.name  || "Archivo desconocido";
                             this.dfnva_inmueble.get_nueva_vigilancia_archivo[index].pdf = file;
                         } else if (ISTO == "_NEWFILE_ENTIDA_VEHICULO") {
-                            this.dfnva_vehiculo.get_nueva_vigilancia_archivo[index].pdfName = file.name;
+                            this.dfnva_vehiculo.get_nueva_vigilancia_archivo[index].pdfName = file.name  || "Archivo desconocido";
                             this.dfnva_vehiculo.get_nueva_vigilancia_archivo[index].pdf = file;
                         }else if (ISTO == "_FINISH_EXPEDIENTE") {
                             this.dataFinish.archivo = file;
@@ -3496,7 +3506,7 @@
                         } else {
                             // Verifica si el archivo es un PDF
                             if (file && file.type === "application/pdf") {
-                                this.dataExpe.selectdataReferenciaVideovigilancia[index].pdfName = file.name;
+                                this.dataExpe.selectdataReferenciaVideovigilancia[index].pdfName = file.name  || "Archivo desconocido";
                                 this.dataExpe.selectdataReferenciaVideovigilancia[index].pdf = file;
                             } else {
 

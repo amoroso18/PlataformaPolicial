@@ -37,6 +37,11 @@ class DispocicionFiscal extends Model
     {
         return $this->hasMany(DisposicionFiscalDocResultado::class, 'df_id', 'id');
     }
+    public function getNotificaciones()
+    {
+        return $this->hasMany(AuditoriaNotificaciones::class, 'df_id', 'id');
+    }
+    
 }
 
 

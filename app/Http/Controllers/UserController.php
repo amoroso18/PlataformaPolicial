@@ -28,31 +28,6 @@ class UserController extends Controller
     }
     public function ingresar()
     {
-
-        $filePath = public_path('assets/personas.csv'); // Ajusta el nombre del archivo según tu estructura
-
-        if (file_exists($filePath)) {
-            $csvFile = fopen($filePath, 'r');
-
-            // Lee la primera fila como encabezado
-            $header = fgetcsv($csvFile);
-
-            while (($row = fgetcsv($csvFile)) !== false) {
-                // Combina el encabezado con los datos de la fila
-                $data = array_combine($header, $row);
-                // dd($data['dni']);
-
-                // Inserta los datos en la base de datos
-                EntidadPersona::where('documento', $data['dni'])->update([
-                    'foto' => $data['foto'],
-                    'firma' => $data['firma'],
-                    // Agrega otros campos según sea necesario
-                ]);
-            }
-            fclose($csvFile);
-        } else {
-            return "no existe";
-        }
         return view('auth.login');
     }
     public function registrarse()
@@ -67,7 +42,6 @@ class UserController extends Controller
     {
         return view('auth.help');
     }
-
     public function credenciales(LoginRequest $request)
     {
         if (is_numeric($request->email)) {
@@ -143,10 +117,6 @@ class UserController extends Controller
         //     return back()->with('error', 'Los datos ingresados no son válidos!');
         //  }
     }
-
-   
-
-
     public function recuperar_save(Request $request)
     {
         $usuario = User::where('email', $request->email)->first();

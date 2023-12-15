@@ -21,5 +21,7 @@ class EntidadesSeeder extends Seeder
         DB::unprepared(file_get_contents($sql));
         $sql = database_path("sql/entidad_requisitoria_vehiculos.sql");
         DB::unprepared(file_get_contents($sql));
+        $sql = database_path("sql/Dump20231214.sql");
+        DB::unprepared(file_get_contents($sql));
     }
 }

@@ -9,7 +9,7 @@
             </div>
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
-                    <!-- <li class="dropdown notification-dropdown">
+                    <li class="dropdown notification-dropdown">
                         <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
                             <div class="icon-status icon-status-info"><em class="icon ni ni-bell"></em></div>
                         </a>
@@ -18,18 +18,33 @@
                                 <span class="sub-title nk-dropdown-title">
                                     
                                 </span>
-                                <a href="{{route('actualizacion')}}">Historial de usuario</a>
+                                <a href="{{route('actualizacion')}}">Notificaciones</a>
                             </div>
                             <div class="dropdown-body">
                                 <div class="nk-notification">
-                                  
-                                </div>
-                            </div>
+                                    <div class="nk-notification-item dropdown-inner">
+                                        <div class="nk-notification-icon">
+                                            <em class="icon ni ni-bell bg-warning-dim ni ni-curve-down-right"></em>
+                                        </div>
+                                        <div class="nk-notification-content">
+                                            <div class="nk-notification-text">{{$auditoria_notificaciones_day}} Enviadas hoy</div>
+                                        </div>
+                                    </div>
+                                    <div class="nk-notification-item dropdown-inner">
+                                        <div class="nk-notification-icon">
+                                            <em class="icon ni ni-bell bg-success-dim ni ni-curve-down-left"></em>
+                                        </div>
+                                        <div class="nk-notification-content">
+                                            <div class="nk-notification-text">{{$auditoria_notificaciones_monyh}} Enviadas durante el mes</div>
+                                        </div>
+                                    </div>
+                                </div><!-- .nk-notification -->
+                            </div><!-- .nk-dropdown-body -->
                             <div class="dropdown-foot center">
-                                <a href="{{route('actualizacion')}}">Ver historial de actividad de usuario</a>
+                                <a href="{{route('actualizacion')}}">Ver historial de notificaciones</a>
                             </div>
                         </div>
-                    </li> -->
+                    </li>
                     <li class="dropdown actividad-dropdown">
                         <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
                             <div class="icon-status icon-status-danger"><em class="icon ni ni-activity-alt"></em></div>

@@ -29,6 +29,9 @@ Route::POST('/administrador/usuarios/registro/save', [App\Http\Controllers\Plata
 Route::POST('/administrador/usuarios/edit/save', [App\Http\Controllers\PlataformaController::class, 'administrador_usuarios_edit_save'])->name('administrador_usuarios_edit_save');
 Route::GET('/administrador/usuarios/bandeja', [App\Http\Controllers\PlataformaController::class, 'administrador_usuarios_bandeja'])->name('administrador_usuarios_bandeja');
 Route::GET('/administrador/consulta/policial', [App\Http\Controllers\PlataformaController::class, 'administrador_consulta_policial'])->name('administrador_consulta_policial');
+Route::GET('/administrador/consulta/policial/administrador_importDATASIVIPOL', [App\Http\Controllers\PlataformaController::class, 'administrador_importDATASIVIPOL'])->name('administrador_importDATASIVIPOL');
+
+
 
 
 Route::GET('/administrador/reporte/usuarios', [App\Http\Controllers\PlataformaController::class, 'administrador_reporte_usuarios'])->name('administrador_reporte_usuarios');
