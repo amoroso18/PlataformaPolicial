@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-class ProvSeeder extends Seeder
+class DfSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,7 +13,7 @@ class ProvSeeder extends Seeder
      */
     public function run()
     {
-        $sql = database_path("sql/provincia.sql");
+        $sql = database_path("sql/df.sql");
         DB::unprepared(file_get_contents($sql));
     }
 }

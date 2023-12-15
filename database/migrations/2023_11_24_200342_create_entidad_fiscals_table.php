@@ -26,29 +26,29 @@ return new class extends Migration
             $table->string('ubigeo')->nullable();
             $table->timestamps();
         });
-        DB::table('entidad_fiscals')->insert(
-            array(
-                [
-                    'carnet' => null,
-                    'dni' => null,
-                    'nombres' => '',
-                    'paterno' => '',
-                    'materno' => '',
-                    'celular' => '',
-                    'correo' => '',
-                     'procedencia' => 'NO TIENE',
-                    'ficalia' => 'NO TIENE',
-                    'despacho' => 'NO TIENE',
-                    'ubigeo' => 'NO TIENE',
-                    // 'procedencia' => 'MINISTERIO PÚBLICO',
-                    // 'ficalia' => '2DA. FISCALÍA PROVINCIAL PENAL CORPORATIVADE CARABAYLLO',
-                    // 'despacho' => 'SEGUNDO DESPACHO',
-                    // 'ubigeo' => 'DISTRITO FISCAL DE LIMA NORTE',
-                ],
+        // DB::table('entidad_fiscals')->insert(
+        //     array(
+        //         [
+        //             'carnet' => null,
+        //             'dni' => null,
+        //             'nombres' => '',
+        //             'paterno' => '',
+        //             'materno' => '',
+        //             'celular' => '',
+        //             'correo' => '',
+        //              'procedencia' => 'NO TIENE',
+        //             'ficalia' => 'NO TIENE',
+        //             'despacho' => 'NO TIENE',
+        //             'ubigeo' => 'NO TIENE',
+        //             // 'procedencia' => 'MINISTERIO PÚBLICO',
+        //             // 'ficalia' => '2DA. FISCALÍA PROVINCIAL PENAL CORPORATIVADE CARABAYLLO',
+        //             // 'despacho' => 'SEGUNDO DESPACHO',
+        //             // 'ubigeo' => 'DISTRITO FISCAL DE LIMA NORTE',
+        //         ],
                
              
-            )
-        );
+        //     )
+        // );
     }
 
     /**

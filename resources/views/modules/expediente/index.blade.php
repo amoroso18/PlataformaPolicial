@@ -125,9 +125,9 @@
                 <div slot="get_fiscal" slot-scope="props" v-if="props.row.get_fiscal.id != 1">
                     <span v-text="props.row.get_fiscal.carnet + ' ' +props.row.get_fiscal.nombres + ' ' + props.row.get_fiscal.paterno + ' ' + props.row.get_fiscal.materno + ' ' + props.row.get_fiscal.ficalia"> </span>
                 </div>
-                <div slot="get_fiscal_adjunto" slot-scope="props" v-if="props.row.get_fiscal_adjunto.id != 1">
+                <!-- <div slot="get_fiscal_adjunto" slot-scope="props" v-if="props.row.get_fiscal_adjunto.id != 1">
                     <span v-text="props.row.get_fiscal_adjunto.carnet + ' ' +props.row.get_fiscal_adjunto.nombres + ' ' + props.row.get_fiscal_adjunto.paterno + ' ' + props.row.get_fiscal_adjunto.materno + ' ' + props.row.get_fiscal_adjunto.ficalia"> </span>
-                </div>
+                </div> -->
                 <div slot="progreso" slot-scope="props">
                     <ul class="list">
                         <li>fecha_inicio: <span v-text="props.row.fecha_inicio"></span> </li>
@@ -655,39 +655,95 @@
                     <h5 class="modal-title">Agregar Fiscales</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-carnet" v-model="dataFiscalAdd.carnet"><label class="form-label-outlined" for="outlined-carnet">Carnet</label></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-dni" v-model="dataFiscalAdd.dni"><label class="form-label-outlined" for="outlined-dni">DNI</label></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-nombres" v-model="dataFiscalAdd.nombres"><label class="form-label-outlined" for="outlined-nombres">Nombres</label></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-paterno" v-model="dataFiscalAdd.paterno"><label class="form-label-outlined" for="outlined-paterno">Paterno</label></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-materno" v-model="dataFiscalAdd.materno"><label class="form-label-outlined" for="outlined-materno">Materno</label></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control-wrap"><input type="number" class="form-control form-control-xl form-control-outlined" id="outlined-celular" v-model="dataFiscalAdd.celular"><label class="form-label-outlined" for="outlined-celular">Celular</label></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-correo" v-model="dataFiscalAdd.correo"><label class="form-label-outlined" for="outlined-correo">Correo</label></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-procedencia" v-model="dataFiscalAdd.procedencia"><label class="form-label-outlined" for="outlined-procedencia">Procedencia</label></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-ficalia" v-model="dataFiscalAdd.ficalia"><label class="form-label-outlined" for="outlined-ficalia">Ficalia</label></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-despacho" v-model="dataFiscalAdd.despacho"><label class="form-label-outlined" for="outlined-despacho">Despacho</label></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-control-wrap"><input type="text" class="form-control form-control-xl form-control-outlined" id="outlined-ubigeo" v-model="dataFiscalAdd.ubigeo"><label class="form-label-outlined" for="outlined-ubigeo">Ubigeo</label></div>
-                    </div>
+                    <section>
+                        <div class="form-label-group mt-2">
+                            <label class="form-label">Carnet</label>
+                        </div>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control form-control-lg" v-model="dataFiscalAdd.carnet" />
+                        </div>
+                    </section>
+                    <section>
+                        <div class="form-label-group mt-2">
+                            <label class="form-label">DNI</label>
+                        </div>
+                        <div class="form-control-wrap">
+                            <input type="number" class="form-control form-control-lg" v-model="dataFiscalAdd.dni" />
+                        </div>
+                    </section>
+                    <section>
+                        <div class="form-label-group mt-2">
+                            <label class="form-label">Nombres</label>
+                        </div>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control form-control-lg" v-model="dataFiscalAdd.nombres" />
+                        </div>
+                    </section>
+                    <section>
+                        <div class="form-label-group mt-2">
+                            <label class="form-label">Paterno</label>
+                        </div>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control form-control-lg" v-model="dataFiscalAdd.paterno" />
+                        </div>
+                    </section>
+                    <section>
+                        <div class="form-label-group mt-2">
+                            <label class="form-label">Materno</label>
+                        </div>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control form-control-lg" v-model="dataFiscalAdd.materno" />
+                        </div>
+                    </section>
+                    <section>
+                        <div class="form-label-group mt-2">
+                            <label class="form-label">Celular</label>
+                        </div>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control form-control-lg" v-model="dataFiscalAdd.celular" />
+                        </div>
+                    </section>
+                    <section>
+                        <div class="form-label-group mt-2">
+                            <label class="form-label">Correo</label>
+                        </div>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control form-control-lg" v-model="dataFiscalAdd.correo" />
+                        </div>
+                    </section>
+                    <section>
+                        <div class="form-label-group mt-2">
+                            <label class="form-label">Procedencia</label>
+                        </div>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control form-control-lg" v-model="dataFiscalAdd.procedencia" />
+                        </div>
+                    </section>
+                    <section>
+                        <div class="form-label-group mt-2">
+                            <label class="form-label">Ficalia</label>
+                        </div>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control form-control-lg" v-model="dataFiscalAdd.ficalia" />
+                        </div>
+                    </section>
+                    <section>
+                        <div class="form-label-group mt-2">
+                            <label class="form-label">Despacho</label>
+                        </div>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control form-control-lg" v-model="dataFiscalAdd.despacho" />
+                        </div>
+                    </section>
+                    <section>
+                        <div class="form-label-group mt-2">
+                            <label class="form-label">Ubigeo</label>
+                        </div>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control form-control-lg" v-model="dataFiscalAdd.ubigeo" />
+                        </div>
+                    </section>
+                   
                     <div class="form-group">
                         <button class="btn btn-primary" v-if="!loadingModalNuevoFiscal" v-on:click="GrabarNuevoFiscal">Registrar</button>
                         <p v-if="loadingModalNuevoFiscal"><em class="icon ni ni-loader"></em> Cargando....</p>
@@ -2268,7 +2324,7 @@
                     dataInmuebleSearch: [],
                     data_nacionalidad: [],
                     data: {
-                        columns: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', 'get_estado', 'progreso', 'opciones'],
+                        columns: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_estado', 'progreso', 'opciones'],
                         tableData: [],
                         options: {
                             toMomentFormat: true,
@@ -2285,12 +2341,11 @@
                                 resumen: 'RESUMEN',
                                 plazo: 'DÍAS DE PLAZO',
                                 get_fiscal: 'FISCAL',
-                                get_fiscal_adjunto: 'FISCAL ADJUNTO',
                                 get_estado: 'SITUACION',
                                 progreso: 'PROGRESO',
                                 opciones: 'OPCIONES',
                             },
-                            filterable: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_fiscal_adjunto', 'get_estado'],
+                            filterable: ['nro', 'caso', 'resumen', 'plazo', 'get_fiscal', 'get_estado'],
                             texts: {
                                 limit: 'Mostrar:',
                                 count: 'Total de {count} registros encontrados',
