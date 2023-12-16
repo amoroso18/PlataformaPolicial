@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('documentos_id')->constrained('tipo_documentos_referencias')->onDelete('cascade');
             $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
             $table->date('fecha_documento')->nullable();
-            $table->string('asunto',5000)->nullable();
-            $table->string('resultadoFinal',10000)->nullable();
-            $table->string('destino',5000)->nullable();
+            $table->text('asunto')->nullable();
+            $table->text('resultadoFinal')->nullable();
+            $table->text('destino')->nullable();
             $table->string('archivo')->nullable();
             $table->integer('estado')->default(1);
             $table->timestamps();

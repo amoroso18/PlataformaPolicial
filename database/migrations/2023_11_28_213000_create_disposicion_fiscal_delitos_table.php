@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('df_id')->constrained('dispocicion_fiscals')->onDelete('cascade');
             $table->foreignId('delitos_id')->constrained('tipo_delitos')->onDelete('cascade');
             $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
-            $table->string('observaciones',5000)->nullable();
+            $table->string('observaciones',2500)->nullable();
             $table->integer('estado')->default(1);
             $table->timestamps();
         });

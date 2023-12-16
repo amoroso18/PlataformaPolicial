@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('auditoria_notificaciones', function (Blueprint $table) {
             $table->id();
             $table->foreignId('df_id')->constrained('dispocicion_fiscals')->onDelete('cascade');
-            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('users_id')->constrained('entidad_policias')->onDelete('cascade');
             $table->string('titulo',1000)->nullable();
             $table->string('contenido',1000)->nullable();
             $table->integer('estado')->default(1);

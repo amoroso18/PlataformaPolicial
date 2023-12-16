@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('contenido_id')->constrained('tipo_contenidos')->onDelete('cascade');
             $table->datetime('fecha_hora_obtencion');
-            $table->string('descripcion',5000)->nullable();
-            $table->string('observaciones',5000)->nullable();
+            $table->text('descripcion')->nullable();
+            $table->string('observaciones',1500)->nullable();
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
