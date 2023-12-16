@@ -81,7 +81,7 @@ class ExpedienteController extends Controller
                 $new->nro = $request->nro ?? "-";
                 $new->fecha_disposicion = $request->fecha_disposicion  ? $request->fecha_disposicion : null;
                 $new->fiscal_responsable_id = $request->fiscal_responsable_id ? $request->fiscal_responsable_id : 1;
-                $new->oficial_acargo_id = $request->oficial_acargo_id ? $request->oficial_acargo_id : 1;
+                $new->oficial_acargo_id = $request->oficial_acargo_id ?? null;
                 $new->fiscal_asistente_id = $request->fiscal_asistente_id  ? $request->fiscal_asistente_id : 1;
                 $new->resumen = $request->resumen ? $request->resumen : "Sin resumen";
                 $new->observaciones = $request->observaciones  ? $request->observaciones : "Sin observaciones";
@@ -225,36 +225,35 @@ class ExpedienteController extends Controller
                     foreach ($DDFF as $key => $value) {
                         try {
                             $fecha_hoy = new \DateTime();
-                            $fecha_inicio = \DateTime::createFromFormat('Y-m-d', $value->fecha_inicio);
-                            $fecha_fin = \DateTime::createFromFormat('Y-m-d', $value->fecha_termino);
-                            $interval = $fecha_hoy->diff($fecha_fin);
-                            $dias_faltantes = $interval->days;
-                            $caduco = $fecha_hoy > $fecha_fin;
-        
-                            if($fecha_hoy->format('Y-m-d') === $fecha_fin->format('Y-m-d')){
-                                $titulo =  "ULTIMO DÍA";
-                                $contenido =  "HOY VENCE EL PLAZO PARA LA VIDEOVIGILANCIA";
-                            }else if($fecha_hoy > $fecha_fin){
-                                $titulo =  "VENCIMIENTO";
-                                $contenido =  "LA FECHA YA CADUCÓ PARA LA VIDEOVIGILANCIA";
-                            }else{
-                                $titulo =  "PRÓXIMO VENCIMIENTO";
-                                $contenido =  "DÍAS FALTANTES: " . $dias_faltantes;
+                            if($value->fecha_inicio && $value->fecha_termino){
+                                $fecha_inicio = \DateTime::createFromFormat('Y-m-d', $value->fecha_inicio);
+                                $fecha_fin = \DateTime::createFromFormat('Y-m-d', $value->fecha_termino);
+                                $interval = $fecha_hoy->diff($fecha_fin);
+                                $dias_faltantes = $interval->days;
+                                $caduco = $fecha_hoy > $fecha_fin;
+            
+                                if($fecha_hoy->format('Y-m-d') === $fecha_fin->format('Y-m-d')){
+                                    $titulo =  "ULTIMO DÍA";
+                                    $contenido =  "HOY VENCE EL PLAZO PARA LA VIDEOVIGILANCIA";
+                                }else if($fecha_hoy > $fecha_fin){
+                                    $titulo =  "VENCIMIENTO";
+                                    $contenido =  "LA FECHA YA CADUCÓ PARA LA VIDEOVIGILANCIA";
+                                }else{
+                                    $titulo =  "PRÓXIMO VENCIMIENTO";
+                                    $contenido =  "DÍAS FALTANTES: " . $dias_faltantes;
+                                }
+                                $DDFF_new = new AuditoriaNotificaciones;
+                                $DDFF_new->df_id = $value->id;
+                                $DDFF_new->users_id = $value->getOficial->id;
+                                $DDFF_new->titulo =  $titulo;
+                                $DDFF_new->contenido =  $contenido;
+                                $DDFF_new->save();
                             }
-                            $DDFF_new = new AuditoriaNotificaciones;
-                            $DDFF_new->df_id = $value->id;
-                            $DDFF_new->users_id = $value->getOficial->id;
-                            $DDFF_new->titulo =  $titulo;
-                            $DDFF_new->contenido =  $contenido;
-                            $DDFF_new->save();
                         } catch (\Throwable $th) {
                             //throw $th;
                         }
                     }
                 }
-                
-             
-
                 return response()->json([
                     'data' => DispocicionFiscal::with(['getFiscal', 'getFiscalAdjunto', 'getPlazo', 'getEstado','getNuevaVigilancia','getResultado',
                     'getNuevaVigilancia.getNuevaVigilanciaActividad','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad.getNuevaVigilanciaArchivo','getNuevaVigilancia.getNuevaVigilanciaActividad.getNuevaVigilanciaEntidad.getTipoEntidad'])->orderBy('id', 'desc')->get(),

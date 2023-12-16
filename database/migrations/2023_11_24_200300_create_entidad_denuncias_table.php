@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('entidad_denuncias', function (Blueprint $table) {
             $table->id();
-            $table->string('comisaria', 40)->nullable();
+            $table->string('comisaria', 1000)->nullable();
             $table->string('fecha_denuncia')->nullable();
-            $table->string('nrodocumento', 10)->nullable();
-            $table->string('paterno', 30)->nullable();
-            $table->string('materno', 30)->nullable();
-            $table->string('nombres', 30)->nullable();
-            $table->string('condicion', 20)->nullable();
-            $table->string('motivo', 40)->nullable();
-            $table->text('contenido',2500)->nullable();
+            $table->string('nrodocumento', 100)->nullable();
+            $table->string('paterno', 100)->nullable();
+            $table->string('materno', 100)->nullable();
+            $table->string('nombres', 100)->nullable();
+            $table->string('condicion', 1000)->nullable();
+            $table->string('motivo', 1000)->nullable();
+            $table->text('contenido',5000)->nullable();
             $table->string('created_at')->nullable();
             $table->string('update_at')->nullable();
         });

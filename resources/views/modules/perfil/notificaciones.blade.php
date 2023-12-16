@@ -26,7 +26,10 @@
                         <th scope="row">{{$item->created_at}}</th>
                         <td>{{$item->titulo}}</td>
                         <td>{{$item->contenido}}</td>
-                        <td>{{$item->getOficial->getGrado->descripcion}} {{$item->getOficial->nombres}} {{$item->getOficial->paterno}} {{$item->getOficial->materno}}</td>
+                        <td>@if($item->getOficial)
+                                {{$item->getOficial->getGrado->descripcion}} {{$item->getOficial->nombres}} {{$item->getOficial->paterno}} {{$item->getOficial->materno}}
+                            @endif
+                        </td>
                         <td>{{$item->getOficial->correo}}</td>
                     </tr>
                     @endforeach

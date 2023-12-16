@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('dispocicion_fiscals', function (Blueprint $table) {
             $table->id();
-            $table->string('caso')->nullable();
-            $table->string('nro')->nullable();
+            $table->string('caso',5000)->nullable();
+            $table->string('nro',5000)->nullable();
             $table->date('fecha_disposicion')->nullable();
             $table->foreignId('fiscal_responsable_id')->constrained('entidad_fiscals')->onDelete('cascade')->default(1);
             $table->foreignId('fiscal_asistente_id')->constrained('entidad_fiscals')->onDelete('cascade')->default(1);
             $table->foreignId('oficial_acargo_id')->constrained('entidad_policias')->onDelete('cascade')->default(1);
-            $table->string('resumen',1000)->nullable();
-            $table->string('observaciones',1000)->nullable();
+            $table->string('resumen',5000)->nullable();
+            $table->string('observaciones',5000)->nullable();
             $table->foreignId('plazo_id')->constrained('tipo_plazos')->onDelete('cascade')->default(0);
             $table->integer('plazo')->nullable();
             $table->integer('plazo_ampliacion')->nullable(); // dato secundario

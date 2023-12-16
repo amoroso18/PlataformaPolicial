@@ -230,6 +230,7 @@ class ReportesController extends Controller
             $MYPDF = new PDFF($ContenidoTitulo);
             $MYPDF->AliasNbPages();
             $MYPDF->AddPage();
+            $MYPDF->SetAutoPageBreak(true, 30);
             $MYPDF->image('images/sivipol/BannerSivipol.png', 75, 10, 60);
             //$MYPDF->image('images/qrvalidar.png', 172.5, 31.5, 31);
             $MYPDF->Ln(10);
@@ -383,6 +384,67 @@ class ReportesController extends Controller
                     // self::generateLineTextForDetailSpace($MYPDF, 'foto', $EntidadPersona->foto);
                     // self::generateLineTextForDetailSpace($MYPDF, 'firma', $EntidadPersona->firma);
                     $MYPDF->Ln(3);
+
+                    if($value->entidads_id == 1 && !empty($EntidadPersona->documento)){
+                        $data_rq = EntidadRequisitoriaPeruano::where([['nrodocumento',$EntidadPersona->documento]])->get();
+                        if(isset($data_rq) && count($data_rq) > 0){
+                            $MYPDF->Ln(2);
+                            self::generateLineTextSpace($MYPDF, "REQUISITORIA", "", 5);
+                            $MYPDF->Ln(2);
+                            // $data_rq = EntidadRequisitoriaPeruano::inRandomOrder()->limit(3)->get();
+                            foreach ($data_rq as $key => $value) {
+                                $NUM = $key + 1;
+                                self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value->id, "", 5);
+                                self::generateLineTextSpace($MYPDF,  "fecha", $value->fecha, 9);
+                                self::generateLineTextSpace($MYPDF,  "tipo", $value->tipo, 9);
+                                self::generateLineTextSpace($MYPDF,  "delito", $value->delitos, 9);
+                                self::generateLineTextSpace($MYPDF,  "situacion", $value->situacion, 9);
+                                self::generateLineTextSpace($MYPDF,  "autoridad judicial", $value->autoridadjudicial, 9);
+                                self::generateLineTextSpace($MYPDF,  "documento", $value->documento, 9);
+                                self::generateLineTextSpace($MYPDF,  "fecha documento", $value->fechadocumento, 9);
+                                $MYPDF->Ln(2);
+                            }
+                        }
+                 
+                        $data_ant = EntidadAntecedente::where([['nrodocumento',$EntidadPersona->documento]])->get();
+                        if(isset($data_ant) &&  count($data_ant) > 0){
+                            $MYPDF->Ln(2);
+                            self::generateLineTextSpace($MYPDF, "ANTECEDENTES", "", 5);
+                            $MYPDF->Ln(2);
+                            // $data_ant = EntidadAntecedente::inRandomOrder()->limit(3)->get();
+                            foreach ($data_ant as $key => $value) {
+                                $NUM = $key + 1;
+                                self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value->id, "", 5);
+                                self::generateLineTextSpace($MYPDF,  "fecha", $value->fecha, 9);
+                                self::generateLineTextSpace($MYPDF,  "nro documento", $value->nrodocumento, 9);
+                                self::generateLineTextSpace($MYPDF,  "delito", $value->delitos, 9);
+                                self::generateLineTextSpace($MYPDF,  "situacion", $value->situacion, 9);
+                                self::generateLineTextSpace($MYPDF,  "autoridad judicial", $value->autoridadjudicial, 9);
+                                self::generateLineTextSpace($MYPDF,  "documento", $value->documento, 9);
+                                self::generateLineTextSpace($MYPDF,  "fecha documento", $value->fechadocumento, 9);
+                                $MYPDF->Ln(2);
+                            }
+                        }
+
+                        $data_den = EntidadDenuncias::where([['nrodocumento',$EntidadPersona->documento]])->get();
+                        if(isset($data_den) && count($data_den) > 0){
+                            $MYPDF->Ln(2);
+                            self::generateLineTextSpace($MYPDF, "DENUNCIAS", "", 5);
+                            $MYPDF->Ln(2);
+                             // $data_den = EntidadDenuncias::inRandomOrder()->limit(3)->get();
+                             foreach ($data_den as $key => $value) {
+                                $NUM = $key + 1;
+                                self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value->id, "", 5);
+                                self::generateLineTextSpace($MYPDF,  "fecha", $value->fecha_denuncia, 9);
+                                self::generateLineTextSpace($MYPDF,  "comisaria", $value->comisaria, 9);
+                                self::generateLineTextSpace($MYPDF,  "nro documento", $value->nrodocumento, 9);
+                                self::generateLineTextSpace($MYPDF,  "condicion", $value->condicion, 9);
+                                self::generateLineTextSpace($MYPDF,  "motivo", $value->motivo, 9);
+                                self::generateLineTextSpace($MYPDF,  "contenido judicial", $value->contenido, 9);
+                                $MYPDF->Ln(2);
+                            }
+                        }
+                    }
                 } elseif ($value->entidads_id == 3) {
                     $EntidadVehiculos = EntidadVehiculos::where('id', $value->codigo_relacion)->first();
                     self::generateLineTextForDetailSpace($MYPDF, strtoupper('placa'), $EntidadVehiculos->placa);
@@ -444,108 +506,81 @@ class ReportesController extends Controller
                     }
                     self::generateLineTextSpace($MYPDF, ('observaciones'), $EntidadInmueble->observaciones ?? "SIN OBSERVACIONES");
                     $MYPDF->Ln(3);
-                }
 
-
-
-                $MYPDF->Ln(2);
-                self::generateLineTextSpace($MYPDF, "REQUISITORIA", "", 5);
-                $MYPDF->Ln(2);
-                // $data_rq = EntidadRequisitoriaPeruano::where([['nrodocumento',$EntidadPersona->documento]])->get();
-                $data_rq = EntidadRequisitoriaPeruano::inRandomOrder()->limit(3)->get();
-                foreach ($data_rq as $key => $value) {
-                    $NUM = $key + 1;
-                    self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value->id, "", 5);
-                    self::generateLineTextSpace($MYPDF,  "fecha", $value->fecha, 9);
-                    self::generateLineTextSpace($MYPDF,  "tipo", $value->tipo, 9);
-                    self::generateLineTextSpace($MYPDF,  "delito", $value->delitos, 9);
-                    self::generateLineTextSpace($MYPDF,  "situacion", $value->situacion, 9);
-                    self::generateLineTextSpace($MYPDF,  "autoridad judicial", $value->autoridadjudicial, 9);
-                    self::generateLineTextSpace($MYPDF,  "documento", $value->documento, 9);
-                    self::generateLineTextSpace($MYPDF,  "fecha documento", $value->fechadocumento, 9);
-                    $MYPDF->Ln(2);
-                }
-
-
-                $MYPDF->Ln(2);
-                self::generateLineTextSpace($MYPDF, "ANTECEDENTES", "", 5);
-                $MYPDF->Ln(2);
-                // $data_ant = EntidadAntecedente::where([['nrodocumento',$EntidadPersona->documento]])->get();
-                $data_ant = EntidadAntecedente::inRandomOrder()->limit(3)->get();
-                foreach ($data_ant as $key => $value) {
-                    $NUM = $key + 1;
-                    self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value->id, "", 5);
-                    self::generateLineTextSpace($MYPDF,  "fecha", $value->fecha, 9);
-                    self::generateLineTextSpace($MYPDF,  "nro documento", $value->nrodocumento, 9);
-                    self::generateLineTextSpace($MYPDF,  "delito", $value->delitos, 9);
-                    self::generateLineTextSpace($MYPDF,  "situacion", $value->situacion, 9);
-                    self::generateLineTextSpace($MYPDF,  "autoridad judicial", $value->autoridadjudicial, 9);
-                    self::generateLineTextSpace($MYPDF,  "documento", $value->documento, 9);
-                    self::generateLineTextSpace($MYPDF,  "fecha documento", $value->fechadocumento, 9);
-                    $MYPDF->Ln(2);
-                }
-
-
-                $MYPDF->Ln(2);
-                self::generateLineTextSpace($MYPDF, "DENUNCIAS", "", 5);
-                $MYPDF->Ln(2);
-                // $data_den = EntidadDenuncias::where([['nrodocumento',$EntidadPersona->documento]])->get();
-                $data_den = EntidadDenuncias::inRandomOrder()->limit(3)->get();
-                foreach ($data_den as $key => $value) {
-                    $NUM = $key + 1;
-                    self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value->id, "", 5);
-                    self::generateLineTextSpace($MYPDF,  "fecha", $value->fecha_denuncia, 9);
-                    self::generateLineTextSpace($MYPDF,  "comisaria", $value->comisaria, 9);
-                    self::generateLineTextSpace($MYPDF,  "nro documento", $value->nrodocumento, 9);
-                    self::generateLineTextSpace($MYPDF,  "condicion", $value->condicion, 9);
-                    self::generateLineTextSpace($MYPDF,  "motivo", $value->motivo, 9);
-                    self::generateLineTextSpace($MYPDF,  "contenido judicial", $value->contenido, 9);
-                    $MYPDF->Ln(2);
-                }
-
-
-
-                $MYPDF->Ln(2);
-                self::generateLineTextSpace($MYPDF, "eXPEDIENTES RELACIONADOS", "", 5);
-                $MYPDF->Ln(2);
-                // $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::where([['codigo_relacion',$EntidadPersona->id]])->get();
-                $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::inRandomOrder()->limit(3)->get();
-                // dd($data_VV );
-                foreach ($data_VV as $key => $value) {
-                    // $data_vva = DisposicionFiscalNuevaVigilanciaActividad::where([['id', $value->dfnva_id]])->get();
-                    $data_vva = DisposicionFiscalNuevaVigilanciaActividad::inRandomOrder()->limit(1)->get();
-                    foreach ($data_vva as $key2 => $value2) {
-                        // $data_vvna = DisposicionFiscalNuevaVigilancia::where([['id', $value2->dfnv_id]])->get();
-                        $data_vvna = DisposicionFiscalNuevaVigilancia::inRandomOrder()->limit(1)->get();
-                        foreach ($data_vvna as $key3 => $value3) {
-                            // $data_df = DispocicionFiscal::where([['id', $value3->df_id]])->get();
-                            $data_df = DispocicionFiscal::inRandomOrder()->limit(1)->get();
-                            foreach ($data_df as $key4 => $value4) {
-                                $NUM = $key + 1;
-                                self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value4->id, "", 5);
-                                self::generateLineTextSpace($MYPDF,  "caso", $value4->caso, 9);
-                                self::generateLineTextSpace($MYPDF,  "nro", $value4->nro, 9);
-                                self::generateLineTextSpace($MYPDF,  "fecha disposicion", $value4->fecha_disposicion, 9);
-                                self::generateLineTextSpace($MYPDF,  "resumen", $value4->resumen, 9);
-                                self::generateLineTextSpace($MYPDF,  "plazo", $value4->plazo, 9);
-                                self::generateLineTextSpace($MYPDF,  "fecha inicio", $value4->fecha_inicio, 9);
-                                self::generateLineTextSpace($MYPDF,  "fecha termino", $value4->fecha_termino, 9);
-                                self::generateLineTextSpace($MYPDF,  "Estado", $value4->getEstado->descripcion, 9);
-
-                                $fecha_hoy = new \DateTime();
-                                $fecha_inicio = \DateTime::createFromFormat('Y-m-d', $value4->fecha_inicio);
-                                $fecha_fin = \DateTime::createFromFormat('Y-m-d', $value4->fecha_termino);
-                                $interval = $fecha_hoy->diff($fecha_fin);
-                                $dias_faltantes = $interval->days;
-                                $caduco = $fecha_hoy > $fecha_fin;
-                                if ($fecha_hoy->format('Y-m-d') === $fecha_fin->format('Y-m-d')) {
-                                    self::generateLineTextSpace($MYPDF,  "Situación", "Hoy vence el plazo", 9);
-                                } else if ($fecha_hoy > $fecha_fin) {
-                                    self::generateLineTextSpace($MYPDF,  "Situación", "La fecha ya caducó", 9);
-                                } else {
-                                    self::generateLineTextSpace($MYPDF,  "Situación", "Días faltantes: " . $dias_faltantes, 9);
+                    $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::where([['codigo_relacion',$EntidadInmueble->id],['entidads_id',4]])->get();
+                    foreach ($data_VV  as $key => $value) {
+                        $data_VVA = DisposicionFiscalNuevaVigilanciaArchivo::where([['dfnve_id',$value->id],['ta_id',1]])->limit(3)->get();
+                        $MYPDF->Ln(1);
+                        $x = $MYPDF->GetX() + 6;
+                        foreach ($data_VVA as $key2 => $value2) {
+                                if ($value2->archivo) {
+                                    $y = $MYPDF->GetY();    
+                                    $MYPDF->image(public_path('files/').$value2->archivo, $x, $y, 55, 45);
+                                    $x = $x+62;
+                                    // $MYPDF->SetXY($x + 15, $y + 15);
                                 }
-                                $MYPDF->Ln(2);
+                        }
+                        if(count($data_VVA)> 0){
+                            $MYPDF->SetXY($x + 20, $y + 20);
+                            $MYPDF->Ln(30);
+                        }
+                    }
+
+
+                }
+
+               
+                $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::where([['codigo_relacion',$value->codigo_relacion],['entidads_id',$value->entidads_id]])->get();
+                  // $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::inRandomOrder()->limit(3)->get();
+                // dd($data_VV );
+                if($data_VV  && count($data_VV ) > 0){
+                    $MYPDF->Ln(2);
+                    self::generateLineTextSpace($MYPDF, "eXPEDIENTES RELACIONADOS", "", 5);
+                    $MYPDF->Ln(2);
+                    foreach ($data_VV as $key => $value) {
+                        $data_vva = DisposicionFiscalNuevaVigilanciaActividad::where([['id', $value->dfnva_id]])->get();
+                        // $data_vva = DisposicionFiscalNuevaVigilanciaActividad::inRandomOrder()->limit(1)->get();
+                        foreach ($data_vva as $key2 => $value2) {
+                            $data_vvna = DisposicionFiscalNuevaVigilancia::where([['id', $value2->dfnv_id]])->get();
+                            // $data_vvna = DisposicionFiscalNuevaVigilancia::inRandomOrder()->limit(1)->get();
+                            foreach ($data_vvna as $key3 => $value3) {
+                                $data_df = DispocicionFiscal::where([['id', $value3->df_id]])->get();
+                                // $data_df = DispocicionFiscal::inRandomOrder()->limit(1)->get();
+                                foreach ($data_df as $key4 => $value4) {
+                                    $NUM = $key + 1;
+                                    self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value4->id, "", 5);
+                                    self::generateLineTextSpace($MYPDF,  "caso", $value4->caso, 9);
+                                    self::generateLineTextSpace($MYPDF,  "nro", $value4->nro, 9);
+                                    self::generateLineTextSpace($MYPDF,  "fecha disposicion", $value4->fecha_disposicion, 9);
+                                    self::generateLineTextSpace($MYPDF,  "resumen", $value4->resumen, 9);
+                                    self::generateLineTextSpace($MYPDF,  "plazo", $value4->plazo, 9);
+                                    self::generateLineTextSpace($MYPDF,  "fecha inicio", $value4->fecha_inicio, 9);
+                                    self::generateLineTextSpace($MYPDF,  "fecha termino", $value4->fecha_termino, 9);
+                                    self::generateLineTextSpace($MYPDF,  "Estado", $value4->getEstado->descripcion, 9);
+    
+                                    if($value4->fecha_inicio && $value4->fecha_termino && $value4->estado_id != 2){
+                                        $fecha_hoy = new \DateTime();
+                                        $fecha_inicio = \DateTime::createFromFormat('Y-m-d', $value4->fecha_inicio);
+                                        $fecha_fin = \DateTime::createFromFormat('Y-m-d', $value4->fecha_termino);
+                                        $interval = $fecha_hoy->diff($fecha_fin);
+                                        $dias_faltantes = $interval->days;
+                                        $caduco = $fecha_hoy > $fecha_fin;
+                                        if ($fecha_hoy->format('Y-m-d') === $fecha_fin->format('Y-m-d')) {
+                                            self::generateLineTextSpace($MYPDF,  "Situación", "Hoy vence el plazo", 9);
+                                        } else if ($fecha_hoy > $fecha_fin) {
+                                            self::generateLineTextSpace($MYPDF,  "Situación", "La fecha ya caducó", 9);
+                                        } else {
+                                            self::generateLineTextSpace($MYPDF,  "Situación", "Días faltantes: " . $dias_faltantes, 9);
+                                        }
+                                        $MYPDF->Ln(2);
+                                    }else if($value4->estado_id == 2){
+                                        self::generateLineTextSpace($MYPDF,  "Situación", "CULMINADO", 9);
+                                        $MYPDF->Ln(2);
+                                    }else{
+                                        self::generateLineTextSpace($MYPDF,  "Situación", "Error de información", 9);
+                                        $MYPDF->Ln(2);
+                                    }
+                                }
                             }
                         }
                     }
@@ -640,6 +675,59 @@ class ReportesController extends Controller
                             // self::generateLineTextForDetailSpace($MYPDF, 'foto', $EntidadPersona->foto);
                             // self::generateLineTextForDetailSpace($MYPDF, 'firma', $EntidadPersona->firma);
                             $MYPDF->Ln(3);
+
+                            
+                            if($value3->entidads_id == 1 && !empty($EntidadPersona->documento)){
+                                $data_rq = EntidadRequisitoriaPeruano::where([['nrodocumento',$EntidadPersona->documento]])->get();
+                                if(isset($data_rq) && count($data_rq) > 0){
+                                    $MYPDF->Ln(2);
+                                    self::generateLineTextSpace($MYPDF, "REQUISITORIA", "", 33);
+                                    $MYPDF->Ln(2);
+                                    // $data_rq = EntidadRequisitoriaPeruano::inRandomOrder()->limit(3)->get();
+                                    foreach ($data_rq as $key_Data => $value_data) {
+                                        $NUM = $key_Data + 1;
+                                        self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value_data->id, "", 33);
+                                        self::generateLineTextSpace($MYPDF,  "delito", $value_data->delitos, 37);
+                                        $MYPDF->Ln(2);
+                                    }
+                                }
+                        
+                                $data_ant = EntidadAntecedente::where([['nrodocumento',$EntidadPersona->documento]])->get();
+                                if(isset($data_ant) &&  count($data_ant) > 0){
+                                    $MYPDF->Ln(2);
+                                    self::generateLineTextSpace($MYPDF, "ANTECEDENTES", "", 5);
+                                    $MYPDF->Ln(2);
+                                    // $data_ant = EntidadAntecedente::inRandomOrder()->limit(3)->get();
+                                    foreach ($data_ant as  $key_Data => $value_data) {
+                                        $NUM = $key_Data + 1;
+                                        self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value_data->id, "", 33);
+                                        self::generateLineTextSpace($MYPDF,  "fecha", $value_data->fecha, 37);
+                                        self::generateLineTextSpace($MYPDF,  "delito", $value_data->delitos, 37);
+                                        self::generateLineTextSpace($MYPDF,  "situacion", $value_data->situacion, 37);
+                                        $MYPDF->Ln(2);
+                                    }
+                                }
+
+                                $data_den = EntidadDenuncias::where([['nrodocumento',$EntidadPersona->documento]])->get();
+                                if(isset($data_den) && count($data_den) > 0){
+                                    $MYPDF->Ln(2);
+                                    self::generateLineTextSpace($MYPDF, "DENUNCIAS", "", 5);
+                                    $MYPDF->Ln(2);
+                                    // $data_den = EntidadDenuncias::inRandomOrder()->limit(3)->get();
+                                    foreach ($data_den as $key_Data => $value_data) {
+                                        $NUM = $key_Data + 1;
+                                        self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value_data->id, "", 37);
+                                        self::generateLineTextSpace($MYPDF,  "fecha", $value_data->fecha_denuncia, 37);
+                                        self::generateLineTextSpace($MYPDF,  "comisaria", $value_data->comisaria, 37);
+                                        self::generateLineTextSpace($MYPDF,  "nro documento", $value_data->nrodocumento, 37);
+                                        self::generateLineTextSpace($MYPDF,  "condicion", $value_data->condicion, 37);
+                                        $MYPDF->Ln(2);
+                                    }
+                                }
+                            }
+
+
+
                         } elseif ($value3->entidads_id == 3) {
                             $EntidadVehiculos = EntidadVehiculos::where('id', $value3->codigo_relacion)->first();
                             self::generateLineTextForDetailSpace($MYPDF, strtoupper('placa'), $EntidadVehiculos->placa, 33);
@@ -702,91 +790,78 @@ class ReportesController extends Controller
                             self::generateLineTextSpaceAcitividadSub4($MYPDF, ('observaciones'), $EntidadInmueble->observaciones ?? "SIN OBSERVACIONES", 33);
                             $MYPDF->Ln(3);
                         }
-                        self::generateLineTextSpaceAcitividadSub4($MYPDF, 'DETALLE', $value3->detalle, 33);
-
-
-
-                        $MYPDF->Ln(2);
-                        self::generateLineTextSpace($MYPDF, "REQUISITORIA", "", 33);
-                        $MYPDF->Ln(2);
-                        // $data_rq = EntidadRequisitoriaPeruano::where([['nrodocumento',$EntidadPersona->documento]])->get();
-                        $data_rq = EntidadRequisitoriaPeruano::inRandomOrder()->limit(1)->get();
-                        foreach ($data_rq as $key => $value) {
-                            $NUM = $key + 1;
-                            self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value->id, "", 33);
-                            self::generateLineTextSpace($MYPDF,  "delito", $value->delitos, 37);
-                            $MYPDF->Ln(2);
+                     
+                        foreach ($value3->getNuevaVigilanciaArchivo as $key4 => $value4) {
+                            if($value4->ta_id == 1){
+                                $x = $MYPDF->GetX() + 33;
+                                if ($value4->archivo) {
+                                    $y = $MYPDF->GetY();    
+                                    $MYPDF->image(public_path('files/').$value4->archivo, $x, $y, 40, 40);
+                                    $x = $x+62;
+                                    $MYPDF->SetXY($x + 20, $y + 20);
+                                    $MYPDF->Ln(21);
+                                }
+                            }else{
+                                $SR4 = $key4 + 1;
+                                self::generateLineTextSpaceAcitividadSub4($MYPDF, 'ARCHIVO ANEXO ' . $SR4, asset('files') . "/" . $value4->archivo, 33);
+                            }
                         }
+                        $MYPDF->Ln(4);
 
-                        $MYPDF->Ln(2);
-                        self::generateLineTextSpace($MYPDF, "ANTECEDENTES", "", 33);
-                        $MYPDF->Ln(2);
-                        // $data_ant = EntidadAntecedente::where([['nrodocumento',$EntidadPersona->documento]])->get();
-                        $data_ant = EntidadAntecedente::inRandomOrder()->limit(3)->get();
-                        foreach ($data_ant as $key => $value) {
-                            $NUM = $key + 1;
-                            self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value->id, "", 33);
-                            self::generateLineTextSpace($MYPDF,  "fecha", $value->fecha, 37);
-                            self::generateLineTextSpace($MYPDF,  "delito", $value->delitos, 37);
-                            self::generateLineTextSpace($MYPDF,  "situacion", $value->situacion, 37);
+                        $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::where([['codigo_relacion',$value3->codigo_relacion],['entidads_id',$value3->entidads_id]])->get();
+                        if($data_VV  && count($data_VV ) > 0){
                             $MYPDF->Ln(2);
-                        }
-        
-        
-                        $MYPDF->Ln(2);
-                        self::generateLineTextSpace($MYPDF, "DENUNCIAS", "", 33);
-                        $MYPDF->Ln(2);
-                        // $data_den = EntidadDenuncias::where([['nrodocumento',$EntidadPersona->documento]])->get();
-                        $data_den = EntidadDenuncias::inRandomOrder()->limit(3)->get();
-                        foreach ($data_den as $key => $value) {
-                            $NUM = $key + 1;
-                            self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value->id, "", 37);
-                            self::generateLineTextSpace($MYPDF,  "fecha", $value->fecha_denuncia, 37);
-                            self::generateLineTextSpace($MYPDF,  "comisaria", $value->comisaria, 37);
-                            self::generateLineTextSpace($MYPDF,  "nro documento", $value->nrodocumento, 37);
-                            self::generateLineTextSpace($MYPDF,  "condicion", $value->condicion, 37);
+                            self::generateLineTextSpace($MYPDF, "eXPEDIENTES RELACIONADOS", "", 33);
                             $MYPDF->Ln(2);
-                        }
-
-                        $MYPDF->Ln(2);
-                        self::generateLineTextSpace($MYPDF, "eXPEDIENTES RELACIONADOS", "", 33);
-                        $MYPDF->Ln(2);
-                        // $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::where([['codigo_relacion',$EntidadPersona->id]])->get();
-                        $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::inRandomOrder()->limit(3)->get();
-                        // dd($data_VV );
-                        foreach ($data_VV as $key => $valuexd) {
-                            // $data_vva = DisposicionFiscalNuevaVigilanciaActividad::where([['id', $value->dfnva_id]])->get();
-                            $data_vva = DisposicionFiscalNuevaVigilanciaActividad::inRandomOrder()->limit(1)->get();
-                            foreach ($data_vva as $key2 => $value2xd) {
-                                // $data_vvna = DisposicionFiscalNuevaVigilancia::where([['id', $value2->dfnv_id]])->get();
-                                $data_vvna = DisposicionFiscalNuevaVigilancia::inRandomOrder()->limit(1)->get();
-                                foreach ($data_vvna as $key3 => $value3xd) {
-                                    // $data_df = DispocicionFiscal::where([['id', $value3->df_id]])->get();
-                                    $data_df = DispocicionFiscal::inRandomOrder()->limit(1)->get();
-                                    foreach ($data_df as $key4 => $value4xd) {
-                                        $NUM = $key + 1;
-                                        self::generateLineTextSpace($MYPDF,   $NUM . ") CODIGO " . "NRO. 000000" . $value4xd->id, "", 33);
-                                        self::generateLineTextSpace($MYPDF,  "caso", $value4xd->caso, 37);
-                                        self::generateLineTextSpace($MYPDF,  "nro", $value4xd->nro, 37);
-                                        self::generateLineTextSpace($MYPDF,  "fecha disposicion", $value4xd->fecha_disposicion, 37);
-                                        self::generateLineTextSpace($MYPDF,  "plazo", $value4xd->plazo, 37);
-                                        self::generateLineTextSpace($MYPDF,  "fecha inicio", $value4xd->fecha_inicio, 37);
-                                        self::generateLineTextSpace($MYPDF,  "fecha termino", $value4xd->fecha_termino, 37);
-                                        self::generateLineTextSpace($MYPDF,  "Estado", $value4xd->getEstado->descripcion, 37);
+                            $NUM_xd = 1;
+                            foreach ($data_VV as $key11 => $valuexd) {
+                                $data_vva = DisposicionFiscalNuevaVigilanciaActividad::where([['id', $valuexd->dfnva_id]])->get();
+                                // $data_vva = DisposicionFiscalNuevaVigilanciaActividad::inRandomOrder()->limit(1)->get();
+                                foreach ($data_vva as $key22 => $value2_xd) {
+                                    $data_vvna = DisposicionFiscalNuevaVigilancia::where([['id', $value2_xd->dfnv_id]])->get();
+                                    // $data_vvna = DisposicionFiscalNuevaVigilancia::inRandomOrder()->limit(1)->get();
+                                    foreach ($data_vvna as $key33 => $value3_xd) {
+                                        $data_df = DispocicionFiscal::where([['id', $value3_xd->df_id]])->get();
+                                        // $data_df = DispocicionFiscal::inRandomOrder()->limit(1)->get();
+                                        
+                                        foreach ($data_df as $key44 => $value4) {
+                                            self::generateLineTextSpace($MYPDF,   $NUM_xd . ") CODIGO " . "NRO. 000000" . $value4->id, "", 33);
+                                            self::generateLineTextSpace($MYPDF,  "caso", $value4->caso, 37);
+                                            self::generateLineTextSpace($MYPDF,  "nro", $value4->nro, 37);
+                                            self::generateLineTextSpace($MYPDF,  "fecha disposicion", $value4->fecha_disposicion, 37);
+                                            self::generateLineTextSpace($MYPDF,  "plazo", $value4->plazo, 37);
+                                            self::generateLineTextSpace($MYPDF,  "fecha inicio", $value4->fecha_inicio, 37);
+                                            self::generateLineTextSpace($MYPDF,  "fecha termino", $value4->fecha_termino, 37);
+                                            self::generateLineTextSpace($MYPDF,  "Estado", $value4->getEstado->descripcion, 37);
+            
+                                            if($value4->fecha_inicio && $value4->fecha_termino && $value4->estado_id != 2){
+                                                $fecha_hoy = new \DateTime();
+                                                $fecha_inicio = \DateTime::createFromFormat('Y-m-d', $value4->fecha_inicio);
+                                                $fecha_fin = \DateTime::createFromFormat('Y-m-d', $value4->fecha_termino);
+                                                $interval = $fecha_hoy->diff($fecha_fin);
+                                                $dias_faltantes = $interval->days;
+                                                $caduco = $fecha_hoy > $fecha_fin;
+                                                if ($fecha_hoy->format('Y-m-d') === $fecha_fin->format('Y-m-d')) {
+                                                    self::generateLineTextSpace($MYPDF,  "Situación", "Hoy vence el plazo", 37);
+                                                } else if ($fecha_hoy > $fecha_fin) {
+                                                    self::generateLineTextSpace($MYPDF,  "Situación", "La fecha ya caducó", 37);
+                                                } else {
+                                                    self::generateLineTextSpace($MYPDF,  "Situación", "Días faltantes: " . $dias_faltantes, 37);
+                                                }
+                                                $MYPDF->Ln(2);
+                                            }else if($value4->estado_id == 2){
+                                                self::generateLineTextSpace($MYPDF,  "Situación", "CULMINADO", 37);
+                                                $MYPDF->Ln(2);
+                                            }else{
+                                                self::generateLineTextSpace($MYPDF,  "Situación", "Error de información", 37);
+                                                $MYPDF->Ln(2);
+                                            }
+                                            $NUM_xd++;
+                                        }
                                     }
                                 }
                             }
                         }
-
-
-
-
-                        $MYPDF->Ln(1);
-                        foreach ($value3->getNuevaVigilanciaArchivo as $key4 => $value4) {
-                            $SR4 = $key4 + 1;
-                            self::generateLineTextSpaceAcitividadSub4($MYPDF, 'ARCHIVO ANEXO ' . $SR4, asset('files') . "/" . $value4->archivo, 33);
-                        }
-                        $MYPDF->Ln(3);
                     }
                 }
                 $MYPDF->Ln(1);
@@ -794,7 +869,6 @@ class ReportesController extends Controller
                 $MYPDF->multicell(189, 4,  str_repeat("-", 153), 0, 'j');
                 $MYPDF->Ln(1);
             }
-
 
             $MYPDF->Ln(2);
             $MYPDF->SetFont('Arial', 'B', 11);
@@ -832,51 +906,7 @@ class ReportesController extends Controller
                 }
             }
 
-            // // $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::where([['codigo_relacion',$EntidadPersona->id]])->get();
-            // $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::inRandomOrder()->limit(3)->get();
-            // // dd($data_VV );
-            // foreach ($data_VV as $key => $value) {
-            //     // $data_vva = DisposicionFiscalNuevaVigilanciaActividad::where([['id', $value->dfnva_id]])->get();
-            //     $data_vva = DisposicionFiscalNuevaVigilanciaActividad::inRandomOrder()->limit(1)->get();
-            //     foreach ($data_vva as $key2 => $value2) {
-            //         // $data_vvna = DisposicionFiscalNuevaVigilancia::where([['id', $value2->dfnv_id]])->get();
-            //         $data_vvna = DisposicionFiscalNuevaVigilancia::inRandomOrder()->limit(1)->get();
-            //         foreach ($data_vvna as $key3 => $value3) {
-            //             // $data_df = DispocicionFiscal::where([['id', $value3->df_id]])->get();
-            //             $data_df = DispocicionFiscal::inRandomOrder()->limit(1)->get();
-            //             foreach ($data_df as $key4 => $value4) {
-            //                 $NUM = $key+1;
-            //                 self::generateLineTextSpace($MYPDF,   $NUM .") CODIGO "."NRO. 000000".$value4->id, "",1);
-            //                 self::generateLineTextSpace($MYPDF,  "caso", $value4->caso,5);
-            //                 self::generateLineTextSpace($MYPDF,  "nro", $value4->nro,5);
-            //                 self::generateLineTextSpace($MYPDF,  "fecha disposicion", $value4->fecha_disposicion,5);
-            //                 self::generateLineTextSpace($MYPDF,  "resumen", $value4->resumen,5);
-            //                 self::generateLineTextSpace($MYPDF,  "plazo", $value4->plazo,5);
-            //                 self::generateLineTextSpace($MYPDF,  "fecha inicio", $value4->fecha_inicio,5);
-            //                 self::generateLineTextSpace($MYPDF,  "fecha termino", $value4->fecha_termino,5);
-            //                 self::generateLineTextSpace($MYPDF,  "Estado", $value4->getEstado->descripcion,5);
-
-            //                 $fecha_hoy = new \DateTime();
-            //                 $fecha_inicio = \DateTime::createFromFormat('Y-m-d', $value4->fecha_inicio);
-            //                 $fecha_fin = \DateTime::createFromFormat('Y-m-d', $value4->fecha_termino);
-            //                 $interval = $fecha_hoy->diff($fecha_fin);
-            //                 $dias_faltantes = $interval->days;
-            //                 $caduco = $fecha_hoy > $fecha_fin;
-            //                 if($fecha_hoy->format('Y-m-d') === $fecha_fin->format('Y-m-d')){
-            //                     self::generateLineTextSpace($MYPDF,  "Situación", "Hoy vence el plazo",5);
-            //                 }else if($fecha_hoy > $fecha_fin){
-            //                     self::generateLineTextSpace($MYPDF,  "Situación", "La fecha ya caducó",5);
-            //                 }else{
-            //                     self::generateLineTextSpace($MYPDF,  "Situación", "Días faltantes: " . $dias_faltantes,5);
-            //                 }
-            //                 $MYPDF->Ln(2);
-            //             }
-            //         }
-            //     }
-            // }
-
             $MYPDF->Output(('ReporteDeExpediente.pdf'), 'I');
-            //$MYPDF->Output('D', "ReporteReferenciaSerpol.pdf", true);
             exit();
         } catch (\Exception $e) {
             dd($e);
@@ -895,6 +925,7 @@ class ReportesController extends Controller
         $MYPDF = new PDFF($ContenidoTitulo);
         $MYPDF->AliasNbPages();
         $MYPDF->AddPage();
+        $MYPDF->SetAutoPageBreak(true, 35);
         $MYPDF->image('images/sivipol/BannerSivipol.png', 75, 10, 60);
         //$MYPDF->image('images/qrvalidar.png', 172.5, 31.5, 31);
         $MYPDF->Ln(10);
@@ -949,6 +980,24 @@ class ReportesController extends Controller
         if ($EntidadInmueble->observaciones) {
             self::generateLineTextSpace($MYPDF, strtoupper('observaciones'), $EntidadInmueble->observaciones);
         }
+
+        $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::where([['codigo_relacion',$EntidadInmueble->id],['entidads_id',4]])->get();
+        foreach ($data_VV  as $key => $value) {
+            $data_VVA = DisposicionFiscalNuevaVigilanciaArchivo::where([['dfnve_id',$value->id],['ta_id',1]])->limit(3)->get();
+            $MYPDF->Ln(1);
+            $x = $MYPDF->GetX() + 6;
+           foreach ($data_VVA as $key2 => $value2) {
+                if ($value2->archivo) {
+                    $y = $MYPDF->GetY();    
+                    $MYPDF->image(public_path('files/').$value2->archivo, $x, $y, 55, 45);
+                    $x = $x+62;
+                    // $MYPDF->SetXY($x + 15, $y + 15);
+                }
+           }
+           $MYPDF->SetXY($x + 20, $y + 20);
+           $MYPDF->Ln(30);
+        }
+
         $MYPDF->Ln(1);
         $MYPDF->SetFont('Arial', 'B', 11);
         $MYPDF->multicell(192, 5, "PROPIETARIOS", 0, 'L');
@@ -1011,10 +1060,13 @@ class ReportesController extends Controller
             $MYPDF->Ln(3);
         }
 
+
         $MYPDF->SetFont('Arial', 'B', 11);
         $MYPDF->multicell(192, 5, "EXPEDIENTES RELACIONADOS", 0, 'L');
         $MYPDF->Ln(2);
 
+
+         // $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::where([['codigo_relacion',$EntidadPersona->id]])->get();
         $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::inRandomOrder()->limit(3)->get();
         // dd($data_VV );
         foreach ($data_VV as $key => $value) {
@@ -1080,6 +1132,7 @@ class ReportesController extends Controller
         $MYPDF = new PDFF($ContenidoTitulo);
         $MYPDF->AliasNbPages();
         $MYPDF->AddPage();
+        $MYPDF->SetAutoPageBreak(true, 35);
         $MYPDF->image('images/sivipol/BannerSivipol.png', 75, 10, 60);
         //$MYPDF->image('images/qrvalidar.png', 172.5, 31.5, 31);
         $MYPDF->Ln(10);

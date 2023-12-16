@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('entidads_id')->constrained('tipo_entidads')->onDelete('cascade');
             $table->integer('codigo_relacion');
             // codigo_relacion con entidades POLICIA, PERUANOS, EXTRANJEROS, VEHICULO, INMUEBLE ....
-            $table->string('observaciones',1000)->nullable();
+            $table->string('observaciones',5000)->nullable();
             $table->integer('estado')->default(1);
             $table->timestamps();
         });

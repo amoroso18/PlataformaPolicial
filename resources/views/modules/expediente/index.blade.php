@@ -186,7 +186,11 @@
                                                 <li><span class="w-50">Responde a</span> : <span class="ml-auto" v-text="item.respondea"></span></li>
                                                 <li><span class="w-50">Evaluación</span> : <span class="ml-auto" v-text="item.evaluacion"></span></li>
                                                 <li><span class="w-50">Conclusiones</span> : <span class="ml-auto" v-text="item.conclusiones"></span></li>
-                                                <li><span class="w-50">Archivo</span> : <span class="ml-auto" v-text="item.archivo"></span></li>
+                                                <li><span class="w-50">Archivo</span> : <span class="ml-auto" v-if="item.archivo">
+                                                        <a target="_blank" :href="URLASSET+'files/' + item.archivo" class="btn btn-icon btn-lg btn-white btn-dim btn-outline-primary"> Ver anexo <em class="icon ni ni-external-alt"></em></a>
+                                                    </span>
+
+                                                </li>
                                                 <li><span class="w-50">Fecha creación</span> : <span class="ml-auto" v-text="item.created_at"></span></li>
                                             </ul>
                                         </div>
@@ -597,46 +601,46 @@
                     <div class="form-group">
                         <label class="form-label" for="default-01">Archivo principal</label>
                         <div class="form-control-wrap">
-                            <input type="file" accept="application/pdf" class="form-control"  @change="handleFileChange('',$event,'_FINISH_EXPEDIENTE')">
-                            <p v-if="dataFinish.archivo"  v-text="dataFinish.archivo_NAME"></p>
+                            <input type="file" accept="application/pdf" class="form-control" @change="handleFileChange('',$event,'_FINISH_EXPEDIENTE')">
+                            <p v-if="dataFinish.archivo" v-text="dataFinish.archivo_NAME"></p>
                         </div>
                     </div>
 
                     <div class="col-sm-12 mt-3">
-                            <div v-for="(item, index) in dataFinish.files" :key="index">
-                                <div class="card card-preview ">
-                                    <div class="input-group-append pointer d-flex justify-content-end">
-                                        <em class="icon ni ni-trash-alt" @click="removeInput('ARCHIVOS_FINISH',index)"></em>
-                                    </div>
-                                    <div class="card-inner">
-                                        <div class="row">
-                                            <div class="form-group">
-                                                <div class="form-control-wrap">
-                                                     <select class="form-control" data-ui="xl" id="outlined-select2" v-model="item.ta_id">
-                                                        <option v-for="item in dataTipoDocumentos" :key="item.id" :value="item.id" v-text="item.descripcion"></option>
-                                                    </select>
-                                                </div>
+                        <div v-for="(item, index) in dataFinish.files" :key="index">
+                            <div class="card card-preview ">
+                                <div class="input-group-append pointer d-flex justify-content-end">
+                                    <em class="icon ni ni-trash-alt" @click="removeInput('ARCHIVOS_FINISH',index)"></em>
+                                </div>
+                                <div class="card-inner">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="form-control-wrap">
+                                                <select class="form-control" data-ui="xl" id="outlined-select2" v-model="item.ta_id">
+                                                    <option v-for="item in dataTipoDocumentos" :key="item.id" :value="item.id" v-text="item.descripcion"></option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="row mt-2">
-                                            <div class="form-group">
-                                                <div class="form-control-wrap" v-if="!item.pdf">
-                                                    <input type="file" class="form-control" @change="handleFileChange(index,$event,'_NEWFILE_ENTIDAD')">
-                                                </div> 
-                                                <p v-if="item.pdf" v-text="item.pdfName"></p>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="form-group">
+                                            <div class="form-control-wrap" v-if="!item.pdf">
+                                                <input type="file" class="form-control" @change="handleFileChange(index,$event,'_NEWFILE_ENTIDAD')">
                                             </div>
+                                            <p v-if="item.pdf" v-text="item.pdfName"></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-dark mt-2" @click="addInput('ARCHIVOS_FINISH')">Agregar Archivos</button>
                         </div>
-                        <div class="col-sm-12 mt-3">
-                            <div class="form-group">
-                                <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="GrabarActividad('_DisposicionFiscalFINISH')">Registrar</button>
-                                <p v-if="loadingPersonas">Cargando....</p>
-                            </div>
+                        <button class="btn btn-dark mt-2" @click="addInput('ARCHIVOS_FINISH')">Agregar Archivos</button>
+                    </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="form-group">
+                            <button v-if="!loadingPersonas" class="btn btn-lg btn-primary btn-block" v-on:click="GrabarActividad('_DisposicionFiscalFINISH')">Registrar</button>
+                            <p v-if="loadingPersonas">Cargando....</p>
                         </div>
+                    </div>
 
                 </div>
                 <div class="modal-footer">
@@ -743,7 +747,7 @@
                             <input type="text" class="form-control form-control-lg" v-model="dataFiscalAdd.ubigeo" />
                         </div>
                     </section>
-                   
+
                     <div class="form-group">
                         <button class="btn btn-primary" v-if="!loadingModalNuevoFiscal" v-on:click="GrabarNuevoFiscal">Registrar</button>
                         <p v-if="loadingModalNuevoFiscal"><em class="icon ni ni-loader"></em> Cargando....</p>
@@ -1668,73 +1672,69 @@
                 </div>
                 <div class="modal-body">
                     <div class="card-inner">
-                        <div class="row">
-                            <div class="col-sm-8">
-                                <div class="form-group">
-                                    <div class="form-control-wrap">
-                                        <select class="form-control" data-ui="xl" id="outlined-select2" v-model="nuevafechadocumentovideovigilancia.documentos_id">
-                                            <option v-for="item in dataTipoDocumentos" :key="item.id" :value="item.id" v-text="item.descripcion"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" v-model="nuevafechadocumentovideovigilancia.numeroDocumento" placeholder="Número">
-                                    </div>
-                                </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Tipo de documento</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" data-ui="xl" id="outlined-select2" v-model="nuevafechadocumentovideovigilancia.documentos_id">
+                                    <option v-for="item in dataTipoDocumentos" :key="item.id" :value="item.id" v-text="item.descripcion"></option>
+                                </select>
                             </div>
                         </div>
-                        <div class="form-control-wrap mt-2">
-                            <input type="text" class="form-control" v-model="nuevafechadocumentovideovigilancia.siglasDocumento" placeholder="Siglas">
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <div class="form-control-wrap">
-                                        <input type="date" class="form-control" v-model="nuevafechadocumentovideovigilancia.fechaDocumento" placeholder="fecha Documento...">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" v-model="nuevafechadocumentovideovigilancia.asunto" placeholder="asunto...">
-                                    </div>
-                                </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Siglas</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" v-model="nuevafechadocumentovideovigilancia.siglasDocumento" placeholder="Siglas">
                             </div>
                         </div>
-                        <div class="row mt-2">
-                            <div class="col-sm-6 ">
-                                <div class="form-group">
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" v-model="nuevafechadocumentovideovigilancia.respondea" placeholder="responde a...">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" v-model="nuevafechadocumentovideovigilancia.evaluacion" placeholder="evaluacion...">
-                                    </div>
-                                </div>
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Nro documento</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" v-model="nuevafechadocumentovideovigilancia.numeroDocumento" placeholder="Número">
                             </div>
                         </div>
-                        <div class="row mt-2">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" v-model="nuevafechadocumentovideovigilancia.conclusiones" placeholder="conclusiones...">
-                                    </div>
-                                </div>
+
+
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Fecha documento</label>
+                            <div class="form-control-wrap">
+                                <input type="date" class="form-control" v-model="nuevafechadocumentovideovigilancia.fechaDocumento" placeholder="fecha Documento...">
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <div class="form-control-wrap" v-if="!nuevafechadocumentovideovigilancia.pdf">
-                                        <input type="file" accept="application/pdf" class="form-control" @change="handleFileChange('',$event,'_NUEVAFVV')">
-                                    </div>
-                                    <p v-if="nuevafechadocumentovideovigilancia.pdf" v-text="nuevafechadocumentovideovigilancia.pdfName"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Asunto</label>
+                            <div class="form-control-wrap">
+                                <textarea class="form-control no-resize" v-model="nuevafechadocumentovideovigilancia.asunto" ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Evaluación</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" v-model="nuevafechadocumentovideovigilancia.evaluacion" placeholder="evaluacion...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Responde a</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" v-model="nuevafechadocumentovideovigilancia.respondea" placeholder="responde a...">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">conclusiones</label>
+                            <div class="form-control-wrap">
+                                <textarea class="form-control no-resize" v-model="nuevafechadocumentovideovigilancia.conclusiones"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="default-01">Anexo - Documento Digital</label>
+                            <div class="form-control-wrap">
+                                <p v-if="nuevafechadocumentovideovigilancia.pdf" v-text="nuevafechadocumentovideovigilancia.pdfName"></p>
+                                <div class="form-control-wrap">
+                                    <input type="file" accept="application/pdf" class="form-control" @change="handleFileChange('',$event,'_NUEVAFVV')">
                                 </div>
                             </div>
                         </div>
@@ -2178,7 +2178,7 @@
                         destino: "",
                         archivo: "",
                         archivo_NAME: "",
-                        files:[]
+                        files: []
                     },
                     disposicion_fiscal_nueva_vigilancia_actividads: {
                         index1: null,
@@ -2662,26 +2662,26 @@
                             }
                         }
                         // console.log(this.dataExpe);
-                        if(this.dataExpe.selectdataReferenciaVideovigilancia){
+                        if (this.dataExpe.selectdataReferenciaVideovigilancia) {
                             for (let i = 0; i < this.dataExpe.selectdataReferenciaVideovigilancia.length; i++) {
-                            if (this.dataExpe.selectdataReferenciaVideovigilancia[i]) {
-                                formData.append(`selectdataReferenciaVideovigilancia_documentos_id_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].documentos_id);
-                                formData.append(`selectdataReferenciaVideovigilancia_fecha_documento_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].fecha_documento);
-                                formData.append(`selectdataReferenciaVideovigilancia_nro_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].nro);
-                                formData.append(`selectdataReferenciaVideovigilancia_pdf_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].pdf);
-                                formData.append(`selectdataReferenciaVideovigilancia_siglas_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].siglas);
+                                if (this.dataExpe.selectdataReferenciaVideovigilancia[i]) {
+                                    formData.append(`selectdataReferenciaVideovigilancia_documentos_id_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].documentos_id);
+                                    formData.append(`selectdataReferenciaVideovigilancia_fecha_documento_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].fecha_documento);
+                                    formData.append(`selectdataReferenciaVideovigilancia_nro_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].nro);
+                                    formData.append(`selectdataReferenciaVideovigilancia_pdf_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].pdf);
+                                    formData.append(`selectdataReferenciaVideovigilancia_siglas_[${i}]`, this.dataExpe.selectdataReferenciaVideovigilancia[i].siglas);
+                                }
                             }
                         }
-                        }
-                        if(this.dataExpe.selectdataTipoVideovigilancia){
+                        if (this.dataExpe.selectdataTipoVideovigilancia) {
                             for (let i = 0; i < this.dataExpe.selectdataTipoVideovigilancia.length; i++) {
                                 if (this.dataExpe.selectdataTipoVideovigilancia[i].id) {
                                     formData.append(`selectdataTipoVideovigilancia_[${i}]`, this.dataExpe.selectdataTipoVideovigilancia[i].id);
                                 }
                             }
                         }
-                        
-                       
+
+
                         for (let i = 0; i < this.dataVehiculo.length; i++) {
                             if (this.dataVehiculo[i].id) {
                                 formData.append(`dataVehiculo_[${i}]`, this.dataVehiculo[i].id);
@@ -2845,7 +2845,7 @@
                                 setTimeout(() => {
                                     $('#modalADD').modal('show');
                                 }, 1000);
-                               
+
                             });
                     },
                     GrabarPersonas(TIPO) {
@@ -2954,10 +2954,10 @@
                                             get_nueva_vigilancia_archivo: []
                                         };
                                         $('#modalInmueble').modal('hide');
-                                     
+
                                         setTimeout(() => {
                                             $('#modalEntidadActividadAdd').modal('show');
-                            }, 1000);
+                                        }, 1000);
                                         this.loadingSarchInmueble = false;
                                         return true;
                                     } else {
@@ -2981,7 +2981,7 @@
                                     setTimeout(() => {
                                         $('#modalADD').modal('show');
                                     }, 1000);
-                                        
+
                                 }
                             });
                     },
@@ -3086,7 +3086,7 @@
                                 setTimeout(() => {
                                     $('#modalADD').modal('show');
                                 }, 1000);
-                     
+
                             });
                     },
                     BuscarPersonas(TIPO) {
@@ -3543,25 +3543,25 @@
                         const file = e.target.files[0];
                         if (ISTO == "_NUEVAFVV") {
                             if (file && file.type === "application/pdf") {
-                                this.nuevafechadocumentovideovigilancia.pdfName = file.name  || "Archivo desconocido";
+                                this.nuevafechadocumentovideovigilancia.pdfName = file.name || "Archivo desconocido";
                                 this.nuevafechadocumentovideovigilancia.pdf = file;
                             }
                         } else if (ISTO == "_NEWFILE_ENTIDAD") {
                             this.dfnva_persona.get_nueva_vigilancia_archivo[index].pdfName = file.name || "Archivo desconocido";
                             this.dfnva_persona.get_nueva_vigilancia_archivo[index].pdf = file;
                         } else if (ISTO == "_NEWFILE_ENTIDA_INMUEBLE") {
-                            this.dfnva_inmueble.get_nueva_vigilancia_archivo[index].pdfName = file.name  || "Archivo desconocido";
+                            this.dfnva_inmueble.get_nueva_vigilancia_archivo[index].pdfName = file.name || "Archivo desconocido";
                             this.dfnva_inmueble.get_nueva_vigilancia_archivo[index].pdf = file;
                         } else if (ISTO == "_NEWFILE_ENTIDA_VEHICULO") {
-                            this.dfnva_vehiculo.get_nueva_vigilancia_archivo[index].pdfName = file.name  || "Archivo desconocido";
+                            this.dfnva_vehiculo.get_nueva_vigilancia_archivo[index].pdfName = file.name || "Archivo desconocido";
                             this.dfnva_vehiculo.get_nueva_vigilancia_archivo[index].pdf = file;
-                        }else if (ISTO == "_FINISH_EXPEDIENTE") {
+                        } else if (ISTO == "_FINISH_EXPEDIENTE") {
                             this.dataFinish.archivo = file;
                             this.dataFinish.archivo_NAME = file.name;
                         } else {
                             // Verifica si el archivo es un PDF
                             if (file && file.type === "application/pdf") {
-                                this.dataExpe.selectdataReferenciaVideovigilancia[index].pdfName = file.name  || "Archivo desconocido";
+                                this.dataExpe.selectdataReferenciaVideovigilancia[index].pdfName = file.name || "Archivo desconocido";
                                 this.dataExpe.selectdataReferenciaVideovigilancia[index].pdf = file;
                             } else {
 
