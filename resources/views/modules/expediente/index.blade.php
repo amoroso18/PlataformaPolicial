@@ -32,7 +32,6 @@
         left: 0;
         right: 0;
     }
-
     input[type="datetime-local"]::-webkit-calendar-picker-indicator {
         background: transparent;
         cursor: pointer;
@@ -42,9 +41,11 @@
         left: 0;
         right: 0;
     }
-
     .pointer {
         cursor: pointer;
+    }
+    .pac-container {
+        z-index: 10000 !important; /* Ajusta el valor según sea necesario */
     }
 </style>
 @endpush
@@ -1325,6 +1326,8 @@
 
                             <div class="form-label-group mt-2">
                                 <label class="form-label">Ubicación</label>
+                                <input id="pac-input" class="controls form-control form-control-lg" type="text" placeholder="Buscar lugar">
+
                             </div>
                             <div class="form-control-wrap">
                                 <div id="mapDiv" style="height: 400px;"></div>
@@ -3654,49 +3657,66 @@
                     },
                     initMap() {
                         if (typeof google !== 'undefined' && google.maps) {
-                            console.log("si existe");
-
                             const map = new google.maps.Map(document.getElementById('mapDiv'), {
-                                center: {
-                                    lat: -12.100499,
-                                    lng: -77.0272729
-                                },
-                                zoom: 13,
+                            center: { lat: -12.100499, lng: -77.0272729 },
+                            zoom: 13,
                             });
 
-                            // Agrega un marcador al centro del mapa
                             const initialMarker = new google.maps.Marker({
-                                position: {
-                                    lat: -12.100499,
-                                    lng: -77.0272729
-                                },
-                                map: map,
-                                title: 'Marcador Inicial',
-                                draggable: true, // Permite mover el marcador
+                            position: { lat: -12.100499, lng: -77.0272729 },
+                            map: map,
+                            title: 'Marcador Inicial',
+                            draggable: true,
+                            });
+
+                            // Agrega el cuadro de búsqueda
+                            const input = document.getElementById('pac-input');
+                            const searchBox = new google.maps.places.SearchBox(input);
+                            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+                            // Escucha el evento de cambios en el cuadro de búsqueda
+                            map.addListener('bounds_changed', () => {
+                            searchBox.setBounds(map.getBounds());
+                            });
+
+                            // Escucha el evento de selección de un lugar en el cuadro de búsqueda
+                            searchBox.addListener('places_changed', () => {
+                            const places = searchBox.getPlaces();
+
+                            if (places.length === 0) {
+                                return;
+                            }
+
+                            // Mueve el marcador al lugar seleccionado
+                            const newLocation = places[0].geometry.location;
+                            initialMarker.setPosition(newLocation);
+                            map.setCenter(newLocation);
+
+                            // Actualiza la dirección y coordenadas
+                            this.dataInmuebleAdd.latitud = newLocation.lat();
+                            this.dataInmuebleAdd.longitud = newLocation.lng();
+                            this.dataInmuebleAdd.direccion = places[0].formatted_address;
                             });
 
                             // Agrega evento de arrastre al marcador
                             initialMarker.addListener('dragend', () => {
-                                const markerPosition = initialMarker.getPosition();
-                                this.dataInmuebleAdd.latitud = markerPosition.lat();
-                                this.dataInmuebleAdd.longitud = markerPosition.lng();
+                            const markerPosition = initialMarker.getPosition();
+                            this.dataInmuebleAdd.latitud = markerPosition.lat();
+                            this.dataInmuebleAdd.longitud = markerPosition.lng();
 
-                                // Utiliza la API de Geocodificación para obtener la dirección
-                                const geocoder = new google.maps.Geocoder();
-                                geocoder.geocode({
-                                    location: markerPosition
-                                }, (results, status) => {
-                                    if (status === 'OK' && results[0]) {
-                                        const address = results[0].formatted_address;
-                                        this.dataInmuebleAdd.direccion = address;
-                                        // console.log('Nueva Dirección:', address);
-                                    } else {
-                                        // console.error('No se pudo obtener la dirección.');
-                                    }
-                                });
+                            const geocoder = new google.maps.Geocoder();
+                            geocoder.geocode({ location: markerPosition }, (results, status) => {
+                                if (status === 'OK' && results[0]) {
+                                const address = results[0].formatted_address;
+                                this.dataInmuebleAdd.direccion = address;
+                                } else {
+                                console.error('No se pudo obtener la dirección.');
+                                }
+                            });
                             });
                         }
                     },
+
                 },
                 watch: {
                     'dataExpe.fecha_inicio': 'calcularFechaFinal',
