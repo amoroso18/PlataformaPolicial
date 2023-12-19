@@ -1989,54 +1989,54 @@
                                 <li><span class="w-50">Apellido Materno</span> : <span class="ml-auto" v-text="dfnva_persona.materno"></span></li>
                                 <li><span class="w-50">Sexo </span> : <span class="ml-auto" v-text="dfnva_persona.sexo"></span></li>
 
-                                <li><span class="w-50">estado_civil </span> : <span class="ml-auto" v-text="dfnva_persona.estado_civil"></span></li>
-                                <li><span class="w-50">fecha_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.fecha_nacimiento"></span></li>
-                                <li><span class="w-50">ubigeo_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.ubigeo_nacimiento"></span></li>
-                                <li><span class="w-50">departamento_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.departamento_nacimiento"></span></li>
-                                <li><span class="w-50">provincia_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.provincia_nacimiento"></span></li>
-                                <li><span class="w-50">distrito_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.distrito_nacimiento"></span></li>
-                                <li><span class="w-50">lugar_nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.lugar_nacimiento"></span></li>
-                                <li><span class="w-50">ubigeo_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.ubigeo_domicilio"></span></li>
+                                <li><span class="w-50">Estado civil </span> : <span class="ml-auto" v-text="dfnva_persona.estado_civil"></span></li>
+                                <li><span class="w-50">Fecha nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.fecha_nacimiento"></span></li>
+                                <li><span class="w-50">Ubigeo nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.ubigeo_nacimiento"></span></li>
+                                <li><span class="w-50">Departamento nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.departamento_nacimiento"></span></li>
+                                <li><span class="w-50">Provincia nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.provincia_nacimiento"></span></li>
+                                <li><span class="w-50">Distrito nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.distrito_nacimiento"></span></li>
+                                <li><span class="w-50">Lugar nacimiento </span> : <span class="ml-auto" v-text="dfnva_persona.lugar_nacimiento"></span></li>
+                                <li><span class="w-50">Ubigeo domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.ubigeo_domicilio"></span></li>
 
-                                <li><span class="w-50">departamento_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.departamento_domicilio"></span></li>
-                                <li><span class="w-50">provincia_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.provincia_domicilio"></span></li>
-                                <li><span class="w-50">distrito_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.distrito_domicilio"></span></li>
-                                <li><span class="w-50">lugar_domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.lugar_domicilio"></span></li>
+                                <li><span class="w-50">Departamento domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.departamento_domicilio"></span></li>
+                                <li><span class="w-50">Provincia domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.provincia_domicilio"></span></li>
+                                <li><span class="w-50">Distrito domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.distrito_domicilio"></span></li>
+                                <li><span class="w-50">Lugar domicilio </span> : <span class="ml-auto" v-text="dfnva_persona.lugar_domicilio"></span></li>
 
 
                             </ul>
                             <ul class="pricing-features" v-if="dfnva_vehiculo.id">
-                                <li><span class="w-50">placa</span> : <span class="ml-auto" v-text="dfnva_vehiculo.placa"></span></li>
-                                <li><span class="w-50">color</span> : <span class="ml-auto" v-text="dfnva_vehiculo.color"></span></li>
-                                <li><span class="w-50">marca</span> : <span class="ml-auto" v-text="dfnva_vehiculo.marca"></span></li>
-                                <li><span class="w-50">modelo </span> : <span class="ml-auto" v-text="dfnva_vehiculo.modelo"></span></li>
-                                <li><span class="w-50">serie</span> : <span class="ml-auto" v-text="dfnva_vehiculo.serie"></span></li>
-                                <li><span class="w-50">numero_motor</span> : <span class="ml-auto" v-text="dfnva_vehiculo.numero_motor"></span></li>
-                                <li><span class="w-50">año</span> : <span class="ml-auto" v-text="dfnva_vehiculo.ano"></span></li>
-                                <li><span class="w-50">tipo_carroceria </span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_carroceria"></span></li>
-                                <li><span class="w-50">vin</span> : <span class="ml-auto" v-text="dfnva_vehiculo.vin"></span></li>
-                                <li><span class="w-50">tipo_motor</span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_motor"></span></li>
-                                <li><span class="w-50">cilindrada_motor</span> : <span class="ml-auto" v-text="dfnva_vehiculo.cilindrada_motor"></span></li>
-                                <li><span class="w-50">tipo_combustible </span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_combustible"></span></li>
-                                <li><span class="w-50">tipo_transmision</span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_transmision"></span></li>
-                                <li><span class="w-50">tipo_traccion</span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_traccion"></span></li>
-                                <li><span class="w-50">kilometraje</span> : <span class="ml-auto" v-text="dfnva_vehiculo.kilometraje"></span></li>
-                                <li><span class="w-50">estado_vehiculo </span> : <span class="ml-auto" v-text="dfnva_vehiculo.estado_vehiculo"></span></li>
+                                <li><span class="w-50">Placa</span> : <span class="ml-auto" v-text="dfnva_vehiculo.placa"></span></li>
+                                <li><span class="w-50">Color</span> : <span class="ml-auto" v-text="dfnva_vehiculo.color"></span></li>
+                                <li><span class="w-50">Marca</span> : <span class="ml-auto" v-text="dfnva_vehiculo.marca"></span></li>
+                                <li><span class="w-50">Modelo </span> : <span class="ml-auto" v-text="dfnva_vehiculo.modelo"></span></li>
+                                <li><span class="w-50">Serie</span> : <span class="ml-auto" v-text="dfnva_vehiculo.serie"></span></li>
+                                <li><span class="w-50">Numero motor</span> : <span class="ml-auto" v-text="dfnva_vehiculo.numero_motor"></span></li>
+                                <li><span class="w-50">Año</span> : <span class="ml-auto" v-text="dfnva_vehiculo.ano"></span></li>
+                                <li><span class="w-50">Tipo carroceria </span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_carroceria"></span></li>
+                                <li><span class="w-50">Vin</span> : <span class="ml-auto" v-text="dfnva_vehiculo.vin"></span></li>
+                                <li><span class="w-50">Tipo motor</span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_motor"></span></li>
+                                <li><span class="w-50">Cilindrada motor</span> : <span class="ml-auto" v-text="dfnva_vehiculo.cilindrada_motor"></span></li>
+                                <li><span class="w-50">Tipo combustible </span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_combustible"></span></li>
+                                <li><span class="w-50">Tipo transmision</span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_transmision"></span></li>
+                                <li><span class="w-50">Tipo traccion</span> : <span class="ml-auto" v-text="dfnva_vehiculo.tipo_traccion"></span></li>
+                                <li><span class="w-50">Kilometraje</span> : <span class="ml-auto" v-text="dfnva_vehiculo.kilometraje"></span></li>
+                                <li><span class="w-50">Estado vehiculo </span> : <span class="ml-auto" v-text="dfnva_vehiculo.estado_vehiculo"></span></li>
                             </ul>
                             <ul class="pricing-features" v-if="dfnva_inmueble.id">
                                 <li v-if="dfnva_inmueble.get_tipo_inmueble"><span class="w-50">Tipo</span> : <span class="ml-auto" v-text="dfnva_inmueble.get_tipo_inmueble.descripcion"></span></li>
-                                <li><span class="w-50">direccion</span> : <span class="ml-auto" v-text="dfnva_inmueble.direccion"></span></li>
-                                <li><span class="w-50">departamento</span> : <span class="ml-auto" v-text="dfnva_inmueble.departamento"></span></li>
-                                <li><span class="w-50">provincia</span> : <span class="ml-auto" v-text="dfnva_inmueble.provincia"></span></li>
-                                <li><span class="w-50">distrito </span> : <span class="ml-auto" v-text="dfnva_inmueble.distrito"></span></li>
+                                <li><span class="w-50">Direccion</span> : <span class="ml-auto" v-text="dfnva_inmueble.direccion"></span></li>
+                                <li><span class="w-50">Departamento</span> : <span class="ml-auto" v-text="dfnva_inmueble.departamento"></span></li>
+                                <li><span class="w-50">Provincia</span> : <span class="ml-auto" v-text="dfnva_inmueble.provincia"></span></li>
+                                <li><span class="w-50">Distrito </span> : <span class="ml-auto" v-text="dfnva_inmueble.distrito"></span></li>
 
-                                <li><span class="w-50">referencia</span> : <span class="ml-auto" v-text="dfnva_inmueble.referencia"></span></li>
-                                <li><span class="w-50">color_exterior</span> : <span class="ml-auto" v-text="dfnva_inmueble.color_exterior"></span></li>
-                                <li><span class="w-50">caracteristicas_especiales </span> : <span class="ml-auto" v-text="dfnva_inmueble.caracteristicas_especiales"></span></li>
-                                <li><span class="w-50">estado_conservacion</span> : <span class="ml-auto" v-text="dfnva_inmueble.estado_conservacion"></span></li>
-                                <li><span class="w-50">latitud</span> : <span class="ml-auto" v-text="dfnva_inmueble.latitud"></span></li>
-                                <li><span class="w-50">longitud</span> : <span class="ml-auto" v-text="dfnva_inmueble.longitud"></span></li>
-                                <li><span class="w-50">observaciones </span> : <span class="ml-auto" v-text="dfnva_inmueble.observaciones"></span></li>
+                                <li><span class="w-50">Referencia</span> : <span class="ml-auto" v-text="dfnva_inmueble.referencia"></span></li>
+                                <li><span class="w-50">Color exterior</span> : <span class="ml-auto" v-text="dfnva_inmueble.color_exterior"></span></li>
+                                <li><span class="w-50">Caracteristicas especiales </span> : <span class="ml-auto" v-text="dfnva_inmueble.caracteristicas_especiales"></span></li>
+                                <li><span class="w-50">Estado conservacion</span> : <span class="ml-auto" v-text="dfnva_inmueble.estado_conservacion"></span></li>
+                                <li><span class="w-50">Latitud</span> : <span class="ml-auto" v-text="dfnva_inmueble.latitud"></span></li>
+                                <li><span class="w-50">Longitud</span> : <span class="ml-auto" v-text="dfnva_inmueble.longitud"></span></li>
+                                <li><span class="w-50">Observaciones </span> : <span class="ml-auto" v-text="dfnva_inmueble.observaciones"></span></li>
 
 
                             </ul>

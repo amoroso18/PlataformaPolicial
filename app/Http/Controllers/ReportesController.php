@@ -695,7 +695,7 @@ class ReportesController extends Controller
                                 $data_ant = EntidadAntecedente::where([['nrodocumento',$EntidadPersona->documento]])->get();
                                 if(isset($data_ant) &&  count($data_ant) > 0){
                                     $MYPDF->Ln(2);
-                                    self::generateLineTextSpace($MYPDF, "ANTECEDENTES", "", 5);
+                                    self::generateLineTextSpace($MYPDF, "ANTECEDENTES", "", 33);
                                     $MYPDF->Ln(2);
                                     // $data_ant = EntidadAntecedente::inRandomOrder()->limit(3)->get();
                                     foreach ($data_ant as  $key_Data => $value_data) {
@@ -711,7 +711,7 @@ class ReportesController extends Controller
                                 $data_den = EntidadDenuncias::where([['nrodocumento',$EntidadPersona->documento]])->get();
                                 if(isset($data_den) && count($data_den) > 0){
                                     $MYPDF->Ln(2);
-                                    self::generateLineTextSpace($MYPDF, "DENUNCIAS", "", 5);
+                                    self::generateLineTextSpace($MYPDF, "DENUNCIAS", "", 33);
                                     $MYPDF->Ln(2);
                                     // $data_den = EntidadDenuncias::inRandomOrder()->limit(3)->get();
                                     foreach ($data_den as $key_Data => $value_data) {
@@ -1203,6 +1203,26 @@ class ReportesController extends Controller
         // self::generateLineTextForDetailSpace($MYPDF, 'firma', $EntidadPersona->firma);
         $MYPDF->Ln(5);
 
+        $data_VV = DisposicionFiscalNuevaVigilanciaEntidad::where('codigo_relacion', $EntidadPersona->id)
+        ->whereIn('entidads_id', [1, 2])
+        ->get();
+        foreach ($data_VV  as $key => $value) {
+            $data_VVA = DisposicionFiscalNuevaVigilanciaArchivo::where([['dfnve_id',$value->id],['ta_id',1]])->limit(3)->get();
+            $MYPDF->Ln(1);
+            $x = $MYPDF->GetX() + 6;
+           foreach ($data_VVA as $key2 => $value2) {
+                if ($value2->archivo) {
+                    $y = $MYPDF->GetY();    
+                    $MYPDF->image(public_path('files/').$value2->archivo, $x, $y, 55, 45);
+                    $x = $x+62;
+                    // $MYPDF->SetXY($x + 15, $y + 15);
+                }
+           }
+           $MYPDF->SetXY($x + 20, $y + 20);
+           $MYPDF->Ln(30);
+        }
+
+        $MYPDF->Ln(2);
         $MYPDF->SetFont('Arial', 'B', 11);
         $MYPDF->multicell(192, 5, "REQUISITORIA", 0, 'L');
         $MYPDF->Ln(2);
