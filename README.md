@@ -25,6 +25,10 @@ Para usarlo de manera local:
 10. para limpiar el cache: php artisan optimize:clear
 11 para inicialiar el proyecto: php artisan serve
 
+Para inicializar:
+-primero: Inicializar wampserser
+-segundo: Paso 6,10,11
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
