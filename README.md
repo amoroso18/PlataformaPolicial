@@ -26,8 +26,8 @@ Para usarlo de manera local:
 11 para inicialiar el proyecto: php artisan serve
 
 Para inicializar:
--primero: Inicializar wampserser
--segundo: Paso 6,10,11
+primero: Inicializar wampserser
+segundo: Paso 6,10,11
 
 ## License
 
