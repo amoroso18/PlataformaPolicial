@@ -232,7 +232,7 @@ class ReportesController extends Controller
             $MYPDF = new PDFF($ContenidoTitulo);
             $MYPDF->AliasNbPages();
             $MYPDF->AddPage();
-            $MYPDF->SetAutoPageBreak(true, 30);
+            $MYPDF->SetAutoPageBreak(true, 45);
             $MYPDF->image('images/sivipol/BannerSivipol.png', 75, 10, 60);
             //$MYPDF->image('images/qrvalidar.png', 172.5, 31.5, 31);
             $MYPDF->Ln(10);
