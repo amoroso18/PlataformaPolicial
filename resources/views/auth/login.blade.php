@@ -48,7 +48,7 @@
             <a class="link link-primary link-sm" tabindex="-1" href="{{route('ayuda')}}">'¿Necesitas ayuda?</a>
         </div>
         <div class="form-control-wrap">
-            <input autocomplete="off" type="text" class="form-control form-control-lg valid @error('email') is-invalid @enderror" placeholder="ingresa tu Correo electrónico" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+            <input autocomplete="off" type="text" class="form-control form-control-lg valid @error('email') is-invalid @enderror" placeholder="ingresa tu Correo electrónico" name="email" value="comando@sivipol.com" required autocomplete="email" autofocus>
         </div>
         @error('email')
         <span class="invalid-feedback" role="alert">
@@ -66,7 +66,7 @@
                 <em class="passcode-icon icon-show icon ni ni-eye"></em>
                 <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
             </a>
-            <input autocomplete="new-password" type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" placeholder="Ingresa tu contraseña" id="password" name="password" required autocomplete="current-password">
+            <input autocomplete="new-password" type="password" value="20230818121247" class="form-control form-control-lg @error('password') is-invalid @enderror" placeholder="Ingresa tu contraseña" id="password" name="password" required autocomplete="current-password">
         </div>
         <script>
             function mostrarContrasena() {

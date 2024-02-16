@@ -1973,11 +1973,11 @@
                             <ul class="pricing-features" v-if="dfnva_persona.id">
                                 <li>
                                     <div class="row g-gs">
-                                        <div class="col-lg-6">
-                                            <img :style="{ width: '100%' }" v-bind:src="'data:image/jpeg;base64,' + dfnva_persona.foto" alt="Imagen">
+                                        <div class="col-lg-6" v-if="dfnva_persona.foto">
+                                            <img :style="{ width: '100%' }" v-bind:src="URLASSET+ 'fotos-personas/'+ dfnva_persona.foto" alt="Imagen">
                                         </div>
-                                        <div class="col-lg-6">
-                                            <img :style="{ width: '100%' }" v-bind:src="'data:image/jpeg;base64,' + dfnva_persona.firma" alt="Imagen">
+                                        <div class="col-lg-6" v-if="dfnva_persona.firma">
+                                            <img :style="{ width: '100%' }" v-bind:src="URLASSET+ 'fotos-personas/'+ dfnva_persona.firma" alt="Imagen">
                                         </div>
                                     </div>
                                 </li>

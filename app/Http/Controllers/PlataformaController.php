@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -20,10 +21,18 @@ use App\Http\Controllers\ReportesController;
 
 class PlataformaController extends Controller
 {
+    private $routeImagesPathTemp;
 
     public function __construct()
     {
         $this->middleware('auth');
+        if (App::environment('local')) {
+            $routeImagesPathTemp = public_path('temp/');
+            $routeImagesPathFotosPersonas = public_path('fotos-personas/');
+        } else {
+            $routeImagesPathTemp = '/var/www/html/sivipol/temp/';
+            $routeImagesPathFotosPersonas = '/var/www/html/sivipol/fotos-personas/';
+        }
     }
 
     public function dashboard()

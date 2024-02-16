@@ -58,18 +58,25 @@ use App\Http\Controllers\ReportesController;
 class ExpedienteController extends Controller
 {
     public $upload_files;
+    public $routeImagesPathTemp;
+    public $routeImagesPathFotosPersonas;
     public function __construct()
     {
         $this->middleware('auth');
         if (App::environment('local')) {
             $this->upload_files = public_path('files');
+            $this->routeImagesPathTemp = public_path('temp/');
+            $this->routeImagesPathFotosPersonas = public_path('fotos-personas/');
         } else {
             $this->upload_files = '/files';
+            $this->routeImagesPathTemp = '/var/www/html/sivipol/temp/';
+            $this->routeImagesPathFotosPersonas = '/var/www/html/sivipol/fotos-personas/';
         }
     }
     public function expedientes()
     {
-        return view('modules.expediente.index');
+        $routeImagesPathFotosPersonas = $this->routeImagesPathFotosPersonas;
+        return view('modules.expediente.index', compact('routeImagesPathFotosPersonas'));
     }
     public function ExpedienteWS(Request $request)
     {

@@ -37,8 +37,11 @@ return new class extends Migration
             $table->string('distrito_domicilio')->nullable();
             $table->string('lugar_domicilio',2500)->nullable();
 
-            $table->binary('foto')->nullable();
-            $table->binary('firma')->nullable();
+            $table->string('foto')->nullable();
+            $table->string('firma')->nullable();
+
+            // $table->binary('foto')->nullable();
+            // $table->binary('firma')->nullable();
             $table->timestamps();
         });
         // DB::table('entidad_personas')->insert(

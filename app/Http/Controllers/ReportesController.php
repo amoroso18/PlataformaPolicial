@@ -222,8 +222,10 @@ class ReportesController extends Controller
             $imageType = 'jpeg';
             if (App::environment('local')) {
                 $routeImagesPathTemp = public_path('temp/');
+                $routeImagesPathFotosPersonas = public_path('fotos-personas/');
             } else {
                 $routeImagesPathTemp = '/var/www/html/sivipol/temp/';
+                $routeImagesPathFotosPersonas = '/var/www/html/sivipol/fotos-personas/';
             }
             $INFO = AuditoriaController::audita_usuario(Auth::user()->id, "DESCARGA REPORTE", "EXPEDIENTE", $idexpe);
             $ContenidoTitulo = utf8_decode('CÓDIGO DE SEGURIDAD NRO.' . $INFO->id . ' | CÓDIGO USUARIO NRO.' . Auth::user()->id . ' | FECHA DESCARGA ' . $INFO->created_at);
@@ -335,18 +337,18 @@ class ReportesController extends Controller
                         $MYPDF->Ln(1);
                         $x = $MYPDF->GetX() + 6;
                         $y = $MYPDF->GetY();
-                        $base64Image = $EntidadPersona->foto; // Tus datos BLOB
+                        // $base64Image = $EntidadPersona->foto; // Tus datos BLOB
                         // Decodifica el BLOB y guarda la imagen en un archivo temporal
-                        $imageData = base64_decode($base64Image);
-                        $tempImageFile = $EntidadPersona->documento . '_temp_image.jpg'; // Nombre del archivo temporal
-                        file_put_contents($routeImagesPathTemp . $tempImageFile, $imageData);
-                        chmod($routeImagesPathTemp . $tempImageFile, 0755);
+                        // $imageData = base64_decode($base64Image);
+                        // $tempImageFile = $EntidadPersona->documento . '_temp_image.jpg'; // Nombre del archivo temporal
+                        // file_put_contents($routeImagesPathTemp . $tempImageFile, $imageData);
+                        // chmod($routeImagesPathTemp . $tempImageFile, 0755);
                         // Inserta la imagen en el PDF
-                        $MYPDF->image($routeImagesPathTemp . $tempImageFile, $x, $y, 25, 30);
+                        $MYPDF->image($routeImagesPathFotosPersonas . $EntidadPersona->foto, $x, $y, 25, 30);
                         $MYPDF->SetXY($x + 15, $y + 15);
                         $MYPDF->Ln(15);
                         // Elimina el archivo temporal
-                        unlink($routeImagesPathTemp . $tempImageFile);
+                        // unlink($routeImagesPathTemp . $tempImageFile);
                     }
                     self::generateLineTextForDetailSpace($MYPDF, 'NACIONALIDAD', $EntidadPersona->getTipoNacionalidad->descripcion);
                     self::generateLineTextForDetailSpace($MYPDF, 'TIPO DOCUMENTO', $EntidadPersona->getTipoDocumentoIdentidad->descripcion);
@@ -626,18 +628,18 @@ class ReportesController extends Controller
                                 $MYPDF->Ln(1);
                                 $x = $MYPDF->GetX() + 34;
                                 $y = $MYPDF->GetY();
-                                $base64Image = $EntidadPersona->foto; // Tus datos BLOB
+                                // $base64Image = $EntidadPersona->foto; // Tus datos BLOB
                                 // Decodifica el BLOB y guarda la imagen en un archivo temporal
-                                $imageData = base64_decode($base64Image);
-                                $tempImageFile = $EntidadPersona->documento . '_temp_image.jpg'; // Nombre del archivo temporal
-                                file_put_contents($routeImagesPathTemp . $tempImageFile, $imageData);
-                                chmod($routeImagesPathTemp . $tempImageFile, 0755);
+                                // $imageData = base64_decode($base64Image);
+                                // $tempImageFile = $EntidadPersona->documento . '_temp_image.jpg'; // Nombre del archivo temporal
+                                // file_put_contents($routeImagesPathTemp . $tempImageFile, $imageData);
+                                // chmod($routeImagesPathTemp . $tempImageFile, 0755);
                                 // Inserta la imagen en el PDF
-                                $MYPDF->image($routeImagesPathTemp . $tempImageFile, $x, $y, 25, 30);
+                                $MYPDF->image($routeImagesPathFotosPersonas . $EntidadPersona->foto, $x, $y, 25, 30);
                                 $MYPDF->SetXY($x + 15, $y + 15);
                                 $MYPDF->Ln(15);
                                 // Elimina el archivo temporal
-                                unlink($routeImagesPathTemp . $tempImageFile);
+                                // unlink($routeImagesPathTemp . $tempImageFile);
                             }
                             self::generateLineTextForDetailSpace($MYPDF, 'NACIONALIDAD', $EntidadPersona->getTipoNacionalidad->descripcion, 33);
                             self::generateLineTextForDetailSpace($MYPDF, 'TIPO DOCUMENTO', $EntidadPersona->getTipoDocumentoIdentidad->descripcion);
@@ -917,8 +919,10 @@ class ReportesController extends Controller
         $imageType = 'jpeg';
         if (App::environment('local')) {
             $routeImagesPathTemp = public_path('temp/');
+            $routeImagesPathFotosPersonas = public_path('fotos-personas/');
         } else {
             $routeImagesPathTemp = '/var/www/html/sivipol/temp/';
+            $routeImagesPathFotosPersonas = '/var/www/html/sivipol/fotos-personas/';
         }
         $INFO = AuditoriaController::audita_usuario(Auth::user()->id, "DESCARGA REPORTE", "INFOZONA", $idexpe);
         $ContenidoTitulo = utf8_decode('CÓDIGO DE SEGURIDAD NRO.' . $INFO->id . ' | CÓDIGO USUARIO NRO.' . Auth::user()->id . ' | FECHA DESCARGA ' . $INFO->created_at);
@@ -1009,18 +1013,18 @@ class ReportesController extends Controller
                 $MYPDF->Ln(1);
                 $x = $MYPDF->GetX() + 6;
                 $y = $MYPDF->GetY();
-                $base64Image = $EntidadPersona->foto; // Tus datos BLOB
+                // $base64Image = $EntidadPersona->foto; // Tus datos BLOB
                 // Decodifica el BLOB y guarda la imagen en un archivo temporal
-                $imageData = base64_decode($base64Image);
-                $tempImageFile = $EntidadPersona->documento . '_temp_image.jpg'; // Nombre del archivo temporal
-                file_put_contents($routeImagesPathTemp . $tempImageFile, $imageData);
-                chmod($routeImagesPathTemp . $tempImageFile, 0755);
+                // $imageData = base64_decode($base64Image);
+                // $tempImageFile = $EntidadPersona->documento . '_temp_image.jpg'; // Nombre del archivo temporal
+                // file_put_contents($routeImagesPathTemp . $tempImageFile, $imageData);
+                // chmod($routeImagesPathTemp . $tempImageFile, 0755);
                 // Inserta la imagen en el PDF
-                $MYPDF->image($routeImagesPathTemp . $tempImageFile, $x, $y, 25, 30);
+                $MYPDF->image($routeImagesPathFotosPersonas . $EntidadPersona->foto, $x, $y, 25, 30);
                 $MYPDF->SetXY($x + 15, $y + 15);
                 $MYPDF->Ln(15);
                 // Elimina el archivo temporal
-                unlink($routeImagesPathTemp . $tempImageFile);
+                // unlink($routeImagesPathTemp . $tempImageFile);
             }
             self::generateLineTextForDetailSpace($MYPDF, 'NACIONALIDAD', $EntidadPersona->getTipoNacionalidad->descripcion);
             self::generateLineTextForDetailSpace($MYPDF, 'TIPO DOCUMENTO', $EntidadPersona->getTipoDocumentoIdentidad->descripcion);
@@ -1124,8 +1128,10 @@ class ReportesController extends Controller
         $imageType = 'jpeg';
         if (App::environment('local')) {
             $routeImagesPathTemp = public_path('temp/');
+            $routeImagesPathFotosPersonas = public_path('fotos-personas/');
         } else {
             $routeImagesPathTemp = '/var/www/html/sivipol/temp/';
+            $routeImagesPathFotosPersonas = '/var/www/html/sivipol/fotos-personas/';
         }
         $INFO = AuditoriaController::audita_usuario(Auth::user()->id, "DESCARGA REPORTE", "INFOSOMBRA", $idexpe);
         $ContenidoTitulo = utf8_decode('CÓDIGO DE SEGURIDAD NRO.' . $INFO->id . ' | CÓDIGO USUARIO NRO.' . Auth::user()->id . ' | FECHA DESCARGA ' . $INFO->created_at);
@@ -1153,18 +1159,18 @@ class ReportesController extends Controller
             $MYPDF->Ln(1);
             $x = $MYPDF->GetX() + 6;
             $y = $MYPDF->GetY();
-            $base64Image = $EntidadPersona->foto; // Tus datos BLOB
+            // $base64Image = $EntidadPersona->foto; // Tus datos BLOB
             // Decodifica el BLOB y guarda la imagen en un archivo temporal
-            $imageData = base64_decode($base64Image);
-            $tempImageFile = $EntidadPersona->documento . '_temp_image.jpg'; // Nombre del archivo temporal
-            file_put_contents($routeImagesPathTemp . $tempImageFile, $imageData);
-            chmod($routeImagesPathTemp . $tempImageFile, 0755);
+            // $imageData = base64_decode($base64Image);
+            // $tempImageFile = $EntidadPersona->documento . '_temp_image.jpg'; // Nombre del archivo temporal
+            // file_put_contents($routeImagesPathTemp . $tempImageFile, $imageData);
+            // chmod($routeImagesPathTemp . $tempImageFile, 0755);
             // Inserta la imagen en el PDF
-            $MYPDF->image($routeImagesPathTemp . $tempImageFile, $x, $y, 45, 45);
+            $MYPDF->image($routeImagesPathFotosPersonas . $EntidadPersona->foto, $x, $y, 25, 30);
             $MYPDF->SetXY($x + 32, $y + 32);
             $MYPDF->Ln(15);
             // Elimina el archivo temporal
-            unlink($routeImagesPathTemp . $tempImageFile);
+            // unlink($routeImagesPathTemp . $tempImageFile);
         }
         self::generateLineTextForDetailSpace($MYPDF, 'NACIONALIDAD', $EntidadPersona->getTipoNacionalidad->descripcion);
         self::generateLineTextForDetailSpace($MYPDF, 'TIPO DOCUMENTO', $EntidadPersona->getTipoDocumentoIdentidad->descripcion);
